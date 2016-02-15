@@ -7,14 +7,25 @@ import Line.InterpolationModes exposing (linear)
 import Scale
 import Point exposing (Point)
 import Axis
+import Svg exposing (circle, Svg)
+import Svg.Attributes exposing (cx, cy, r)
 
 main : Html
 main =
   createPlot 400 400 (Scale.linear (0, 100) (0, 400)) (Scale.linear (0, 100) (400, 0))
-    |> addPoints points
+    |> addPoints (List.map (\p -> { point = p, toHtml = circleSvg }) points)
     |> addLines linear lines
     |> addXAxis { orient = Axis.Bottom, ticks = 10 }
     |> toHtml
+
+circleSvg : Float -> Float -> Svg
+circleSvg x y =
+  circle
+    [ cx <| toString x
+    , cy <| toString y
+    , r "3"
+    ]
+    []
 
 -- type alias Point' = {x : Float, y : Float, z : Float}
 

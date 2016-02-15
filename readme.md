@@ -12,7 +12,6 @@ Todo
   - [ ] x0?
   - [x] scale
   - [ ] style
-- bar?
 - axis
   - [ ] style
   - [ ] orientation
@@ -32,6 +31,7 @@ Todo
   - [ ] quantize
   - [ ] quantile
   - [ ] threshold
+  - [ ] time
 - interpolators
   - [x] linear
   - [ ] linear-closed
@@ -46,15 +46,26 @@ Todo
   - [ ] cardinal-open
   - [ ] cardinal-closed
   - [ ] monotone
+- [ ] append additional html to plot (titles, etc)
+- [x] append svg at a point (plot something other than points)
+- bar?
 
-- titles
-- ticks on axises
-- scales https://github.com/mbostock/d3/wiki/Quantitative-Scales
-- [ ] append additional html to plot
 
 for our plots
 - panning and zooming
 - mouse input
+
+- [x] PQR tile
+- [ ] PQR/Peak Mod scope
+  - axises with labels and ticks
+  - pan and zooming
+  - mouse input for point selection
+- [ ] QC Cal tile / scope
+  - axises with labels and ticks
+  - append svg at point
+- [ ] batch summary chart
+  - ordinal scale
+  - axises with labels and ticks
 
 
 https://github.com/mbostock/d3/wiki/API-Reference#d3svg-svg

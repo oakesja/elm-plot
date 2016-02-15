@@ -1,14 +1,13 @@
 module Axis where
 
-import Html exposing (Html)
 import Scale exposing (Scale)
-import Svg exposing (path)
+import Svg exposing (Svg, path)
 import Svg.Attributes exposing (d, fill, stroke, shapeRendering)
 
 type Orientation = Top | Bottom | Left | Right
 type alias Axis = {orient : Orientation, ticks : Int}
 
-toHtml : Scale -> Maybe Axis -> List Html
+toHtml : Scale -> Maybe Axis -> List Svg
 toHtml scale axis =
   case axis of
     Just axis ->

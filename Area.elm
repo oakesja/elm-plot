@@ -2,8 +2,7 @@ module Area where
 
 import Line.InterpolationModes exposing (InterpolationMode)
 import Scale exposing (Scale)
-import Html exposing (Html)
-import Svg exposing (path)
+import Svg exposing (Svg, path)
 import Svg.Attributes exposing (d, stroke, strokeWidth)
 
 type alias AreaPoint = { x : Float, y0 : Float, y1 : Float }
@@ -22,7 +21,7 @@ rescaleAreaPoint xScale yScale point =
   , y1 = yScale.rescale point.y1
   }
 
-toHtml : Area -> Html
+toHtml : Area -> Svg
 toHtml area =
   path
     [ d <| pathString area
