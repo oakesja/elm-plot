@@ -16,7 +16,7 @@ rescale xScale yScale line =
 toHtml : Line -> Html
 toHtml line =
   path
-    [ d <| line.mode line.points
+    [ d <| "M" ++ line.mode line.points
     , stroke "blue"
     , strokeWidth "2"
     , fill "none"

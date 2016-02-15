@@ -9,6 +9,7 @@ import Point
 import Scale exposing (Scale)
 import Line exposing (Line)
 import Axis exposing (Axis)
+import Area exposing (Area, AreaPoint)
 
 type alias Dimensions = {width: Float, height: Float}
 
@@ -18,8 +19,9 @@ type alias Plot =
   { dimensions: Dimensions
   , xScale : Scale
   , yScale : Scale
-  , points: Points
-  , lines: List Line
+  , points : Points
+  , lines : List Line
+  , areas : List Area
   , xAxis : Maybe Axis
   , yAxis : Maybe Axis
   }
@@ -31,6 +33,7 @@ createPlot width height xScale yScale=
   , yScale = yScale
   , points = []
   , lines = []
+  , areas = []
   , xAxis = Nothing
   , yAxis = Nothing
   }
@@ -45,6 +48,13 @@ addLines mode points plot =
     l = { points = points, mode = mode }
   in
     { plot | lines = l :: plot.lines }
+
+addArea : InterpolationMode -> List AreaPoint -> Plot -> Plot
+addArea mode points plot =
+  let
+    a = { points = points, mode = mode }
+  in
+    { plot | areas = a :: plot.areas }
 
 -- addXScale : Scale -> Plot -> Plot
 -- addXScale scale plot =
@@ -74,6 +84,7 @@ toHtml p =
       <| List.concat
         [ Points.toHtml plot.points
         , List.map Line.toHtml plot.lines
+        , List.map Area.toHtml plot.areas
         , Axis.toHtml plot.xScale plot.xAxis
         ]
 
@@ -82,8 +93,10 @@ rescale plot =
   let
     newLines = List.map (Line.rescale plot.xScale plot.yScale) plot.lines
     newPoints = List.map (Point.rescale plot.xScale plot.yScale) plot.points
+    newAreas = List.map (Area.rescale plot.xScale plot.yScale) plot.areas
   in
     { plot
     | lines = newLines
     , points = newPoints
+    , areas = newAreas
     }
