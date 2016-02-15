@@ -1,19 +1,18 @@
 module Plot where
 
-import Html exposing (Html, text)
-import Svg exposing (svg, circle, line, path)
-import Svg.Attributes exposing (cx, cy, r, width, height, stroke, strokeWidth, d, fill)
+import Html exposing (Html)
+import Svg exposing (svg)
+import Svg.Attributes exposing (width, height)
 import Line.InterpolationModes exposing (InterpolationMode)
 import Points exposing (Points)
 import Point
 import Scale exposing (Scale)
 import Line exposing (Line)
+import Axis exposing (Axis)
 
 type alias Dimensions = {width: Float, height: Float}
 
 -- axes
-type Orientation = Top | Bottom | Left | Right
-type alias Axis = {orient : Orientation, ticks : Int}
 
 type alias Plot =
   { dimensions: Dimensions
