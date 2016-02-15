@@ -1,15 +1,27 @@
 module Scale where
 
-type alias Scale = Float -> Float
+type alias Scale =
+  { domain : (Float, Float)
+  , range : (Float, Float)
+  , rescale : Float -> Float
+  }
 
-identity : Float -> Float
-identity point =
-  point
+identity : (Float, Float) -> Scale
+identity domain =
+  { domain = domain
+  , range = domain
+  , rescale = \x -> x
+  }
 
-linear : (Float, Float) -> (Float, Float) -> Float -> Float
-linear domain range p =
+linear : (Float, Float) -> (Float, Float) -> Scale
+linear domain range =
   let
-    u = \x -> (x - fst domain) / snd domain
+    b = if snd domain - fst domain < 0 then 1 / snd domain else snd domain - fst domain
+    u = \x -> (x - fst domain) / b
     i = \x -> fst range * (1 - x) + snd range * x
+    rescale = \x -> i(u x)
   in
-    i(u p)
+    { domain = domain
+    , range = range
+    , rescale = rescale
+    }

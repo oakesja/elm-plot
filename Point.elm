@@ -9,7 +9,7 @@ type alias Point = {x: Float, y: Float}
 
 rescale : Scale -> Scale -> Point -> Point
 rescale xScale yScale point =
-  { x = xScale point.x, y = yScale point.y }
+  { x = xScale.rescale point.x, y = yScale.rescale point.y }
 
 toHtml : Point -> Html
 toHtml point =

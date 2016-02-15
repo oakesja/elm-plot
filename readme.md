@@ -9,5 +9,7 @@ Todo
 - titles
 - ticks on axises
 - scales https://github.com/mbostock/d3/wiki/Quantitative-Scales
+- panning and zooming
+- mouse input
 
 https://github.com/mbostock/d3/wiki/API-Reference#d3svg-svg

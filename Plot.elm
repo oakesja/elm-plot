@@ -24,11 +24,11 @@ type alias Plot =
   , yAxis : Maybe Axis
   }
 
-createPlot : Float -> Float -> Plot
-createPlot width height =
+createPlot : Float -> Float -> Scale -> Scale -> Plot
+createPlot width height xScale yScale=
   { dimensions = {width = width, height = height}
-  , xScale = Scale.identity
-  , yScale = Scale.identity
+  , xScale = xScale
+  , yScale = yScale
   , points = []
   , lines = []
   , xAxis = Nothing
@@ -46,13 +46,13 @@ addLines mode points plot =
   in
     { plot | lines = l :: plot.lines }
 
-addXScale : Scale -> Plot -> Plot
-addXScale scale plot =
-  { plot | xScale = scale }
-
-addYScale : Scale -> Plot -> Plot
-addYScale scale plot =
-  { plot | yScale = scale }
+-- addXScale : Scale -> Plot -> Plot
+-- addXScale scale plot =
+--   { plot | xScale = scale }
+--
+-- addYScale : Scale -> Plot -> Plot
+-- addYScale scale plot =
+--   { plot | yScale = scale }
 
 addXAxis : Axis -> Plot -> Plot
 addXAxis axis plot =
@@ -71,7 +71,11 @@ toHtml p =
       [ width (toString plot.dimensions.width)
       , height (toString plot.dimensions.height)
       ]
-      (List.append (Points.toHtml plot.points) (List.map Line.toHtml plot.lines))
+      <| List.concat
+        [ Points.toHtml plot.points
+        , List.map Line.toHtml plot.lines
+        , Axis.toHtml plot.xScale plot.xAxis
+        ]
 
 rescale : Plot -> Plot
 rescale plot =
