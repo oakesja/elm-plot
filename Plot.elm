@@ -13,13 +13,11 @@ import Area exposing (Area, AreaPoint)
 
 type alias Dimensions = {width: Float, height: Float}
 
--- axes
-
 type alias Plot =
   { dimensions: Dimensions
   , xScale : Scale
   , yScale : Scale
-  , points : SvgPoints
+  , points : List SvgPoints
   , lines : List Line
   , areas : List Area
   , xAxis : Maybe Axis
@@ -40,7 +38,7 @@ createPlot width height xScale yScale=
 
 addPoints : SvgPoints -> Plot -> Plot
 addPoints points plot =
-  { plot | points = points }
+    { plot | points = points :: plot.points }
 
 addLines : InterpolationMode -> Points -> Plot -> Plot
 addLines mode points plot =
@@ -55,14 +53,6 @@ addArea mode points plot =
     a = { points = points, mode = mode }
   in
     { plot | areas = a :: plot.areas }
-
--- addXScale : Scale -> Plot -> Plot
--- addXScale scale plot =
---   { plot | xScale = scale }
---
--- addYScale : Scale -> Plot -> Plot
--- addYScale scale plot =
---   { plot | yScale = scale }
 
 addXAxis : Axis -> Plot -> Plot
 addXAxis axis plot =
@@ -82,7 +72,7 @@ toHtml p =
       , height (toString plot.dimensions.height)
       ]
       <| List.concat
-        [ SvgPoints.toHtml plot.points
+        [ List.concat <| List.map SvgPoints.toHtml plot.points
         , List.map Line.toHtml plot.lines
         , List.map Area.toHtml plot.areas
         , Axis.toHtml plot.xScale plot.xAxis
@@ -92,7 +82,7 @@ rescale : Plot -> Plot
 rescale plot =
   let
     newLines = List.map (Line.rescale plot.xScale plot.yScale) plot.lines
-    newPoints = SvgPoints.rescale plot.xScale plot.yScale plot.points
+    newPoints = List.map (SvgPoints.rescale plot.xScale plot.yScale) plot.points
     newAreas = List.map (Area.rescale plot.xScale plot.yScale) plot.areas
   in
     { plot
