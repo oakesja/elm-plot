@@ -5,14 +5,15 @@ import Plot exposing (..)
 import Plot exposing (..)
 import Line.InterpolationModes exposing (linear)
 import Scale
+import Point exposing (Point)
 
 main : Html
 main =
   createPlot 400 400
     |> addPoints points
     |> addLines linear lines
-    |> addXScale (Scale.linear (0, 100) (0, 200))
-    |> addYScale (Scale.linear (0, 100) (300, 0))
+    |> addXScale (Scale.linear (0, 100) (0, 400))
+    |> addYScale (Scale.linear (0, 100) (400, 0))
     |> toHtml
 
 -- type alias Point' = {x : Float, y : Float, z : Float}

@@ -1,5 +1,6 @@
 module Scale where
 
+type alias Scale = Float -> Float
 
 identity : Float -> Float
 identity point =

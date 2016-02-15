@@ -4,13 +4,16 @@ import Html exposing (Html, text)
 import Svg exposing (svg, circle, line, path)
 import Svg.Attributes exposing (cx, cy, r, width, height, stroke, strokeWidth, d, fill)
 import Line.InterpolationModes exposing (InterpolationMode)
-import Scale
+import Points exposing (Points)
+import Point
+import Scale exposing (Scale)
+import Line exposing (Line)
 
-type alias Point = {x: Float, y: Float}
-type alias Points = List Point
-type alias Line = {points : Points, mode : InterpolationMode}
 type alias Dimensions = {width: Float, height: Float}
-type alias Scale = Float -> Float
+
+-- axes
+type Orientation = Top | Bottom | Left | Right
+type alias Axis = {orient : Orientation, ticks : Int}
 
 type alias Plot =
   { dimensions: Dimensions
@@ -18,6 +21,8 @@ type alias Plot =
   , yScale : Scale
   , points: Points
   , lines: List Line
+  , xAxis : Maybe Axis
+  , yAxis : Maybe Axis
   }
 
 createPlot : Float -> Float -> Plot
@@ -27,13 +32,15 @@ createPlot width height =
   , yScale = Scale.identity
   , points = []
   , lines = []
+  , xAxis = Nothing
+  , yAxis = Nothing
   }
 
-addPoints : List Point -> Plot -> Plot
+addPoints : Points -> Plot -> Plot
 addPoints points plot =
   { plot | points = points }
 
-addLines : InterpolationMode -> List Point -> Plot -> Plot
+addLines : InterpolationMode -> Points -> Plot -> Plot
 addLines mode points plot =
   let
     l = { points = points, mode = mode }
@@ -48,6 +55,14 @@ addYScale : Scale -> Plot -> Plot
 addYScale scale plot =
   { plot | yScale = scale }
 
+addXAxis : Axis -> Plot -> Plot
+addXAxis axis plot =
+  { plot | xAxis = Just axis }
+
+addYAxis : Axis -> Plot -> Plot
+addYAxis axis plot =
+  { plot | xAxis = Just axis }
+
 toHtml : Plot -> Html
 toHtml p =
   let
@@ -57,57 +72,15 @@ toHtml p =
       [ width (toString plot.dimensions.width)
       , height (toString plot.dimensions.height)
       ]
-      (List.append (pointsToHmtl plot) (linesToHtml plot))
+      (List.append (Points.toHtml plot.points) (List.map Line.toHtml plot.lines))
 
 rescale : Plot -> Plot
 rescale plot =
   let
-    newLines = rescaleLines plot.xScale plot.yScale plot.lines
-    newPoints = List.map (rescalePoint plot.xScale plot.yScale) plot.points
+    newLines = List.map (Line.rescale plot.xScale plot.yScale) plot.lines
+    newPoints = List.map (Point.rescale plot.xScale plot.yScale) plot.points
   in
     { plot
     | lines = newLines
     , points = newPoints
     }
-
-rescaleLines : Scale -> Scale -> List Line -> List Line
-rescaleLines xScale yScale lines =
-  List.map (rescaleLine xScale yScale) lines
-
-rescaleLine : Scale -> Scale -> Line -> Line
-rescaleLine xScale yScale line =
-  let
-    newPoints = List.map (rescalePoint xScale yScale) line.points
-  in
-    { line | points = newPoints }
-
-rescalePoint : Scale -> Scale -> Point -> Point
-rescalePoint xScale yScale point =
-  { x = xScale point.x, y = yScale point.y }
-
-pointsToHmtl : Plot -> List Html
-pointsToHmtl plot =
-    List.map createPointSvg plot.points
-
-createPointSvg : Point -> Html
-createPointSvg point =
-  circle
-    [ cx <| toString point.x
-    , cy <| toString point.y
-    , r "5"
-    ]
-    []
-
-linesToHtml : Plot -> List Html
-linesToHtml plot =
-  List.map lineToHtml plot.lines
-
-lineToHtml : Line -> Html
-lineToHtml line =
-  path
-    [ d <| line.mode line.points
-    , stroke "blue"
-    , strokeWidth "2"
-    , fill "none"
-    ]
-    []
