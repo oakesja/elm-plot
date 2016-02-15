@@ -18,8 +18,6 @@ type alias Plot =
   , yScale : Scale
   , points: Points
   , lines: List Line
-  -- , areas
-  -- , scale
   }
 
 createPlot : Float -> Float -> Plot
@@ -65,8 +63,12 @@ rescale : Plot -> Plot
 rescale plot =
   let
     newLines = rescaleLines plot.xScale plot.yScale plot.lines
+    newPoints = List.map (rescalePoint plot.xScale plot.yScale) plot.points
   in
-    { plot | lines = newLines }
+    { plot
+    | lines = newLines
+    , points = newPoints
+    }
 
 rescaleLines : Scale -> Scale -> List Line -> List Line
 rescaleLines xScale yScale lines =
@@ -85,18 +87,16 @@ rescalePoint xScale yScale point =
 
 pointsToHmtl : Plot -> List Html
 pointsToHmtl plot =
-  let
-    createPoints = \point ->  createPointSvg plot.dimensions.width plot.dimensions.height point
-  in
-    List.map createPoints plot.points
+    List.map createPointSvg plot.points
 
-createPointSvg : Float -> Float -> {x : Float, y : Float} -> Html
-createPointSvg plotWidth plotHeight point =
-  let
-    x = toString point.x
-    y = toString (plotHeight - point.y)
-  in
-    circle [cx x, cy y, r "5"] []
+createPointSvg : Point -> Html
+createPointSvg point =
+  circle
+    [ cx <| toString point.x
+    , cy <| toString point.y
+    , r "5"
+    ]
+    []
 
 linesToHtml : Plot -> List Html
 linesToHtml plot =

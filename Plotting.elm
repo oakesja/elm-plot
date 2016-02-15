@@ -9,7 +9,7 @@ import Scale
 main : Html
 main =
   createPlot 400 400
-    -- |> addPoints points
+    |> addPoints points
     |> addLines linear lines
     |> addXScale (Scale.linear (0, 100) (0, 200))
     |> addYScale (Scale.linear (0, 100) (300, 0))
