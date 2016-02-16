@@ -49,6 +49,7 @@ Todo
 - [ ] append additional html to plot (titles, etc)
 - [x] append svg at a point (plot something other than points)
 - bar?
+- record pattern matching in a list
 
 
 for our plots
