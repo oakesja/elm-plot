@@ -93,6 +93,6 @@ Design
   Visual building blocks. Needs a value and a scale to know where to place it. Look into supporting life cycle events (enter, update, exit, hover) Currently this is tied together with the data. Would be nice to have a way of mapping to the data.  https://github.com/vega/vega/wiki/Marks
 
 1. Signals
-  Used for dynamic variables such as user input
-  Look into creating own custom signals that users can tap into.
-  https://github.com/vega/vega/wiki/Signals
+  User specify events that it wants to handle for marks. When that event occurs
+  an action is sent to user to handle. If some type of UI changes need to be made
+  then the user sends that action along with a function to transform the thing. 
