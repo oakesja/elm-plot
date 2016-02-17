@@ -1,37 +1,35 @@
 module Area where
 
-import Line.InterpolationModes exposing (InterpolationMode)
+import Line.Interpolation exposing (Interpolation)
 import Scale exposing (Scale)
 import Svg exposing (Svg, path)
 import Svg.Attributes exposing (d, stroke, strokeWidth)
 
-type alias AreaPoint = { x : Float, y0 : Float, y1 : Float }
-type alias Area = { points : List AreaPoint, mode : InterpolationMode }
+type alias AreaPoint = { x : Float, y : Float, y2 : Float }
+type alias Area = List AreaPoint
 
 rescale : Scale -> Scale -> Area -> Area
 rescale xScale yScale area =
-  { area
-  | points = List.map (rescaleAreaPoint xScale yScale) area.points
-  }
+  List.map (rescaleAreaPoint xScale yScale) area
 
 rescaleAreaPoint : Scale -> Scale -> AreaPoint -> AreaPoint
 rescaleAreaPoint xScale yScale point =
   { x = xScale.rescale point.x
-  , y0 = yScale.rescale point.y0
-  , y1 = yScale.rescale point.y1
+  , y = yScale.rescale point.y
+  , y2 = yScale.rescale point.y2
   }
 
-toHtml : Area -> Svg
-toHtml area =
+toSvg : Interpolation -> Area -> Svg
+toSvg interpolation area =
   path
-    [ d <| pathString area
+    [ d <| pathString interpolation area
     ]
     []
 
-pathString : Area -> String
-pathString area =
+pathString : Interpolation -> Area -> String
+pathString int area =
   let
-    points0 = List.map (\a -> {x = a.x, y = a.y0 }) area.points
-    points1 = List.map (\a -> {x = a.x, y = a.y1 }) area.points
+    points0 = List.map (\a -> {x = a.x, y = a.y }) area
+    points1 = List.map (\a -> {x = a.x, y = a.y2 }) area
   in
-    "M" ++ (area.mode points0) ++ "L" ++ (area.mode points1) ++ "Z"
+    "M" ++ (int points0) ++ "L" ++ (int points1) ++ "Z"

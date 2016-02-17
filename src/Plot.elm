@@ -7,8 +7,7 @@ import Line.Interpolation exposing (Interpolation)
 import Points exposing (Points)
 import Scale exposing (Scale)
 import Line exposing (Line)
--- import Axis exposing (Axis)
--- import Area exposing (Area, AreaPoint)
+import Area exposing (Area)
 
 type alias Dimensions = {width: Float, height: Float}
 
@@ -44,20 +43,16 @@ addLines points getX getY xScale yScale interpolate plot =
   in
     { plot | html = List.append plot.html [line] }
 
--- addArea : InterpolationMode -> List AreaPoint -> Plot -> Plot
--- addArea mode points plot =
---   let
---     a = { points = points, mode = mode }
---   in
---     { plot | areas = a :: plot.areas }
---
--- addXAxis : Axis -> Plot -> Plot
--- addXAxis axis plot =
---   { plot | xAxis = Just axis }
---
--- addYAxis : Axis -> Plot -> Plot
--- addYAxis axis plot =
---   { plot | xAxis = Just axis }
+
+addArea : List a ->  (a -> Float) -> (a -> Float) -> (a -> Float) -> Scale -> Scale -> Interpolation -> Plot -> Plot
+addArea points getX getY getY2 xScale yScale interpolate plot =
+  let
+    area =
+      List.map (\p -> { x = getX p, y = getY p, y2 = getY2 p }) points
+        |> Area.rescale xScale yScale
+        |> Area.toSvg interpolate
+  in
+    { plot | html = List.append plot.html [area] }
 
 toSvg : Plot -> Svg
 toSvg plot =
@@ -66,30 +61,3 @@ toSvg plot =
     , height (toString plot.dimensions.height)
     ]
     plot.html
-
-  -- let
-  --   plot = rescale p
-  -- in
-  --   svg
-  --     [ width (toString plot.dimensions.width)
-  --     , height (toString plot.dimensions.height)
-  --     ]
-  --     <| List.concat
-  --       [ List.concat <| List.map SvgPoints.toHtml plot.points
-  --       , List.map Line.toHtml plot.lines
-  --       , List.map Area.toHtml plot.areas
-  --       , Axis.toHtml plot.xScale plot.xAxis
-  --       ]
-
--- rescale : Plot -> Plot
--- rescale plot =
---   let
---     newLines = List.map (Line.rescale plot.xScale plot.yScale) plot.lines
---     newPoints = List.map (SvgPoints.rescale plot.xScale plot.yScale) plot.points
---     newAreas = List.map (Area.rescale plot.xScale plot.yScale) plot.areas
---   in
---     { plot
---     | lines = newLines
---     , points = newPoints
---     , areas = newAreas
---     }

@@ -3,15 +3,19 @@ module Plotting where
 import Html exposing (Html)
 import Plot exposing (..)
 import Plot exposing (..)
-import Line.InterpolationModes exposing (linear)
+import Line.Interpolation exposing (linear)
 import Scale
 import Point exposing (Point)
 
 main : Html
 main =
-  createPlot 400 400 (Scale.linear (0.7491, 1.3483) (0, 400)) (Scale.linear (0, 551) (400, 0))
-    |> addLines linear lines
-    |> toHtml
+  let
+    xScale = Scale.linear (0.7491, 1.3483) (0, 400)
+    yScale = Scale.linear (0, 551) (400, 0)
+  in
+  createPlot 400 400
+    |> addLines lines .x .y xScale yScale linear
+    |> toSvg
 
 lines : List Point
 lines =
