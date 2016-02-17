@@ -53,6 +53,8 @@ Todo
 - [ ] rule/ gridlines
 - [ ] text
 
+try to remove html dependency
+
 for our plots
 - panning and zooming
 - mouse input
