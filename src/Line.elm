@@ -12,12 +12,18 @@ rescale : Scale -> Scale -> Line -> Line
 rescale xScale yScale line =
   Points.rescale xScale yScale line
 
-toSvg : Interpolation -> Line -> Svg
-toSvg interpolate line =
+toSvg : Interpolation -> List Svg.Attribute -> Line -> Svg
+toSvg interpolate attrs line =
+  let
+    attributes =
+      if List.length attrs == 0 then
+        [ stroke "blue"
+        , strokeWidth "2"
+        , fill "none"
+        ]
+      else
+        attrs
+  in
   path
-    [ d <| "M" ++ interpolate line
-    , stroke "blue"
-    , strokeWidth "2"
-    , fill "none"
-    ]
+    ((d <| "M" ++ interpolate line) :: attributes)
     []

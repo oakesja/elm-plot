@@ -14,7 +14,7 @@ main =
     yScale = Scale.linear (0, 551) (400, 0)
   in
   createPlot 400 400
-    |> addLines lines .x .y xScale yScale linear
+    |> addLines lines .x .y xScale yScale linear []
     |> toSvg
 
 lines : List Point

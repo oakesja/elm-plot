@@ -19,11 +19,10 @@ rescaleAreaPoint xScale yScale point =
   , y2 = yScale.rescale point.y2
   }
 
-toSvg : Interpolation -> Area -> Svg
-toSvg interpolation area =
+toSvg : Interpolation -> List Svg.Attribute -> Area -> Svg
+toSvg interpolation attrs area =
   path
-    [ d <| pathString interpolation area
-    ]
+    ((d <| pathString interpolation area) :: attrs)
     []
 
 pathString : Interpolation -> Area -> String

@@ -6,6 +6,7 @@ import Plot exposing (..)
 import Line.Interpolation exposing (linear)
 import Scale
 import Point exposing (Point)
+import Svg.Attributes exposing (stroke)
 
 main : Html
 main =
@@ -14,8 +15,8 @@ main =
     yScale = Scale.linear (0, 9000) (200, 0)
   in
     createPlot 600 600
-      |> addLines lines .x .y xScale yScale linear
-      |> addArea area .x .y .baseline xScale yScale linear
+      |> addLines lines .x .y xScale yScale linear []
+      |> addArea area .x .y .baseline xScale yScale linear [stroke "red"]
       |> toSvg
 
 lines : List Point

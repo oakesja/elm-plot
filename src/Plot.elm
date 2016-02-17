@@ -33,24 +33,24 @@ addPoints points getX getY xScale yScale pointToSvg plot =
   in
     { plot | html = newHtml }
 
-addLines : List a ->  (a -> Float) -> (a -> Float) -> Scale -> Scale -> Interpolation -> Plot -> Plot
-addLines points getX getY xScale yScale interpolate plot =
+addLines : List a ->  (a -> Float) -> (a -> Float) -> Scale -> Scale -> Interpolation -> List Svg.Attribute -> Plot -> Plot
+addLines points getX getY xScale yScale interpolate attrs plot =
   let
     line =
       List.map (\p -> { x = getX p, y = getY p }) points
         |> Points.rescale xScale yScale
-        |> Line.toSvg interpolate
+        |> Line.toSvg interpolate attrs
   in
     { plot | html = List.append plot.html [line] }
 
 
-addArea : List a ->  (a -> Float) -> (a -> Float) -> (a -> Float) -> Scale -> Scale -> Interpolation -> Plot -> Plot
-addArea points getX getY getY2 xScale yScale interpolate plot =
+addArea : List a ->  (a -> Float) -> (a -> Float) -> (a -> Float) -> Scale -> Scale -> Interpolation -> List Svg.Attribute -> Plot -> Plot
+addArea points getX getY getY2 xScale yScale interpolate attrs plot =
   let
     area =
       List.map (\p -> { x = getX p, y = getY p, y2 = getY2 p }) points
         |> Area.rescale xScale yScale
-        |> Area.toSvg interpolate
+        |> Area.toSvg interpolate attrs
   in
     { plot | html = List.append plot.html [area] }
 

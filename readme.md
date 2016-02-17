@@ -4,14 +4,14 @@ Todo
   - [ ] defined
   - [ ] tension
   - [x] scale
-  - [ ] style
+  - [x] style
 - area  
   - [x] interpolators
   - [ ] defined
   - [ ] tension
   - [ ] x0?
   - [x] scale
-  - [ ] style
+  - [x] style
 - axis
   - [ ] style
   - [ ] orientation
@@ -48,9 +48,10 @@ Todo
   - [ ] monotone
 - [ ] append additional html to plot (titles, etc)
 - [x] append svg at a point (plot something other than points)
-- bar?
-- record pattern matching in a list
-
+- [ ] rect
+- [ ] arc
+- [ ] rule/ gridlines
+- [ ] text
 
 for our plots
 - panning and zooming
@@ -95,4 +96,4 @@ Design
 1. Signals
   User specify events that it wants to handle for marks. When that event occurs
   an action is sent to user to handle. If some type of UI changes need to be made
-  then the user sends that action along with a function to transform the thing. 
+  then the user sends that action along with a function to transform the thing.

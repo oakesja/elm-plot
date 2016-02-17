@@ -16,7 +16,7 @@ main =
     yScale = Scale.linear (0, 100) (400, 0)
   in
     createPlot 400 400
-      |> addLines lines .x .y xScale yScale linear
+      |> addLines lines .x .y xScale yScale linear []
       |> addPoints points .x .y xScale yScale circleSvg
       |> toSvg
 
