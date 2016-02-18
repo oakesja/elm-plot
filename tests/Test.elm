@@ -1,18 +1,13 @@
-import String
 import Task
-
 import Console
 import ElmTest exposing (..)
-
+import Test.Line.InterpolationTest as InterpolationTest
 
 tests : Test
 tests =
-    suite "A Test Suite"
-        [ test "Addition" (assertEqual (3 + 7) 10)
-        , test "String.left" (assertEqual "a" (String.left 1 "abcdefg"))
-        , test "This test should fail" (assert False)
+    suite "All Tests"
+        [ InterpolationTest.tests
         ]
-
 
 port runner : Signal (Task.Task x ())
 port runner =
