@@ -1,4 +1,4 @@
-module Line.Interpolation (linear) where
+module Line.Interpolation (Interpolation, linear) where
 
 import Points exposing (Points)
 

@@ -1,24 +1,36 @@
 module Simple where
 
-import Html exposing (Html)
+import Html exposing (Html, div)
 import Plot exposing (..)
 import Plot exposing (..)
 import Line.Interpolation exposing (linear)
-import Axis
-import Scale
+import Scale exposing (Scale)
 import Svg exposing (circle, Svg)
 import Svg.Attributes exposing (cx, cy, r)
+import Axis
 
 main : Html
 main =
   let
-    xScale = Scale.linear (0, 100) (0, 400)
-    yScale = Scale.linear (0, 100) (400, 0)
+    plot =
+      createPlot 400 400
+        |> addLines lines .x .y xScale yScale linear []
+        |> addPoints points .x .y xScale yScale circleSvg
+        |> addAxis Axis.Top xScale
+        |> addAxis Axis.Right yScale
+        |> toSvg
   in
-    createPlot 400 400
-      |> addLines lines .x .y xScale yScale linear []
-      |> addPoints points .x .y xScale yScale circleSvg
-      |> toSvg
+    div
+      []
+      [plot, plot]
+
+xScale : Scale
+xScale =
+  Scale.linear (0, 100) (0, 400)
+
+yScale : Scale
+yScale =
+  Scale.linear (0, 100) (400, 0)
 
 circleSvg : Float -> Float -> Svg
 circleSvg x y =
@@ -29,20 +41,22 @@ circleSvg x y =
     ]
     []
 
+points : List { x : Float, y : Float }
 points =
-  [ {x = 10, y = 10}
+  [ {x = 0, y = 0}
   , {x = 50, y = 50}
   , {x = 100, y = 100}
   , {x = 200, y = 200}
   , {x = 300, y = 300}
-  , {x = 400, y = 500}
+  , {x = 400, y = 400}
   ]
 
+lines : List { x : Float, y : Float }
 lines =
-  [ { x =  10,   y =  10}
+  [ { x =  0,   y =  0}
   , { x =  50,  y =  50}
   , { x =  40,  y =  10}
   , { x =  60,  y =  40}
   , { x =  80,  y =  5}
-  , { x =  100, y =  60}
+  , { x =  100, y =  100}
   ]
