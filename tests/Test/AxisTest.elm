@@ -13,7 +13,7 @@ tests =
 pathStringTests : Test
 pathStringTests =
   let
-    scale = Scale.identity (10, 90)
+    scale = Scale.linear (10, 90) (10, 90)
     boundingBox =
       { xStart = 5
       , xEnd = 95

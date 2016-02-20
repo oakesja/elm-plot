@@ -63,8 +63,8 @@ addArea points getX getY getY2 xScale yScale interpolate attrs plot =
   in
     { plot | html = List.append plot.html [area] }
 
-addAxis : Axis.Orient -> Scale -> Plot -> Plot
-addAxis orient scale plot =
+addAxis : Axis.Orient -> Scale -> Int -> Plot -> Plot
+addAxis orient scale ticks plot =
   let
     scale = case orient of
       Axis.Top ->
@@ -79,6 +79,7 @@ addAxis orient scale plot =
       { orient = orient
       , scale = scale
       , boundingBox = BoundingBox.from plot.dimensions plot.margins
+      , numTicks = ticks
       }
   in
     { plot | html = List.append plot.html [Axis.toSvg axis] }

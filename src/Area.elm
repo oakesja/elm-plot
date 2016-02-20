@@ -14,9 +14,9 @@ rescale xScale yScale area =
 
 rescaleAreaPoint : Scale -> Scale -> AreaPoint -> AreaPoint
 rescaleAreaPoint xScale yScale point =
-  { x = xScale.rescale point.x
-  , y = yScale.rescale point.y
-  , y2 = yScale.rescale point.y2
+  { x = Scale.scale xScale point.x
+  , y = Scale.scale yScale point.y
+  , y2 = Scale.scale yScale point.y2
   }
 
 toSvg : Interpolation -> List Svg.Attribute -> Area -> Svg

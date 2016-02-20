@@ -1,11 +1,25 @@
 try to remove html dependency
-rule/gridlines
-append additional html to plot
+append additional svg to plot
 give option of width and height for range of scale
 default padding
 negative dimensions
 negative margins
 handle scales that don't need to change from margins
+
+axis
+  - orient
+  - number of ticks or tick values
+  - inner tick size
+  - outer tick size
+  - padding (space between label and axis)
+  - rotation (how much to rotate the label by)
+  - style for axis
+  - style for inner ticks
+  - style for labels
+  - tick format
+  - grid lines
+  - title
+  - title offset
 
 Design
 
