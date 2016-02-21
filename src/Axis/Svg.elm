@@ -104,15 +104,11 @@ createTickInfo : Scale -> Orient -> Float -> TickInfo
 createTickInfo scale orient value =
   let
     scaledValue = Scale.scale scale value
-    translation = case orient of
-      Axis.Orient.Top ->
-        (scaledValue, 0)
-      Axis.Orient.Bottom ->
-        (scaledValue, 0)
-      Axis.Orient.Left ->
-        (0, scaledValue)
-      Axis.Orient.Right ->
-        (0, scaledValue)
+    translation =
+      if orient == Axis.Orient.Top || orient == Axis.Orient.Bottom then
+          (scaledValue, 0)
+      else
+          (0, scaledValue)
   in
     { value = value, translation = translation }
 

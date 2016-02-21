@@ -41,19 +41,19 @@ pathStringTests =
       <| assertEqual "M-6,10H0V90H-6" <| pathString boundingBox scale Axis.Orient.Left 6
     , test "for right orient"
       <| assertEqual "M6,10H0V90H6" <| pathString boundingBox scale Axis.Orient.Right 6
-    , test "for a scale that does not fix inside the x bounding box"
+    , test "for a scale that does not fit inside the x boundings"
       <| assertEqual "M5,-6V0H95V-6"
         <| pathString boundingBox (Scale.linear (0, 105) (0, 105)) Axis.Orient.Top 6
-    , test "for a scale that does not fix inside the y bounding box"
+    , test "for a scale that does not fit inside the y boundings"
       <| assertEqual "M-6,2H0V100H-6"
         <| pathString boundingBox (Scale.linear (0, 105) (0, 105)) Axis.Orient.Left 6
-    , test "for x axis with a reverse scale that does not fix inside the x bounding box"
+    , test "for x axis with a reverse scale that does not fit inside the x boundings"
       <| assertEqual "M5,-6V0H95V-6"
         <| pathString boundingBox (Scale.linear (0, 105) (105, 0)) Axis.Orient.Top 6
-    , test "for y axis with a reverse scale that does not fix inside the y bounding box"
+    , test "for y axis with a reverse scale that does not fit inside the y boundings"
       <| assertEqual "M-6,2H0V100H-6"
         <| pathString boundingBox (Scale.linear (0, 105) (105, 0)) Axis.Orient.Left 6
-    , test "for non default tick size"
+    , test "for a non-default tick size"
       <| assertEqual "M10,-8V0H90V-8" <| pathString boundingBox scale Axis.Orient.Top 8
     ]
 
@@ -66,13 +66,13 @@ createTickInfosTests =
       [ test "for top orient"
           <| assertEqual [{value = 0, translation = (0, 0)}, {value = 1, translation = (10, 0)}]
             <| createTickInfos scale Axis.Orient.Top 1
-      , test "for top orient"
+      , test "for bottom orient"
           <| assertEqual [{value = 0, translation = (0, 0)}, {value = 1, translation = (10, 0)}]
             <| createTickInfos scale Axis.Orient.Bottom 1
-      , test "for top orient"
+      , test "for left orient"
           <| assertEqual [{value = 0, translation = (0, 0)}, {value = 1, translation = (0, 10)}]
             <| createTickInfos scale Axis.Orient.Left 1
-      , test "for top orient"
+      , test "for right orient"
           <| assertEqual [{value = 0, translation = (0, 0)}, {value = 1, translation = (0, 10)}]
             <| createTickInfos scale Axis.Orient.Right 1
       ]
