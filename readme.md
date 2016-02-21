@@ -6,22 +6,31 @@ negative dimensions
 negative margins
 handle scales that don't need to change from margins
 
+symbols
+  - [ ] circle
+  - [ ] square
+  - [ ] cross
+  - [ ] diamond
+  - [ ] triangle up
+  - [ ] triangle down
+
 axis
-  - scale - required but plot needs to adjust for margins somehow
-  - orient - required
-  - number of ticks or tick values - default none
-  - inner tick size - default 6
-  - outer tick size - default 6
-  - padding (space between label and axis) - default 3
-  - rotation (how much to rotate the label by) - default 0
-  - style for axis - default [fill "none", stroke "#000", shapeRendering "crispEdges"]
-  - style for inner ticks - default [fill "none", stroke "#000", shapeRendering "crispEdges"]
-  - style for labels
-  - tick format
-  - grid lines - default none
-  - grid line style - default none
-  - title - default none
-  - title offset
+  - [x] scale - required but plot needs to adjust for margins somehow
+  - [x] orient - required
+  - [x] number of ticks - default none
+  - [ ] tick values instead of number of ticks
+  - [x] inner tick size - default 6
+  - [x] outer tick size - default 6
+  - [x] padding (space between label and axis) - default 3
+  - [x] rotation (how much to rotate the label by) - default 0
+  - [x] style for axis - default [fill "none", stroke "#000", shapeRendering "crispEdges"]
+  - [x] style for inner ticks - default [fill "none", stroke "#000", shapeRendering "crispEdges"]
+  - [ ] style for labels - default depends on orientation
+  - [ ] tick format
+  - [ ] grid lines - default none
+  - [ ] grid line style - default none
+  - [ ] title - default none
+  - [ ] title offset
 
 Design
 

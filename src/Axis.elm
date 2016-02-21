@@ -14,6 +14,8 @@ createAxis scale orient =
   , numTicks = 0
   , innerTickSize = 6
   , outerTickSize = 6
+  , tickPadding = 3
+  , labelRotation = 0
   , axisStyle = [ fill "none", stroke "#000", shapeRendering "crispEdges" ]
   , innerTickStyle = [ fill "none", stroke "#000", shapeRendering "crispEdges" ]
   }
@@ -29,6 +31,14 @@ innerTickSize size axis =
 outerTickSize : Int -> Axis -> Axis
 outerTickSize size axis =
   { axis | outerTickSize = size }
+
+tickPadding : Int -> Axis -> Axis
+tickPadding padding axis =
+  { axis | tickPadding = padding }
+
+labelRotation : Int -> Axis -> Axis
+labelRotation rotation axis =
+  { axis | labelRotation = rotation }
 
 axisStyle : List Svg.Attribute -> Axis -> Axis
 axisStyle style axis =

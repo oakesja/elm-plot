@@ -5,7 +5,7 @@ import Axis.Orient
 import Scale exposing (Scale)
 import BoundingBox exposing (BoundingBox)
 import ElmTest exposing (..)
-import Svg.Attributes exposing (x, y, y2, x2, dy, textAnchor)
+import Svg.Attributes exposing (x, y, y2, x2, dy, textAnchor, transform)
 
 tests : Test
 tests =
@@ -34,22 +34,27 @@ pathStringTests : Test
 pathStringTests =
   suite "pathString"
     [ test "for top orient"
-      <| assertEqual "M10,-6V0H90V-6" <| pathString boundingBox scale Axis.Orient.Top
+      <| assertEqual "M10,-6V0H90V-6" <| pathString boundingBox scale Axis.Orient.Top 6
     , test "for bottom orient"
-      <| assertEqual "M10,6V0H90V6" <| pathString boundingBox scale Axis.Orient.Bottom
+      <| assertEqual "M10,6V0H90V6" <| pathString boundingBox scale Axis.Orient.Bottom 6
     , test "for left orient"
-      <| assertEqual "M-6,10H0V90H-6" <| pathString boundingBox scale Axis.Orient.Left
+      <| assertEqual "M-6,10H0V90H-6" <| pathString boundingBox scale Axis.Orient.Left 6
     , test "for right orient"
-      <| assertEqual "M6,10H0V90H6" <| pathString boundingBox scale Axis.Orient.Right
+      <| assertEqual "M6,10H0V90H6" <| pathString boundingBox scale Axis.Orient.Right 6
     , test "for a scale that does not fix inside the x bounding box"
-      <| assertEqual "M5,-6V0H95V-6" <| pathString boundingBox (Scale.linear (0, 105) (0, 105)) Axis.Orient.Top
+      <| assertEqual "M5,-6V0H95V-6"
+        <| pathString boundingBox (Scale.linear (0, 105) (0, 105)) Axis.Orient.Top 6
     , test "for a scale that does not fix inside the y bounding box"
-      <| assertEqual "M-6,2H0V100H-6" <| pathString boundingBox (Scale.linear (0, 105) (0, 105)) Axis.Orient.Left
+      <| assertEqual "M-6,2H0V100H-6"
+        <| pathString boundingBox (Scale.linear (0, 105) (0, 105)) Axis.Orient.Left 6
     , test "for x axis with a reverse scale that does not fix inside the x bounding box"
-      <| assertEqual "M5,-6V0H95V-6" <| pathString boundingBox (Scale.linear (0, 105) (105, 0)) Axis.Orient.Top
+      <| assertEqual "M5,-6V0H95V-6"
+        <| pathString boundingBox (Scale.linear (0, 105) (105, 0)) Axis.Orient.Top 6
     , test "for y axis with a reverse scale that does not fix inside the y bounding box"
-      <| assertEqual "M-6,2H0V100H-6" <| pathString boundingBox (Scale.linear (0, 105) (105, 0)) Axis.Orient.Left
-    -- different tick size test
+      <| assertEqual "M-6,2H0V100H-6"
+        <| pathString boundingBox (Scale.linear (0, 105) (105, 0)) Axis.Orient.Left 6
+    , test "for non default tick size"
+      <| assertEqual "M10,-8V0H90V-8" <| pathString boundingBox scale Axis.Orient.Top 8
     ]
 
 createTickInfosTests : Test
@@ -94,16 +99,22 @@ labelAttributesTests =
   suite "labelAttributes"
     [ test "for top orient"
         <| assertEqual [x "0", y "-6", dy "0em", textAnchor "middle"]
-          <| labelAttributes Axis.Orient.Top 6
+          <| labelAttributes Axis.Orient.Top 6 0 0
     , test "for bottom orient"
         <| assertEqual [x "0", y "6", dy ".71em", textAnchor "middle"]
-          <| labelAttributes Axis.Orient.Bottom 6
+          <| labelAttributes Axis.Orient.Bottom 6 0 0
     , test "for left orient"
-        <| assertEqual [x "-4", y "0", dy ".32em", textAnchor "end"]
-          <| labelAttributes Axis.Orient.Left 4
+        <| assertEqual [x "-6", y "0", dy ".32em", textAnchor "end"]
+          <| labelAttributes Axis.Orient.Left 6 0 0
     , test "for right orient"
-        <| assertEqual [x "4", y "0", dy ".32em", textAnchor "stat"]
-          <| labelAttributes Axis.Orient.Right 4
+        <| assertEqual [x "6", y "0", dy ".32em", textAnchor "start"]
+          <| labelAttributes Axis.Orient.Right 6 0 0
+    , test "tick padding is included in the ofset"
+        <| assertEqual [x "10", y "0", dy ".32em", textAnchor "start"]
+          <| labelAttributes Axis.Orient.Right 8 2 0
+    , test "when rotation is not zero a rotaion transform is included"
+        <| assertEqual [x "6", y "0", dy ".32em", textAnchor "start", transform "rotate(25,6,0)"]
+          <| labelAttributes Axis.Orient.Right 6 0 25
     ]
 
 scale : Scale

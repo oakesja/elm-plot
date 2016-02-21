@@ -37,7 +37,7 @@ axisTranslation bBox orient =
 axisSvg : Axis -> Svg
 axisSvg axis =
   path
-     ((d <| pathString axis.boundingBox axis.scale axis.orient) :: axis.axisStyle)
+     ((d <| pathString axis.boundingBox axis.scale axis.orient axis.outerTickSize) :: axis.axisStyle)
      []
 
 ticksSvg : Axis -> List Svg
@@ -49,25 +49,33 @@ createTick axis tickInfo =
   g
     [ transform (translateString tickInfo.translation) ]
     [ line ((innerTickLineAttributes axis.orient axis.innerTickSize) ++ axis.innerTickStyle) []
-    , text' (labelAttributes axis.orient axis.innerTickSize) [ Svg.text <| toString tickInfo.value ]
+    , text'
+      (labelAttributes axis.orient axis.innerTickSize axis.tickPadding axis.labelRotation)
+      [ Svg.text <| toString tickInfo.value ]
     ]
 
 -- https://github.com/mbostock/d3/blob/5b981a18db32938206b3579248c47205ecc94123/src/svg/axis.js#L53
-labelAttributes : Orient -> Int -> List Svg.Attribute
-labelAttributes orient tickSize =
+labelAttributes : Orient -> Int -> Int -> Int -> List Svg.Attribute
+labelAttributes orient tickSize tickPadding rotation =
   let
-    pos = innerTickLinePos orient tickSize
-    posAttrs = [x (toString (fst pos)), y (toString (snd pos))]
-  in
-    case orient of
+    pos = innerTickLinePos orient (tickSize + tickPadding)
+    xString = (toString (fst pos))
+    yString = (toString (snd pos))
+    posAttrs = [x xString, y yString]
+    anchorAttrs = case orient of
       Axis.Orient.Top ->
-        List.append posAttrs [dy "0em", textAnchor "middle"]
+        [dy "0em", textAnchor "middle"]
       Axis.Orient.Bottom ->
-        List.append posAttrs [dy ".71em", textAnchor "middle"]
+        [dy ".71em", textAnchor "middle"]
       Axis.Orient.Left ->
-        List.append posAttrs [dy ".32em", textAnchor "end"]
+        [dy ".32em", textAnchor "end"]
       Axis.Orient.Right ->
-        List.append posAttrs [dy ".32em", textAnchor "start"]
+        [dy ".32em", textAnchor "start"]
+  in
+    if rotation == 0 then
+      posAttrs ++ anchorAttrs
+    else
+      posAttrs ++ anchorAttrs ++ [transform <| "rotate(" ++ (toString rotation) ++ "," ++ xString ++ "," ++ yString ++ ")"]
 
 innerTickLineAttributes : Orient -> Int -> List Svg.Attribute
 innerTickLineAttributes orient tickSize =
@@ -112,13 +120,12 @@ translateString : (Float, Float) -> String
 translateString pos =
   "translate(" ++ (toString (fst pos)) ++ "," ++ (toString (snd pos)) ++ ")"
 
-pathString : BoundingBox -> Scale -> Orient -> String
-pathString bBox scale orient =
+pathString : BoundingBox -> Scale -> Orient -> Int -> String
+pathString bBox scale orient tickSize =
   let
     extent = extentOf scale.range
     start = fst extent
     end = snd extent
-    tickSize = 6
     path = case orient of
       Axis.Orient.Top ->
         verticalAxisString bBox -tickSize start end
@@ -131,7 +138,7 @@ pathString bBox scale orient =
   in
     "M" ++ path
 
-verticalAxisString : BoundingBox -> Float -> Float -> Float -> String
+verticalAxisString : BoundingBox -> Int -> Float -> Float -> String
 verticalAxisString bBox tickLocation xStart xEnd =
   let
     start = if xStart < bBox.xStart then bBox.xStart else xStart
@@ -139,7 +146,7 @@ verticalAxisString bBox tickLocation xStart xEnd =
   in
     (toString start) ++ "," ++ (toString tickLocation) ++ "V0H" ++ (toString end) ++ "V" ++ (toString tickLocation)
 
-horizontalAxisString : BoundingBox -> Float -> Float -> Float -> String
+horizontalAxisString : BoundingBox -> Int -> Float -> Float -> String
 horizontalAxisString bBox tickLocation yStart yEnd =
   let
     start = if yStart < bBox.yStart then bBox.yStart else yStart

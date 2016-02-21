@@ -5,7 +5,7 @@ import Plot exposing (..)
 import Line.Interpolation exposing (linear)
 import Scale exposing (Scale)
 import Svg exposing (circle, Svg)
-import Svg.Attributes exposing (cx, cy, r)
+import Svg.Attributes exposing (cx, cy, r, stroke)
 import Axis
 import Axis.Orient
 
@@ -14,11 +14,16 @@ main =
   let
     yAxis =
       Axis.createAxis yScale Axis.Orient.Left
-        |> Axis.numberOfTicks 10
+        |> Axis.numberOfTicks 20
+        |> Axis.outerTickSize 10
+        |> Axis.innerTickSize 15
+        |> Axis.innerTickStyle [stroke "red"]
 
     xAxis =
       Axis.createAxis xScale Axis.Orient.Bottom
         |> Axis.numberOfTicks 10
+        |> Axis.tickPadding 5
+        |> Axis.labelRotation -45
 
     plot =
       createPlot 400 400

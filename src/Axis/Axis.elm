@@ -12,6 +12,8 @@ type alias Axis =
   , numTicks : Int
   , innerTickSize : Int
   , outerTickSize : Int
+  , tickPadding : Int
+  , labelRotation : Int
   , axisStyle : List Svg.Attribute
   , innerTickStyle : List Svg.Attribute
   }
