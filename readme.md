@@ -7,18 +7,20 @@ negative margins
 handle scales that don't need to change from margins
 
 axis
-  - orient
-  - number of ticks or tick values
-  - inner tick size
-  - outer tick size
-  - padding (space between label and axis)
-  - rotation (how much to rotate the label by)
-  - style for axis
-  - style for inner ticks
+  - scale - required but plot needs to adjust for margins somehow
+  - orient - required
+  - number of ticks or tick values - default none
+  - inner tick size - default 6
+  - outer tick size - default 6
+  - padding (space between label and axis) - default 3
+  - rotation (how much to rotate the label by) - default 0
+  - style for axis - default [fill "none", stroke "#000", shapeRendering "crispEdges"]
+  - style for inner ticks - default [fill "none", stroke "#000", shapeRendering "crispEdges"]
   - style for labels
   - tick format
-  - grid lines
-  - title
+  - grid lines - default none
+  - grid line style - default none
+  - title - default none
   - title offset
 
 Design

@@ -8,7 +8,9 @@ import Points exposing (Points)
 import Scale exposing (Scale)
 import Line exposing (Line)
 import Area exposing (Area)
-import Axis exposing (Axis)
+import Axis.Axis exposing (Axis)
+import Axis.Svg
+import Axis.Orient
 import Dimensions exposing (Dimensions, Margins)
 import BoundingBox
 
@@ -63,26 +65,24 @@ addArea points getX getY getY2 xScale yScale interpolate attrs plot =
   in
     { plot | html = List.append plot.html [area] }
 
-addAxis : Axis.Orient -> Scale -> Int -> Plot -> Plot
-addAxis orient scale ticks plot =
+addAxis : Axis -> Plot -> Plot
+addAxis axis plot =
   let
-    scale = case orient of
-      Axis.Top ->
-        Scale.includeMargins plot.margins.left plot.margins.right scale
-      Axis.Bottom ->
-        Scale.includeMargins plot.margins.left plot.margins.right scale
-      Axis.Left ->
-        Scale.includeMargins -plot.margins.bottom -plot.margins.top scale
-      Axis.Right ->
-        Scale.includeMargins -plot.margins.bottom -plot.margins.top scale
-    axis =
-      { orient = orient
-      , scale = scale
-      , boundingBox = BoundingBox.from plot.dimensions plot.margins
-      , numTicks = ticks
-      }
+    scale = case axis.orient of
+      Axis.Orient.Top ->
+        Scale.includeMargins plot.margins.left plot.margins.right axis.scale
+      Axis.Orient.Bottom ->
+        Scale.includeMargins plot.margins.left plot.margins.right axis.scale
+      Axis.Orient.Left ->
+        Scale.includeMargins -plot.margins.bottom -plot.margins.top axis.scale
+      Axis.Orient.Right ->
+        Scale.includeMargins -plot.margins.bottom -plot.margins.top axis.scale
+    a = { axis
+        | scale = scale
+        , boundingBox = BoundingBox.from plot.dimensions plot.margins
+        }
   in
-    { plot | html = List.append plot.html [Axis.toSvg axis] }
+    { plot | html = List.append plot.html [Axis.Svg.toSvg a] }
 
 toSvg : Plot -> Svg
 toSvg plot =

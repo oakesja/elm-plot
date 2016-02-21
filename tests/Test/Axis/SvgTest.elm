@@ -1,6 +1,7 @@
-module Test.AxisTest where
+module Test.Axis.SvgTest where
 
-import Axis exposing (..)
+import Axis.Svg exposing (..)
+import Axis.Orient
 import Scale
 import ElmTest exposing (..)
 
@@ -23,11 +24,11 @@ pathStringTests =
   in
     suite "pathString"
       [ test "for top orient"
-          <| assertEqual "M10,-4V2H90V-4" <| pathString boundingBox scale Top
+          <| assertEqual "M10,-4V2H90V-4" <| pathString boundingBox scale Axis.Orient.Top
       , test "for bottom orient"
-        <| assertEqual "M10,106V100H90V106" <| pathString boundingBox scale Bottom
+        <| assertEqual "M10,106V100H90V106" <| pathString boundingBox scale Axis.Orient.Bottom
       , test "for left orient"
-        <| assertEqual "M-1,10H5V90H-1" <| pathString boundingBox scale Left
+        <| assertEqual "M-1,10H5V90H-1" <| pathString boundingBox scale Axis.Orient.Left
       , test "for right orient"
-        <| assertEqual "M101,10H95V90H101" <| pathString boundingBox scale Right
+        <| assertEqual "M101,10H95V90H101" <| pathString boundingBox scale Axis.Orient.Right
       ]

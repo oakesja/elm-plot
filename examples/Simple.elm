@@ -2,22 +2,26 @@ module Simple where
 
 import Html exposing (Html, div)
 import Plot exposing (..)
-import Plot exposing (..)
 import Line.Interpolation exposing (linear)
 import Scale exposing (Scale)
 import Svg exposing (circle, Svg)
 import Svg.Attributes exposing (cx, cy, r)
 import Axis
+import Axis.Orient
 
 main : Html
 main =
   let
+    yAxis =
+      Axis.createAxis yScale Axis.Orient.Left
+        |> Axis.numberOfTicks 10
+
     plot =
       createPlot 400 400
         |> addLines lines .x .y xScale yScale linear []
         |> addPoints points .x .y xScale yScale circleSvg
-        |> addAxis Axis.Top xScale
-        |> addAxis Axis.Right yScale
+        -- |> addAxis createAxis xScale Axis.Top
+        |> addAxis yAxis
         |> toSvg
   in
     div

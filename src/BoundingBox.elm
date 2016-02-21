@@ -1,4 +1,4 @@
-module BoundingBox (BoundingBox, from) where
+module BoundingBox where
 
 import Dimensions exposing (Dimensions, Margins)
 
