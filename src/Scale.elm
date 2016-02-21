@@ -6,7 +6,7 @@ type alias Scale =
   { domain : (Float, Float)
   , range : (Float, Float)
   , scale : (Float, Float) -> (Float, Float) -> Float -> Float
-  , ticks : Int -> List Float
+  , createTicks : Int -> List Float
   }
 
 scale : Scale -> Float -> Float
@@ -21,7 +21,7 @@ includeMargins lowM highM scale =
   in
     { scale | range = (rLow, rHigh) }
 
--- identity : (Float, Float) -> Scale
+-- identity : (Float, Float) -> Scales
 -- identity domain =
 --   { domain = domain
 --   , range = domain
@@ -37,5 +37,5 @@ linear domain range =
   { domain = domain
   , range = range
   , scale = Scale.Linear.scale
-  , ticks = Scale.Linear.ticks domain
+  , createTicks = Scale.Linear.createTicks domain
   }

@@ -24,7 +24,7 @@ createPlot : Float -> Float -> Plot
 createPlot width height =
   { dimensions = { width = width, height = height }
   , html = []
-  , margins = {top = 10, bottom = 10, right = 10, left = 10}
+  , margins = {top = 40, bottom = 40, right = 40, left = 40}
   }
 
 addPoints : List a -> (a -> Float) -> (a -> Float) -> Scale -> Scale -> (Float -> Float -> Svg) -> Plot -> Plot

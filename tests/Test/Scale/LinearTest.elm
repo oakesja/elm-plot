@@ -34,21 +34,21 @@ ticksTests =
 generateTickTests : List Test
 generateTickTests =
   [ test "for a regular domain and 1 tick"
-      <| assertEqual [0, 1] <| ticks (0, 1) 1
+      <| assertEqual [0, 1] <| createTicks (0, 1) 1
   , test "for a regular domain and 2 ticks"
-      <| assertEqual [0, 0.5, 1] <| ticks (0, 1) 2
+      <| assertEqual [0, 0.5, 1] <| createTicks (0, 1) 2
   , test "for a regular domain and 5 ticks"
-      <| assertEqual [0, 0.2, 0.4, 0.6, 0.8, 1] <| ticks (0, 1) 5
+      <| assertEqual [0, 0.2, 0.4, 0.6, 0.8, 1] <| createTicks (0, 1) 5
   , test "for a regular domain and 10 ticks"
-      <| assertEqual [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1] <| ticks (0, 1) 10
+      <| assertEqual [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1] <| createTicks (0, 1) 10
   , test "for a reverse domain and 1 tick"
-      <| assertEqual [0, 1] <| ticks (1, 0) 1
+      <| assertEqual [0, 1] <| createTicks (1, 0) 1
   , test "for a reverse domain and 2 ticks"
-      <| assertEqual [0, 0.5, 1] <| ticks (1, 0) 2
+      <| assertEqual [0, 0.5, 1] <| createTicks (1, 0) 2
   , test "for a reverse domain and 5 ticks"
-      <| assertEqual [0, 0.2, 0.4, 0.6, 0.8, 1] <| ticks (1, 0) 5
+      <| assertEqual [0, 0.2, 0.4, 0.6, 0.8, 1] <| createTicks (1, 0) 5
   , test "for a reverse domain and 10 ticks"
-      <| assertEqual [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1] <| ticks (1, 0) 10
+      <| assertEqual [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1] <| createTicks (1, 0) 10
   ]
 
 formatTickTests : List Test
@@ -56,7 +56,7 @@ formatTickTests =
   let
     domain = (0.123456789, 1.23456789)
     firstTick = \numTicks ->
-      case List.head (ticks domain numTicks) of
+      case List.head (createTicks domain numTicks) of
         Just a ->
           a
         Nothing ->
@@ -71,5 +71,5 @@ formatTickTests =
     , test "for 64 tick"
         <| assertEqual 0.14 <| firstTick 64
     , test "for 256 tick"
-        <| assertEqual 0.125 <| firstTick 256              
+        <| assertEqual 0.125 <| firstTick 256
     ]

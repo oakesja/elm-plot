@@ -1,6 +1,7 @@
-module Scale.Linear (scale, ticks) where
+module Scale.Linear (scale, createTicks) where
 
 import FloatExtra exposing (ln, roundTo)
+import Utils exposing (extentOf)
 
 scale : (Float, Float) -> (Float, Float) -> Float -> Float
 scale domain range x =
@@ -10,8 +11,8 @@ scale domain range x =
     (((x - fst domain) * (snd range - fst range)) / (snd domain - fst domain)) + fst range
 
 -- https://github.com/mbostock/d3/blob/78ce531f79e82275fe50f975e784ee2be097226b/src/scale/linear.js#L96
-ticks : (Float, Float) -> Int -> List Float
-ticks domain numTicks =
+createTicks : (Float, Float) -> Int -> List Float
+createTicks domain numTicks =
   let
     extent = extentOf domain
     step = stepSize extent (toFloat numTicks)
@@ -36,13 +37,6 @@ stepSize extent numTicks =
       step * 2
     else
       step
-
-extentOf : (Float, Float) -> (Float, Float)
-extentOf domain =
-  if fst domain < snd domain then
-    domain
-  else
-    (snd domain, fst domain)
 
 makeTicks : Float -> Float -> Float -> List Float
 makeTicks min max step =

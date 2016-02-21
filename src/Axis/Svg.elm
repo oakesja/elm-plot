@@ -4,59 +4,145 @@ import Scale exposing (Scale)
 import BoundingBox exposing (BoundingBox)
 import Axis.Orient exposing (Orient)
 import Axis.Axis exposing (Axis)
-import Svg exposing (Svg, path, text', g)
-import Svg.Attributes exposing (d, fill, stroke, shapeRendering, x, y)
+import Svg exposing (Svg, path, text', g, line)
+import Svg.Attributes exposing (d, fill, stroke, shapeRendering, x, y, transform, y2, x2, dy, textAnchor)
+import Utils exposing (extentOf)
+
+type alias TickInfo =
+  { value : Float
+  , translation : (Float, Float)
+  }
 
 toSvg : Axis -> Svg
 toSvg axis =
   g
-    []
-    <| (axisSvg axis) :: ticksSvg axis
+    [ transform <| axisTranslation axis.boundingBox axis.orient ]
+    <| axisSvg axis :: ticksSvg axis
+
+axisTranslation : BoundingBox -> Orient -> String
+axisTranslation bBox orient =
+  let
+    pos = case orient of
+      Axis.Orient.Top ->
+        (0, bBox.yStart)
+      Axis.Orient.Bottom ->
+        (0, bBox.yEnd)
+      Axis.Orient.Left ->
+        (bBox.xStart, 0)
+      Axis.Orient.Right ->
+        (bBox.xEnd, 0)
+  in
+    translateString pos
 
 axisSvg : Axis -> Svg
 axisSvg axis =
   path
-     [ d <| pathString axis.boundingBox axis.scale axis.orient
-     ]
+     ((d <| pathString axis.boundingBox axis.scale axis.orient) :: axis.axisStyle)
      []
 
 ticksSvg : Axis -> List Svg
 ticksSvg axis =
-  let
-    vals = axis.scale.ticks axis.numTicks
-  in
-    List.map (\y -> text axis.boundingBox.xStart (Scale.scale axis.scale y) (toString y)) vals
+  List.map (createTick axis) (createTickInfos axis.scale axis.orient axis.numTicks)
 
-text : Float -> Float -> String -> Svg
-text xPos yPos tex =
-  text'
-    [ x <| toString xPos
-    , y <| toString yPos
+createTick : Axis -> TickInfo -> Svg
+createTick axis tickInfo =
+  g
+    [ transform (translateString tickInfo.translation) ]
+    [ line ((innerTickLineAttributes axis.orient axis.innerTickSize) ++ axis.innerTickStyle) []
+    , text' (labelAttributes axis.orient axis.innerTickSize) [ Svg.text <| toString tickInfo.value ]
     ]
-    [ Svg.text tex ]
+
+-- https://github.com/mbostock/d3/blob/5b981a18db32938206b3579248c47205ecc94123/src/svg/axis.js#L53
+labelAttributes : Orient -> Int -> List Svg.Attribute
+labelAttributes orient tickSize =
+  let
+    pos = innerTickLinePos orient tickSize
+    posAttrs = [x (toString (fst pos)), y (toString (snd pos))]
+  in
+    case orient of
+      Axis.Orient.Top ->
+        List.append posAttrs [dy "0em", textAnchor "middle"]
+      Axis.Orient.Bottom ->
+        List.append posAttrs [dy ".71em", textAnchor "middle"]
+      Axis.Orient.Left ->
+        List.append posAttrs [dy ".32em", textAnchor "end"]
+      Axis.Orient.Right ->
+        List.append posAttrs [dy ".32em", textAnchor "start"]
+
+innerTickLineAttributes : Orient -> Int -> List Svg.Attribute
+innerTickLineAttributes orient tickSize =
+  let
+    pos = innerTickLinePos orient tickSize
+  in
+    [ x2 (toString (fst pos)), y2 (toString (snd pos)) ]
+
+innerTickLinePos : Orient -> Int -> (Int, Int)
+innerTickLinePos orient tickSize =
+  case orient of
+    Axis.Orient.Top ->
+      (0, -tickSize)
+    Axis.Orient.Bottom ->
+      (0, tickSize)
+    Axis.Orient.Left ->
+      (-tickSize, 0)
+    Axis.Orient.Right ->
+      (tickSize, 0)
+
+createTickInfos : Scale -> Orient -> Int -> List TickInfo
+createTickInfos scale orient numTicks =
+  List.map (createTickInfo scale orient) (scale.createTicks numTicks)
+
+createTickInfo : Scale -> Orient -> Float -> TickInfo
+createTickInfo scale orient value =
+  let
+    scaledValue = Scale.scale scale value
+    translation = case orient of
+      Axis.Orient.Top ->
+        (scaledValue, 0)
+      Axis.Orient.Bottom ->
+        (scaledValue, 0)
+      Axis.Orient.Left ->
+        (0, scaledValue)
+      Axis.Orient.Right ->
+        (0, scaledValue)
+  in
+    { value = value, translation = translation }
+
+translateString : (Float, Float) -> String
+translateString pos =
+  "translate(" ++ (toString (fst pos)) ++ "," ++ (toString (snd pos)) ++ ")"
 
 pathString : BoundingBox -> Scale -> Orient -> String
 pathString bBox scale orient =
   let
-    start = fst scale.range
-    end = snd scale.range
+    extent = extentOf scale.range
+    start = fst extent
+    end = snd extent
     tickSize = 6
     path = case orient of
       Axis.Orient.Top ->
-        verticalAxisString (bBox.yStart - tickSize) start end bBox.yStart
+        verticalAxisString bBox -tickSize start end
       Axis.Orient.Bottom ->
-        verticalAxisString (bBox.yEnd + tickSize) start end bBox.yEnd
+        verticalAxisString bBox tickSize start end
       Axis.Orient.Left ->
-        horizontalAxisString (bBox.xStart - tickSize) start end bBox.xStart
+        horizontalAxisString bBox -tickSize start end
       Axis.Orient.Right ->
-        horizontalAxisString (bBox.xEnd + tickSize) start end bBox.xEnd
+        horizontalAxisString bBox tickSize start end
   in
     "M" ++ path
 
-verticalAxisString : Float -> Float -> Float -> Float -> String
-verticalAxisString tickLocation start end y =
-  (toString start) ++ "," ++ (toString tickLocation) ++ "V" ++ (toString y) ++ "H" ++ (toString end) ++ "V" ++ (toString tickLocation)
+verticalAxisString : BoundingBox -> Float -> Float -> Float -> String
+verticalAxisString bBox tickLocation xStart xEnd =
+  let
+    start = if xStart < bBox.xStart then bBox.xStart else xStart
+    end = if xEnd > bBox.xEnd then bBox.xEnd else xEnd
+  in
+    (toString start) ++ "," ++ (toString tickLocation) ++ "V0H" ++ (toString end) ++ "V" ++ (toString tickLocation)
 
-horizontalAxisString : Float -> Float -> Float -> Float -> String
-horizontalAxisString tickLocation start end x =
-  (toString tickLocation) ++ "," ++ (toString start) ++ "H" ++ (toString x) ++ "V" ++ (toString end) ++ "H" ++ (toString tickLocation)
+horizontalAxisString : BoundingBox -> Float -> Float -> Float -> String
+horizontalAxisString bBox tickLocation yStart yEnd =
+  let
+    start = if yStart < bBox.yStart then bBox.yStart else yStart
+    end = if yEnd > bBox.yEnd then bBox.yEnd else yEnd
+  in
+    (toString tickLocation) ++ "," ++ (toString start) ++ "H0V" ++ (toString end) ++ "H" ++ (toString tickLocation)

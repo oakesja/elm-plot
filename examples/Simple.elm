@@ -16,11 +16,15 @@ main =
       Axis.createAxis yScale Axis.Orient.Left
         |> Axis.numberOfTicks 10
 
+    xAxis =
+      Axis.createAxis xScale Axis.Orient.Bottom
+        |> Axis.numberOfTicks 10
+
     plot =
       createPlot 400 400
         |> addLines lines .x .y xScale yScale linear []
         |> addPoints points .x .y xScale yScale circleSvg
-        -- |> addAxis createAxis xScale Axis.Top
+        |> addAxis xAxis
         |> addAxis yAxis
         |> toSvg
   in
