@@ -7,12 +7,13 @@ negative margins
 handle scales that don't need to change from margins
 
 symbols
-  - [ ] circle
-  - [ ] square
+  - [x] circle
+  - [x] square
   - [ ] cross
-  - [ ] diamond
-  - [ ] triangle up
-  - [ ] triangle down
+  - [x] diamond
+  - [x] triangle up
+  - [x] triangle down
+  - [x] custom
 
 axis
   - [x] scale - required but plot needs to adjust for margins somehow

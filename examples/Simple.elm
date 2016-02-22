@@ -4,10 +4,10 @@ import Html exposing (Html, div)
 import Plot exposing (..)
 import Line.Interpolation exposing (linear)
 import Scale exposing (Scale)
-import Svg exposing (circle, Svg)
 import Svg.Attributes exposing (cx, cy, r, stroke)
 import Axis
 import Axis.Orient
+import Symbols exposing (circle, square, diamond, triangleUp, triangleDown)
 
 main : Html
 main =
@@ -28,7 +28,11 @@ main =
     plot =
       createPlot 400 400
         |> addLines lines .x .y xScale yScale linear []
-        |> addPoints points .x .y xScale yScale circleSvg
+        -- |> addPoints points .x .y xScale yScale (circle 3 [])
+        -- |> addPoints points .x .y xScale yScale (square 5 [])
+        -- |> addPoints points .x .y xScale yScale (diamond 5 [])
+        |> addPoints points .x .y xScale yScale (triangleUp 10 [])
+        -- |> addPoints points .x .y xScale yScale (triangleDown 10 [])
         |> addAxis xAxis
         |> addAxis yAxis
         |> toSvg
@@ -44,15 +48,6 @@ xScale =
 yScale : Scale
 yScale =
   Scale.linear (0, 100) (400, 0)
-
-circleSvg : Float -> Float -> Svg
-circleSvg x y =
-  circle
-    [ cx <| toString x
-    , cy <| toString y
-    , r "4"
-    ]
-    []
 
 points : List { x : Float, y : Float }
 points =
