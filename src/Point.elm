@@ -6,4 +6,4 @@ type alias Point = {x: Float, y: Float}
 
 rescale : Scale -> Scale -> Point -> Point
 rescale xScale yScale point =
-  { point | x = Scale.scale xScale point.x, y = Scale.scale yScale point.y }
+  { point | x = Scale.transform xScale point.x, y = Scale.transform yScale point.y }

@@ -98,12 +98,12 @@ innerTickLinePos orient tickSize =
 
 createTickInfos : Scale -> Orient -> Int -> List TickInfo
 createTickInfos scale orient numTicks =
-  List.map (createTickInfo scale orient) (scale.createTicks numTicks)
+  List.map (createTickInfo scale orient) (Scale.createTicks scale numTicks)
 
 createTickInfo : Scale -> Orient -> Float -> TickInfo
 createTickInfo scale orient value =
   let
-    scaledValue = Scale.scale scale value
+    scaledValue = Scale.transform scale value
     translation =
       if orient == Axis.Orient.Top || orient == Axis.Orient.Bottom then
           (scaledValue, 0)

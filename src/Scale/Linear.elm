@@ -1,10 +1,10 @@
-module Scale.Linear (scale, createTicks) where
+module Scale.Linear (transform, createTicks) where
 
 import FloatExtra exposing (ln, roundTo)
 import Utils exposing (extentOf)
 
-scale : (Float, Float) -> (Float, Float) -> Float -> Float
-scale domain range x =
+transform : (Float, Float) -> (Float, Float) -> Float -> Float
+transform domain range x =
   if fst domain == snd domain then
     fst range
   else
