@@ -6,7 +6,7 @@ import Axis.Orient exposing (Orient)
 import Svg
 import Svg.Attributes exposing (fill, stroke, shapeRendering)
 
-createAxis : Scale -> Orient -> Axis
+createAxis : Scale a -> Orient -> Axis a
 createAxis scale orient =
   { scale = scale
   , orient = orient
@@ -20,30 +20,30 @@ createAxis scale orient =
   , innerTickStyle = [ fill "none", stroke "#000", shapeRendering "crispEdges" ]
   }
 
-numberOfTicks : Int -> Axis -> Axis
+numberOfTicks : Int -> Axis a -> Axis a
 numberOfTicks numTicks axis =
   { axis | numTicks = numTicks }
 
-innerTickSize : Int -> Axis -> Axis
+innerTickSize : Int -> Axis a -> Axis a
 innerTickSize size axis =
   { axis | innerTickSize = size }
 
-outerTickSize : Int -> Axis -> Axis
+outerTickSize : Int -> Axis a -> Axis a
 outerTickSize size axis =
   { axis | outerTickSize = size }
 
-tickPadding : Int -> Axis -> Axis
+tickPadding : Int -> Axis a -> Axis a
 tickPadding padding axis =
   { axis | tickPadding = padding }
 
-labelRotation : Int -> Axis -> Axis
+labelRotation : Int -> Axis a -> Axis a
 labelRotation rotation axis =
   { axis | labelRotation = rotation }
 
-axisStyle : List Svg.Attribute -> Axis -> Axis
+axisStyle : List Svg.Attribute -> Axis a -> Axis a
 axisStyle style axis =
   { axis | axisStyle = style }
 
-innerTickStyle : List Svg.Attribute -> Axis -> Axis
+innerTickStyle : List Svg.Attribute -> Axis a -> Axis a
 innerTickStyle style axis =
   { axis | innerTickStyle = style }

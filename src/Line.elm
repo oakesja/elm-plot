@@ -1,18 +1,18 @@
 module Line where
 
 import Line.Interpolation exposing (Interpolation)
-import Points exposing (Points)
+import Points exposing (Points, TransformedPoints)
 import Svg exposing (Svg, path)
 import Svg.Attributes exposing (d, stroke, strokeWidth, fill)
 import Scale exposing (Scale)
 
-type alias Line = Points
+type alias Line a b = Points a b
 
-rescale : Scale -> Scale -> Line -> Line
+rescale : Scale a -> Scale b -> Line a b -> TransformedPoints
 rescale xScale yScale line =
   Points.rescale xScale yScale line
 
-toSvg : Interpolation -> List Svg.Attribute -> Line -> Svg
+toSvg : Interpolation -> List Svg.Attribute -> TransformedPoints -> Svg
 toSvg interpolate attrs line =
   let
     attributes =

@@ -5,8 +5,8 @@ import BoundingBox exposing (BoundingBox)
 import Svg
 import Axis.Orient exposing (Orient)
 
-type alias Axis =
-  { scale : Scale
+type alias Axis a =
+  { scale : Scale a
   , orient : Orient
   , boundingBox : BoundingBox
   , numTicks : Int

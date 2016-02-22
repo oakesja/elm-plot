@@ -64,16 +64,16 @@ createTickInfosTests =
   in
     suite "createTicks"
       [ test "for top orient"
-          <| assertEqual [{value = 0, translation = (0, 0)}, {value = 1, translation = (10, 0)}]
+          <| assertEqual [{label = "0", translation = (0, 0)}, {label = "1", translation = (10, 0)}]
             <| createTickInfos scale Axis.Orient.Top 1
       , test "for bottom orient"
-          <| assertEqual [{value = 0, translation = (0, 0)}, {value = 1, translation = (10, 0)}]
+          <| assertEqual [{label = "0", translation = (0, 0)}, {label = "1", translation = (10, 0)}]
             <| createTickInfos scale Axis.Orient.Bottom 1
       , test "for left orient"
-          <| assertEqual [{value = 0, translation = (0, 0)}, {value = 1, translation = (0, 10)}]
+          <| assertEqual [{label = "0", translation = (0, 0)}, {label = "1", translation = (0, 10)}]
             <| createTickInfos scale Axis.Orient.Left 1
       , test "for right orient"
-          <| assertEqual [{value = 0, translation = (0, 0)}, {value = 1, translation = (0, 10)}]
+          <| assertEqual [{label = "0", translation = (0, 0)}, {label = "1", translation = (0, 10)}]
             <| createTickInfos scale Axis.Orient.Right 1
       ]
 
@@ -117,7 +117,7 @@ labelAttributesTests =
           <| labelAttributes Axis.Orient.Right 6 0 25
     ]
 
-scale : Scale
+scale : Scale Float
 scale =
   Scale.linear (10, 90) (10, 90)
 

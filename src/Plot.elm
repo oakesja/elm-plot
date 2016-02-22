@@ -27,7 +27,7 @@ createPlot width height =
   , margins = {top = 40, bottom = 40, right = 40, left = 40}
   }
 
-addPoints : List a -> (a -> Float) -> (a -> Float) -> Scale -> Scale -> (Float -> Float -> Svg) -> Plot -> Plot
+addPoints : List a -> (a -> b) -> (a -> c) -> Scale b -> Scale c -> (Float -> Float -> Svg) -> Plot -> Plot
 addPoints points getX getY xScale yScale pointToSvg plot =
   let
     xScaleWithMargins = Scale.includeMargins plot.margins.left plot.margins.right xScale
@@ -40,7 +40,7 @@ addPoints points getX getY xScale yScale pointToSvg plot =
   in
     { plot | html = newHtml }
 
-addLines : List a ->  (a -> Float) -> (a -> Float) -> Scale -> Scale -> Interpolation -> List Svg.Attribute -> Plot -> Plot
+addLines : List a ->  (a -> b) -> (a -> c) -> Scale b -> Scale c -> Interpolation -> List Svg.Attribute -> Plot -> Plot
 addLines points getX getY xScale yScale interpolate attrs plot =
   let
     xScaleWithMargins = Scale.includeMargins plot.margins.left plot.margins.right xScale
@@ -52,8 +52,7 @@ addLines points getX getY xScale yScale interpolate attrs plot =
   in
     { plot | html = List.append plot.html [line] }
 
-
-addArea : List a ->  (a -> Float) -> (a -> Float) -> (a -> Float) -> Scale -> Scale -> Interpolation -> List Svg.Attribute -> Plot -> Plot
+addArea : List a ->  (a -> b) -> (a -> c) -> (a -> c) -> Scale b -> Scale c -> Interpolation -> List Svg.Attribute -> Plot -> Plot
 addArea points getX getY getY2 xScale yScale interpolate attrs plot =
   let
     xScaleWithMargins = Scale.includeMargins plot.margins.left plot.margins.right xScale
@@ -65,7 +64,7 @@ addArea points getX getY getY2 xScale yScale interpolate attrs plot =
   in
     { plot | html = List.append plot.html [area] }
 
-addAxis : Axis -> Plot -> Plot
+addAxis : Axis a -> Plot -> Plot
 addAxis axis plot =
   let
     scale = case axis.orient of

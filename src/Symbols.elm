@@ -3,7 +3,7 @@ module Symbols (circle, square, diamond, triangleUp, triangleDown) where
 import Svg exposing (Svg)
 import Svg.Attributes exposing (cx, cy, r, x, y, width, height, transform, d)
 import Line.Interpolation exposing (linear)
-import Points exposing (Points)
+import Points exposing (Points, TransformedPoints)
 
 circle : Int -> List Svg.Attribute -> Float -> Float -> Svg
 circle radius addionalAttrs x y =
@@ -42,7 +42,7 @@ triangleDown length addionalAttrs xPos yPos =
       , { x = xPos + length / 2, y = yPos - length / 2}
       ]
 
-pathSvg : List Svg.Attribute -> Points -> Svg
+pathSvg : List Svg.Attribute -> TransformedPoints -> Svg
 pathSvg addionalAttrs points =
   createSvg Svg.path addionalAttrs [ d <| "M" ++ linear points]
 

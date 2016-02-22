@@ -1,22 +1,23 @@
 module Scale where
 
 import Scale.Linear
+import Axis.Tick exposing (Tick)
 
-type alias Scale =
+type alias Scale a =
   { range : (Float, Float)
-  , transform : ((Float, Float) -> Float -> Float)
-  , createTicks : (Int -> List Float)
+  , transform : ((Float, Float) -> a -> Float)
+  , createTicks : ((Float, Float) -> Int -> List Tick)
   }
 
-transform : Scale -> Float -> Float
+transform : Scale a -> a -> Float
 transform scale x =
   scale.transform scale.range x
 
-createTicks : Scale -> Int -> List Float
-createTicks {createTicks} numTicks =
-  createTicks numTicks
+createTicks : Scale a -> Int -> List Tick
+createTicks scale numTicks =
+  scale.createTicks scale.range numTicks
 
-includeMargins : Float -> Float -> Scale -> Scale
+includeMargins : Float -> Float -> Scale a -> Scale a
 includeMargins lowM highM scale =
   let
     rLow = (fst scale.range) + lowM
@@ -24,7 +25,7 @@ includeMargins lowM highM scale =
   in
     { scale | range = (rLow, rHigh) }
 
-linear : (Float, Float) -> (Float, Float) -> Scale
+linear : (Float, Float) -> (Float, Float) -> Scale Float
 linear domain range =
   { range = range
   , transform = Scale.Linear.transform domain

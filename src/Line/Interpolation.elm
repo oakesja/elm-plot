@@ -1,8 +1,8 @@
 module Line.Interpolation (Interpolation, linear) where
 
-import Points exposing (Points)
+import Points exposing (TransformedPoints)
 
-type alias Interpolation = Points -> String
+type alias Interpolation = TransformedPoints -> String
 
 linear : Interpolation
 linear points =

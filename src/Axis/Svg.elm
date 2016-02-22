@@ -7,13 +7,14 @@ import Axis.Axis exposing (Axis)
 import Svg exposing (Svg, path, text', g, line)
 import Svg.Attributes exposing (d, fill, stroke, shapeRendering, x, y, transform, y2, x2, dy, textAnchor)
 import Utils exposing (extentOf)
+import Axis.Tick exposing (Tick)
 
 type alias TickInfo =
-  { value : Float
+  { label : String
   , translation : (Float, Float)
   }
 
-toSvg : Axis -> Svg
+toSvg : Axis a -> Svg
 toSvg axis =
   g
     [ transform <| axisTranslation axis.boundingBox axis.orient ]
@@ -34,24 +35,24 @@ axisTranslation bBox orient =
   in
     translateString pos
 
-axisSvg : Axis -> Svg
+axisSvg : Axis a -> Svg
 axisSvg axis =
   path
      ((d <| pathString axis.boundingBox axis.scale axis.orient axis.outerTickSize) :: axis.axisStyle)
      []
 
-ticksSvg : Axis -> List Svg
+ticksSvg : Axis a -> List Svg
 ticksSvg axis =
   List.map (createTick axis) (createTickInfos axis.scale axis.orient axis.numTicks)
 
-createTick : Axis -> TickInfo -> Svg
+createTick : Axis a -> TickInfo -> Svg
 createTick axis tickInfo =
   g
     [ transform (translateString tickInfo.translation) ]
     [ line ((innerTickLineAttributes axis.orient axis.innerTickSize) ++ axis.innerTickStyle) []
     , text'
       (labelAttributes axis.orient axis.innerTickSize axis.tickPadding axis.labelRotation)
-      [ Svg.text <| toString tickInfo.value ]
+      [ Svg.text tickInfo.label ]
     ]
 
 -- https://github.com/mbostock/d3/blob/5b981a18db32938206b3579248c47205ecc94123/src/svg/axis.js#L53
@@ -96,27 +97,26 @@ innerTickLinePos orient tickSize =
     Axis.Orient.Right ->
       (tickSize, 0)
 
-createTickInfos : Scale -> Orient -> Int -> List TickInfo
+createTickInfos : Scale a -> Orient -> Int -> List TickInfo
 createTickInfos scale orient numTicks =
   List.map (createTickInfo scale orient) (Scale.createTicks scale numTicks)
 
-createTickInfo : Scale -> Orient -> Float -> TickInfo
-createTickInfo scale orient value =
+createTickInfo : Scale a -> Orient -> Tick -> TickInfo
+createTickInfo scale orient tick =
   let
-    scaledValue = Scale.transform scale value
     translation =
       if orient == Axis.Orient.Top || orient == Axis.Orient.Bottom then
-          (scaledValue, 0)
+          (tick.position, 0)
       else
-          (0, scaledValue)
+          (0, tick.position)
   in
-    { value = value, translation = translation }
+    { label = tick.label, translation = translation }
 
 translateString : (Float, Float) -> String
 translateString pos =
   "translate(" ++ (toString (fst pos)) ++ "," ++ (toString (snd pos)) ++ ")"
 
-pathString : BoundingBox -> Scale -> Orient -> Int -> String
+pathString : BoundingBox -> Scale a -> Orient -> Int -> String
 pathString bBox scale orient tickSize =
   let
     extent = extentOf scale.range

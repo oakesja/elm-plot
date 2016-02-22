@@ -41,11 +41,11 @@ main =
       []
       [plot, plot]
 
-xScale : Scale
+xScale : Scale Float
 xScale =
   Scale.linear (0, 100) (0, 400)
 
-yScale : Scale
+yScale : Scale Float
 yScale =
   Scale.linear (0, 100) (400, 0)
 
@@ -57,6 +57,16 @@ points =
   , {x = 200, y = 200}
   , {x = 300, y = 300}
   , {x = 400, y = 400}
+  ]
+
+points2 : List { x : String, y : Float }
+points2 =
+  [ {x = "0", y = 0}
+  , {x = "50", y = 50}
+  , {x = "100", y = 100}
+  , {x = "200", y = 200}
+  , {x = "300", y = 300}
+  , {x = "400", y = 400}
   ]
 
 lines : List { x : Float, y : Float }

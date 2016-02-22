@@ -2,6 +2,7 @@ module Scale.Linear (transform, createTicks) where
 
 import FloatExtra exposing (ln, roundTo)
 import Utils exposing (extentOf)
+import Axis.Tick exposing (Tick)
 
 transform : (Float, Float) -> (Float, Float) -> Float -> Float
 transform domain range x =
@@ -11,8 +12,8 @@ transform domain range x =
     (((x - fst domain) * (snd range - fst range)) / (snd domain - fst domain)) + fst range
 
 -- https://github.com/mbostock/d3/blob/78ce531f79e82275fe50f975e784ee2be097226b/src/scale/linear.js#L96
-createTicks : (Float, Float) -> Int -> List Float
-createTicks domain numTicks =
+createTicks : (Float, Float) -> (Float, Float) -> Int -> List Tick
+createTicks domain range numTicks =
   let
     extent = extentOf domain
     step = stepSize extent (toFloat numTicks)
@@ -20,7 +21,13 @@ createTicks domain numTicks =
     max = (toFloat (floor (snd extent / step))) * step + step * 0.5
   in
     makeTicks min max step
-      |> List.map (\t -> roundTo t (significantDigits step))
+      |> List.map (createTick (significantDigits step) domain range)
+
+createTick : Int -> (Float, Float) -> (Float, Float) -> Float -> Tick
+createTick sigDigits domain range position =
+  { position = roundTo (transform domain range position) sigDigits
+  , label = toString position
+  }
 
 stepSize : (Float, Float) -> Float -> Float
 stepSize extent numTicks =

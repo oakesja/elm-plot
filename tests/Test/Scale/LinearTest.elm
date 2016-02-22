@@ -33,32 +33,35 @@ ticksTests =
 
 generateTickTests : List Test
 generateTickTests =
-  [ test "for a regular domain and 1 tick"
-      <| assertEqual [0, 1] <| createTicks (0, 1) 1
-  , test "for a regular domain and 2 ticks"
-      <| assertEqual [0, 0.5, 1] <| createTicks (0, 1) 2
-  , test "for a regular domain and 5 ticks"
-      <| assertEqual [0, 0.2, 0.4, 0.6, 0.8, 1] <| createTicks (0, 1) 5
-  , test "for a regular domain and 10 ticks"
-      <| assertEqual [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1] <| createTicks (0, 1) 10
-  , test "for a reverse domain and 1 tick"
-      <| assertEqual [0, 1] <| createTicks (1, 0) 1
-  , test "for a reverse domain and 2 ticks"
-      <| assertEqual [0, 0.5, 1] <| createTicks (1, 0) 2
-  , test "for a reverse domain and 5 ticks"
-      <| assertEqual [0, 0.2, 0.4, 0.6, 0.8, 1] <| createTicks (1, 0) 5
-  , test "for a reverse domain and 10 ticks"
-      <| assertEqual [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1] <| createTicks (1, 0) 10
-  ]
+  let
+    range = (0, 10)
+  in
+    [ test "for a regular domain and 1 tick"
+        <| assertEqual [0, 10] <| List.map .position <| createTicks (0, 1) range 1
+    , test "for a regular domain and 2 ticks"
+        <| assertEqual [0, 5, 10] <| List.map .position <| createTicks (0, 1) range 2
+    , test "for a regular domain and 5 ticks"
+        <| assertEqual [0, 2, 4, 6, 8, 10] <| List.map .position <| createTicks (0, 1) range 5
+    , test "for a regular domain and 10 ticks"
+        <| assertEqual [0..10] <| List.map .position <| createTicks (0, 1) range 10
+    , test "for a reverse domain and 1 tick"
+        <| assertEqual [10, 0] <| List.map .position <| createTicks (1, 0) range 1
+    , test "for a reverse domain and 2 ticks"
+        <| assertEqual [10, 5, 0] <| List.map .position <| createTicks (1, 0) range 2
+    , test "for a reverse domain and 5 ticks"
+        <| assertEqual [10, 8, 6, 4, 2, 0] <| List.map .position <| createTicks (1, 0) range 5
+    , test "for a reverse domain and 10 ticks"
+        <| assertEqual (List.reverse [0..10]) <| List.map .position <| createTicks (1, 0) range 10
+    ]
 
 formatTickTests : List Test
 formatTickTests =
   let
     domain = (0.123456789, 1.23456789)
     firstTick = \numTicks ->
-      case List.head (createTicks domain numTicks) of
+      case List.head (createTicks domain domain numTicks) of
         Just a ->
-          a
+          a.position
         Nothing ->
           -1
   in
