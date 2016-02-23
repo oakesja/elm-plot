@@ -1,6 +1,7 @@
 module Scale where
 
 import Scale.Linear
+import Scale.OrdinalPoints
 import Axis.Tick exposing (Tick)
 
 type alias Scale a =
@@ -31,3 +32,13 @@ linear domain range =
   , transform = Scale.Linear.transform domain
   , createTicks = Scale.Linear.createTicks domain
   }
+
+ordinalPoints : List String -> (Float, Float) -> Int -> Scale String
+ordinalPoints domain range padding =
+  let
+    mapping = Scale.OrdinalPoints.createMapping domain padding
+  in
+    { range = range
+    , transform = Scale.OrdinalPoints.transform mapping
+    , createTicks = Scale.OrdinalPoints.createTicks mapping
+    }

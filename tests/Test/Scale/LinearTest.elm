@@ -5,17 +5,17 @@ import ElmTest exposing (..)
 
 tests : Test
 tests =
-  suite "Scale.Lienar"
-        [ scaleTests
+  suite "Scale.Linear"
+        [ transformTests
         , ticksTests
         ]
 
-scaleTests : Test
-scaleTests =
+transformTests : Test
+transformTests =
   let
     range = (0, 16)
   in
-    suite "scale"
+    suite "transform"
       [ test "for a regular domain"
           <| assertEqual 4 <| transform (0, 1) range 0.25
       , test "for a reverse domain"
@@ -27,12 +27,12 @@ scaleTests =
 ticksTests : Test
 ticksTests =
   suite "ticks"
-    [ suite "generate ticks" generateTickTests
+    [ suite "create ticks" createTicksTests
     , suite "formats ticks with the correct precision" formatTickTests
     ]
 
-generateTickTests : List Test
-generateTickTests =
+createTicksTests : List Test
+createTicksTests =
   let
     range = (0, 10)
   in

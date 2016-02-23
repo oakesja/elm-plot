@@ -5,6 +5,13 @@ default padding
 negative dimensions
 negative margins
 handle scales that don't need to change from margins
+move ticks to individual scales, it does not make sense for ordinal scales
+padding for normal range and reverse range do not appear to be the same
+
+ordinal scales
+  - [x] points
+  - [ ] bands
+  - [ ] specified range
 
 symbols
   - [x] circle

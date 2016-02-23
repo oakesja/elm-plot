@@ -5,6 +5,7 @@ import Test.Line.InterpolationTest as InterpolationTest
 import Test.Scale.LinearTest as ScaleLinearTest
 import Test.Axis.SvgTest as AxisSvgTest
 import Test.FloatExtraTest as FloatExtraTest
+import Test.Scale.OrdinalPointsTests as OrdinalPointsTests
 
 tests : Test
 tests =
@@ -13,6 +14,7 @@ tests =
         , AxisSvgTest.tests
         , ScaleLinearTest.tests
         , FloatExtraTest.tests
+        , OrdinalPointsTests.tests
         ]
 
 port runner : Signal (Task.Task x ())
