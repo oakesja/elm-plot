@@ -1,4 +1,4 @@
-module Simple where
+module Ordinal where
 
 import Html exposing (Html, div)
 import Plot exposing (..)
@@ -12,11 +12,9 @@ main =
   let
     yAxis =
       Axis.createAxis xScale Axis.Orient.Left
-        |> Axis.numberOfTicks 10
 
     xAxis =
       Axis.createAxis yScale Axis.Orient.Bottom
-        |> Axis.numberOfTicks 10
 
     plot =
       createPlot 400 400
@@ -35,7 +33,7 @@ xScale =
 
 yScale : Scale Float
 yScale =
-  Scale.linear (0, 400) (0, 400)
+  Scale.linear (0, 400) (0, 400) 10
 
 points2 : List { x : String, y : Float }
 points2 =

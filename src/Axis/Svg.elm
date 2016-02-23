@@ -43,7 +43,7 @@ axisSvg axis =
 
 ticksSvg : Axis a -> List Svg
 ticksSvg axis =
-  List.map (createTick axis) (createTickInfos axis.scale axis.orient axis.numTicks)
+  List.map (createTick axis) (createTickInfos axis.scale axis.orient)
 
 createTick : Axis a -> TickInfo -> Svg
 createTick axis tickInfo =
@@ -97,9 +97,9 @@ innerTickLinePos orient tickSize =
     Axis.Orient.Right ->
       (tickSize, 0)
 
-createTickInfos : Scale a -> Orient -> Int -> List TickInfo
-createTickInfos scale orient numTicks =
-  List.map (createTickInfo scale orient) (Scale.createTicks scale numTicks)
+createTickInfos : Scale a -> Orient -> List TickInfo
+createTickInfos scale orient =
+  List.map (createTickInfo scale orient) (Scale.createTicks scale)
 
 createTickInfo : Scale a -> Orient -> Tick -> TickInfo
 createTickInfo scale orient tick =

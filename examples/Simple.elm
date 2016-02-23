@@ -14,14 +14,12 @@ main =
   let
     yAxis =
       Axis.createAxis yScale Axis.Orient.Left
-        |> Axis.numberOfTicks 20
         |> Axis.outerTickSize 10
         |> Axis.innerTickSize 15
         |> Axis.innerTickStyle [stroke "red"]
 
     xAxis =
       Axis.createAxis xScale Axis.Orient.Bottom
-        |> Axis.numberOfTicks 10
         |> Axis.tickPadding 5
         |> Axis.labelRotation -45
 
@@ -43,11 +41,11 @@ main =
 
 xScale : Scale Float
 xScale =
-  Scale.linear (0, 100) (0, 400)
+  Scale.linear (0, 100) (0, 400) 10
 
 yScale : Scale Float
 yScale =
-  Scale.linear (0, 100) (400, 0)
+  Scale.linear (0, 100) (400, 0) 20
 
 points : List { x : Float, y : Float }
 points =

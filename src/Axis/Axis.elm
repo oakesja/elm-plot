@@ -9,7 +9,6 @@ type alias Axis a =
   { scale : Scale a
   , orient : Orient
   , boundingBox : BoundingBox
-  , numTicks : Int
   , innerTickSize : Int
   , outerTickSize : Int
   , tickPadding : Int

@@ -11,7 +11,6 @@ createAxis scale orient =
   { scale = scale
   , orient = orient
   , boundingBox = { xStart = 0, xEnd = 0, yStart = 0, yEnd = 0 }
-  , numTicks = 0
   , innerTickSize = 6
   , outerTickSize = 6
   , tickPadding = 3
@@ -19,10 +18,6 @@ createAxis scale orient =
   , axisStyle = [ fill "none", stroke "#000", shapeRendering "crispEdges" ]
   , innerTickStyle = [ fill "none", stroke "#000", shapeRendering "crispEdges" ]
   }
-
-numberOfTicks : Int -> Axis a -> Axis a
-numberOfTicks numTicks axis =
-  { axis | numTicks = numTicks }
 
 innerTickSize : Int -> Axis a -> Axis a
 innerTickSize size axis =

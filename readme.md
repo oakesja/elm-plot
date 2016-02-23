@@ -7,6 +7,11 @@ negative margins
 handle scales that don't need to change from margins
 move ticks to individual scales, it does not make sense for ordinal scales
 padding for normal range and reverse range do not appear to be the same
+better handling for undefined point in ordinal scale
+
+linear scales
+  - [x] number of ticks
+  - [ ] tick values instead of number of ticks
 
 ordinal scales
   - [x] points
@@ -25,8 +30,6 @@ symbols
 axis
   - [x] scale - required but plot needs to adjust for margins somehow
   - [x] orient - required
-  - [x] number of ticks - default none
-  - [ ] tick values instead of number of ticks
   - [x] inner tick size - default 6
   - [x] outer tick size - default 6
   - [x] padding (space between label and axis) - default 3
