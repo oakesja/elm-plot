@@ -3,6 +3,7 @@ module Plot where
 import Svg exposing (svg, Svg)
 import Svg.Attributes exposing (width, height)
 import Private.Models exposing (..)
+import Bars
 import Scale
 import Points
 import Area
@@ -79,6 +80,19 @@ addAxis axis plot =
         }
   in
     { plot | html = List.append plot.html [Axis.Axis.toSvg a] }
+
+addBars : List a -> (a -> b) -> (a -> c) -> Scale b -> Scale c -> Bars.Orient -> List Svg.Attribute -> Plot -> Plot
+addBars points getX getY xScale yScale orient attrs plot =
+  let
+    xScaleWithMargins = Scale.includeMargins plot.margins.left plot.margins.right xScale
+    yScaleWithMargins = Scale.includeMargins -plot.margins.bottom -plot.margins.top yScale
+    newHtml =
+      List.map (\p -> { x = getX p, y = getY p }) points
+        |> Points.transform xScaleWithMargins yScaleWithMargins
+        |> Bars.toSvg (BoundingBox.from plot.dimensions plot.margins) orient attrs
+        |> List.append plot.html
+  in
+    { plot | html = newHtml }
 
 toSvg : Plot -> Svg
 toSvg plot =

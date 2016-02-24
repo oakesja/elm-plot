@@ -9,6 +9,8 @@ padding for normal range and reverse range do not appear to be the same
 better handling for undefined point in ordinal scale
 examples on events
 arcs for pie charts
+custom bands
+consider renaming style to additional attrs
 
 examples
   - [ ] linear scale
@@ -24,8 +26,12 @@ linear scales
 
 ordinal scales
   - [x] points
-  - [ ] bands
+  - [x] bands
   - [ ] specified range
+
+bars
+  - [x] orient (horizonal or vertical)
+  - [x] style
 
 symbols
   - [x] circle

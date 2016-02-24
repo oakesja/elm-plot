@@ -2,7 +2,7 @@ module Points where
 
 import Private.Models exposing (Points, TransformedPoints, Scale, PointValue)
 import Point
-import Svg exposing (Svg)
+import Svg exposing (Svg, rect)
 
 transform : Scale a -> Scale b -> Points a b -> TransformedPoints
 transform xScale yScale points =
