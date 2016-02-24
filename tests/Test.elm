@@ -8,7 +8,8 @@ import Test.Axis.TicksTest as TicksTest
 import Test.Axis.TitleTest as TitleTest
 import Test.Axis.ExtentTest as ExtentTest
 import Test.FloatExtraTest as FloatExtraTest
-import Test.Scale.OrdinalPointsTests as OrdinalPointsTests
+import Test.Scale.OrdinalPointsTest as OrdinalPointsTest
+import Test.Scale.OrdinalBandsTest as OrdinalBandsTest
 
 tests : Test
 tests =
@@ -20,7 +21,8 @@ tests =
         , ExtentTest.tests
         , ScaleLinearTest.tests
         , FloatExtraTest.tests
-        , OrdinalPointsTests.tests
+        , OrdinalPointsTest.tests
+        , OrdinalBandsTest.tests
         ]
 
 port runner : Signal (Task.Task x ())

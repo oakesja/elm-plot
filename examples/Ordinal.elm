@@ -1,39 +1,32 @@
 module Ordinal where
 
-import Html exposing (Html, div)
+import Svg exposing (Svg)
 import Plot exposing (..)
-import Scale exposing (Scale)
+import Scale
 import Axis
 import Axis.Orient
 import Symbols exposing (circle, square, diamond, triangleUp, triangleDown)
 
-main : Html
+main : Svg
 main =
   let
     yAxis =
-      Axis.createAxis xScale Axis.Orient.Left
+      Axis.createAxis yScale Axis.Orient.Left
 
     xAxis =
-      Axis.createAxis yScale Axis.Orient.Bottom
-
-    plot =
-      createPlot 400 400
-        |> addPoints points2 .y .x yScale xScale (circle 5 [])
-        |> addAxis xAxis
-        |> addAxis yAxis
-        |> toSvg
+      Axis.createAxis xScale Axis.Orient.Bottom
   in
-    div
-      []
-      [plot, plot]
+    createPlot 400 400
+      |> addPoints points2 .x .y xScale yScale (circle 5 [])
+      |> addAxis xAxis
+      |> addAxis yAxis
+      |> toSvg
 
-xScale : Scale String
 xScale =
-  Scale.ordinalPoints ["a", "b", "c", "d"] (400, 0) 3
+  Scale.ordinalBands ["a", "b", "c", "d"] (0, 400) 1.0 0.7
 
-yScale : Scale Float
 yScale =
-  Scale.linear (0, 400) (0, 400) 10
+  Scale.linear (0, 400) (400, 0) 10
 
 points2 : List { x : String, y : Float }
 points2 =
@@ -41,5 +34,4 @@ points2 =
   , {x = "b", y = 50}
   , {x = "c", y = 100}
   , {x = "d", y = 400}
-  , {x = "c", y = 300}
   ]

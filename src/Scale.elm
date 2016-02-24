@@ -2,6 +2,7 @@ module Scale where
 
 import Scale.Linear
 import Scale.OrdinalPoints
+import Scale.OrdinalBands
 import Private.Models exposing (PointValue, Tick, Scale)
 
 transform : Scale a -> a -> PointValue
@@ -35,4 +36,14 @@ ordinalPoints domain range padding =
     { range = range
     , transform = Scale.OrdinalPoints.transform mapping
     , createTicks = Scale.OrdinalPoints.createTicks mapping
+    }
+
+ordinalBands : List String -> (Float, Float) -> Float -> Float -> Scale String
+ordinalBands domain range padding outerPadding =
+  let
+    mapping = Scale.OrdinalBands.createMapping domain padding outerPadding
+  in
+    { range = range
+    , transform = Scale.OrdinalBands.transform mapping
+    , createTicks = Scale.OrdinalBands.createTicks mapping
     }

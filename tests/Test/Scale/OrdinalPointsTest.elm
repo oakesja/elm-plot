@@ -1,4 +1,4 @@
-module Test.Scale.OrdinalPointsTests where
+module Test.Scale.OrdinalPointsTest where
 
 import Scale.OrdinalPoints exposing (..)
 import ElmTest exposing (..)
@@ -9,6 +9,8 @@ tests =
         [ transformTests
         , ticksTests
         ]
+
+-- TODO add createMapping tests
 
 transformTests : Test
 transformTests =
