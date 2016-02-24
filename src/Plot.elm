@@ -8,8 +8,8 @@ import Points exposing (Points)
 import Scale exposing (Scale)
 import Line exposing (Line)
 import Area exposing (Area)
-import Axis.Axis exposing (Axis)
-import Axis.Svg
+import Axis.Model exposing (Axis)
+import Axis.Axis
 import Axis.Orient
 import Dimensions exposing (Dimensions, Margins)
 import BoundingBox
@@ -24,7 +24,7 @@ createPlot : Float -> Float -> Plot
 createPlot width height =
   { dimensions = { width = width, height = height }
   , html = []
-  , margins = {top = 40, bottom = 40, right = 40, left = 40}
+  , margins = {top = 70, bottom = 70, right = 70, left = 70}
   }
 
 addPoints : List a -> (a -> b) -> (a -> c) -> Scale b -> Scale c -> (Float -> Float -> Svg) -> Plot -> Plot
@@ -81,7 +81,7 @@ addAxis axis plot =
         , boundingBox = BoundingBox.from plot.dimensions plot.margins
         }
   in
-    { plot | html = List.append plot.html [Axis.Svg.toSvg a] }
+    { plot | html = List.append plot.html [Axis.Axis.toSvg a] }
 
 toSvg : Plot -> Svg
 toSvg plot =

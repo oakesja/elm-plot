@@ -1,7 +1,7 @@
 module Axis where
 
 import Scale exposing (Scale)
-import Axis.Axis exposing (Axis)
+import Axis.Model exposing (Axis)
 import Axis.Orient exposing (Orient)
 import Svg
 import Svg.Attributes exposing (fill, stroke, shapeRendering)
@@ -17,6 +17,9 @@ createAxis scale orient =
   , labelRotation = 0
   , axisStyle = [ fill "none", stroke "#000", shapeRendering "crispEdges" ]
   , innerTickStyle = [ fill "none", stroke "#000", shapeRendering "crispEdges" ]
+  , title = Nothing
+  , titleOffset = Nothing
+  , titleStyle = []
   }
 
 innerTickSize : Int -> Axis a -> Axis a
@@ -42,3 +45,15 @@ axisStyle style axis =
 innerTickStyle : List Svg.Attribute -> Axis a -> Axis a
 innerTickStyle style axis =
   { axis | innerTickStyle = style }
+
+title : String -> Axis a -> Axis a
+title t axis =
+  { axis | title  = Just t }
+
+titleOffset : Int -> Axis a -> Axis a
+titleOffset offset axis =
+  { axis | titleOffset  = Just offset }
+
+titleStyle : List Svg.Attribute -> Axis a -> Axis a
+titleStyle style axis =
+  { axis | titleStyle  = style }

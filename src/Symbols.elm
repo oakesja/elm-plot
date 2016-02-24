@@ -4,6 +4,7 @@ import Svg exposing (Svg)
 import Svg.Attributes exposing (cx, cy, r, x, y, width, height, transform, d)
 import Line.Interpolation exposing (linear)
 import Points exposing (Points, TransformedPoints)
+import SvgAttributesExtras exposing (rotate)
 
 circle : Int -> List Svg.Attribute -> Float -> Float -> Svg
 circle radius addionalAttrs x y =
@@ -20,11 +21,7 @@ square length addionalAttrs xPos yPos =
 
 diamond : Float -> List Svg.Attribute -> Float -> Float -> Svg
 diamond length addionalAttrs xPos yPos =
-  let
-    -- TODO rotation build up is repeated in axis/svg.elm
-    t = transform <| "rotate(45," ++ (toString xPos) ++ "," ++ (toString yPos) ++ ")"
-  in
-  square length (t :: addionalAttrs) xPos yPos
+  square length ((rotate (xPos, yPos) 45) :: addionalAttrs) xPos yPos
 
 triangleUp : Float -> List Svg.Attribute -> Float -> Float -> Svg
 triangleUp length addionalAttrs xPos yPos =

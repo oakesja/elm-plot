@@ -17,27 +17,25 @@ main =
         |> Axis.outerTickSize 10
         |> Axis.innerTickSize 15
         |> Axis.innerTickStyle [stroke "red"]
+        |> Axis.title "y axis"
+        |> Axis.titleOffset 40
 
     xAxis =
       Axis.createAxis xScale Axis.Orient.Bottom
         |> Axis.tickPadding 5
         |> Axis.labelRotation -45
-
-    plot =
-      createPlot 400 400
-        |> addLines lines .x .y xScale yScale linear []
-        -- |> addPoints points .x .y xScale yScale (circle 3 [])
-        -- |> addPoints points .x .y xScale yScale (square 5 [])
-        -- |> addPoints points .x .y xScale yScale (diamond 5 [])
-        |> addPoints points .x .y xScale yScale (triangleUp 10 [])
-        -- |> addPoints points .x .y xScale yScale (triangleDown 10 [])
-        |> addAxis xAxis
-        |> addAxis yAxis
-        |> toSvg
+        |> Axis.title "x axis"
   in
-    div
-      []
-      [plot, plot]
+    createPlot 400 400
+      |> addLines lines .x .y xScale yScale linear []
+      -- |> addPoints points .x .y xScale yScale (circle 3 [])
+      -- |> addPoints points .x .y xScale yScale (square 5 [])
+      |> addPoints points .x .y xScale yScale (diamond 5 [])
+      -- |> addPoints points .x .y xScale yScale (triangleUp 10 [])
+      -- |> addPoints points .x .y xScale yScale (triangleDown 10 [])
+      |> addAxis xAxis
+      |> addAxis yAxis
+      |> toSvg
 
 xScale : Scale Float
 xScale =

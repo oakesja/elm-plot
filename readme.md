@@ -5,9 +5,18 @@ default padding
 negative dimensions
 negative margins
 handle scales that don't need to change from margins
-move ticks to individual scales, it does not make sense for ordinal scales
 padding for normal range and reverse range do not appear to be the same
 better handling for undefined point in ordinal scale
+examples on events
+arcs for pie charts
+
+examples
+  - [ ] linear scale
+  - [ ] each point type
+  - [ ] custom point
+  - [ ] ordinal scale point
+  - [ ] ordinal scale bands
+  - [ ] custom with ordinal scale bands (triangles going to axis from point with band width)
 
 linear scales
   - [x] number of ticks
@@ -40,8 +49,9 @@ axis
   - [ ] tick format
   - [ ] grid lines - default none
   - [ ] grid line style - default none
-  - [ ] title - default none
-  - [ ] title offset
+  - [x] title - default none
+  - [x] title offset
+  - [x] title style
 
 Design
 
