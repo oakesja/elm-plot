@@ -1,13 +1,6 @@
 module BoundingBox where
 
-import Dimensions exposing (Dimensions, Margins)
-
-type alias BoundingBox =
-  { xStart : Float
-  , xEnd : Float
-  , yStart : Float
-  , yEnd : Float
-  }
+import Private.Models exposing (Dimensions, Margins, BoundingBox)
 
 from : Dimensions -> Margins -> BoundingBox
 from dim marg =

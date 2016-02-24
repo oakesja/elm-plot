@@ -3,7 +3,7 @@ module Axis.Title where
 import Svg exposing (Svg, text, text')
 import Svg.Attributes exposing (x, y, textAnchor)
 import Axis.Orient exposing (Orient)
-import Axis.Extent exposing (Extent)
+import Private.Models exposing (Extent)
 import SvgAttributesExtras exposing (rotate)
 
 createTitle : Extent -> Orient -> Int -> Int -> List Svg.Attribute -> Maybe Int ->  Maybe String -> List Svg

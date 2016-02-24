@@ -2,13 +2,7 @@ module Scale where
 
 import Scale.Linear
 import Scale.OrdinalPoints
-import Axis.Tick exposing (Tick)
-
-type alias Scale a =
-  { range : (Float, Float)
-  , transform : ((Float, Float) -> a -> Float)
-  , createTicks : ((Float, Float) -> List Tick)
-  }
+import Private.Models exposing (PointValue, Tick, Scale)
 
 transform : Scale a -> a -> Float
 transform scale x =

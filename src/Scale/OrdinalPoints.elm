@@ -1,6 +1,6 @@
 module Scale.OrdinalPoints (transform, createTicks, createMapping) where
 
-import Axis.Tick exposing (Tick)
+import Private.Models exposing (Tick)
 import Dict exposing (Dict)
 
 transform : ((Float, Float) -> Dict String Float) -> (Float, Float) -> String -> Float

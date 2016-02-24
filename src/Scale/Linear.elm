@@ -2,7 +2,7 @@ module Scale.Linear (transform, createTicks) where
 
 import FloatExtra exposing (ln, roundTo)
 import Utils exposing (extentOf)
-import Axis.Tick exposing (Tick)
+import Private.Models exposing (Tick)
 
 transform : (Float, Float) -> (Float, Float) -> Float -> Float
 transform domain range x =

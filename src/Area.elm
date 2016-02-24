@@ -1,17 +1,12 @@
 module Area where
 
-import Line.Interpolation exposing (Interpolation)
-import Scale exposing (Scale)
+import Private.Models exposing (Interpolation, Scale, Area, TransformedArea, TransformedAreaPoint, AreaPoint)
+import Scale
 import Svg exposing (Svg, path)
 import Svg.Attributes exposing (d, stroke, strokeWidth)
 
-type alias AreaPoint a b = { x : a, y : b, y2 : b }
-type alias TransformedAreaPoint = { x : Float, y : Float, y2 : Float }
-type alias Area a b = List (AreaPoint a b)
-type alias TransformedArea = List TransformedAreaPoint
-
-rescale : Scale a -> Scale b -> Area a b -> TransformedArea
-rescale xScale yScale area =
+transform : Scale a -> Scale b -> Area a b -> TransformedArea
+transform xScale yScale area =
   List.map (rescaleAreaPoint xScale yScale) area
 
 rescaleAreaPoint : Scale a -> Scale b -> AreaPoint a b -> TransformedAreaPoint

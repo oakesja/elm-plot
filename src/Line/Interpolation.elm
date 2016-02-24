@@ -1,8 +1,6 @@
-module Line.Interpolation (Interpolation, linear) where
+module Line.Interpolation (linear) where
 
-import Points exposing (TransformedPoints)
-
-type alias Interpolation = TransformedPoints -> String
+import Private.Models exposing (TransformedPoints, Interpolation)
 
 linear : Interpolation
 linear points =

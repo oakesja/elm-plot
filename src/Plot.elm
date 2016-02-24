@@ -1,22 +1,19 @@
 module Plot where
 
-import Html exposing (Html)
 import Svg exposing (svg, Svg)
 import Svg.Attributes exposing (width, height)
-import Line.Interpolation exposing (Interpolation)
-import Points exposing (Points)
-import Scale exposing (Scale)
-import Line exposing (Line)
-import Area exposing (Area)
-import Axis.Model exposing (Axis)
+import Private.Models exposing (..)
+import Scale
+import Points
+import Area
+import Line
 import Axis.Axis
 import Axis.Orient
-import Dimensions exposing (Dimensions, Margins)
 import BoundingBox
 
 type alias Plot =
   { dimensions: Dimensions
-  , html : List Html
+  , html : List Svg
   , margins : Margins
   }
 
@@ -34,7 +31,7 @@ addPoints points getX getY xScale yScale pointToSvg plot =
     yScaleWithMargins = Scale.includeMargins -plot.margins.bottom -plot.margins.top yScale
     newHtml =
       List.map (\p -> { x = getX p, y = getY p }) points
-        |> Points.rescale xScaleWithMargins yScaleWithMargins
+        |> Points.transform xScaleWithMargins yScaleWithMargins
         |> Points.toSvg pointToSvg
         |> List.append plot.html
   in
@@ -47,7 +44,7 @@ addLines points getX getY xScale yScale interpolate attrs plot =
     yScaleWithMargins = Scale.includeMargins -plot.margins.bottom -plot.margins.top yScale
     line =
       List.map (\p -> { x = getX p, y = getY p }) points
-        |> Points.rescale xScaleWithMargins yScaleWithMargins
+        |> Points.transform xScaleWithMargins yScaleWithMargins
         |> Line.toSvg interpolate attrs
   in
     { plot | html = List.append plot.html [line] }
@@ -59,7 +56,7 @@ addArea points getX getY getY2 xScale yScale interpolate attrs plot =
     yScaleWithMargins = Scale.includeMargins -plot.margins.bottom -plot.margins.top yScale
     area =
       List.map (\p -> { x = getX p, y = getY p, y2 = getY2 p }) points
-        |> Area.rescale xScaleWithMargins yScaleWithMargins
+        |> Area.transform xScaleWithMargins yScaleWithMargins
         |> Area.toSvg interpolate attrs
   in
     { plot | html = List.append plot.html [area] }

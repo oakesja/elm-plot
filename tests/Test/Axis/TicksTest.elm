@@ -2,7 +2,7 @@ module Test.Axis.TicksTest where
 
 import Axis.Ticks exposing (..)
 import Axis.Orient
-import Scale exposing (Scale)
+import Scale
 import ElmTest exposing (..)
 import Svg.Attributes exposing (x, y, y2, x2, dy, textAnchor, transform)
 

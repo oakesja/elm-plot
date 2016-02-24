@@ -1,13 +1,8 @@
 module Axis.Extent where
 
-import BoundingBox exposing (BoundingBox)
+import Private.Models exposing (Extent, BoundingBox)
 import Axis.Orient exposing (Orient)
 import Utils exposing (extentOf)
-
-type alias Extent =
-  { start : Float
-  , stop : Float
-  }
 
 calculateExtent : BoundingBox -> Orient -> (Float, Float) -> Extent
 calculateExtent bBox orient range =
@@ -25,4 +20,4 @@ calculateExtent bBox orient range =
 
 createExtent : Float -> Float -> Extent
 createExtent start stop =
-  { start = start, stop = stop }      
+  { start = start, stop = stop }

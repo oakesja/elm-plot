@@ -1,8 +1,6 @@
 module Axis.Axis where
 
-import Axis.Model exposing (Axis)
-import Scale exposing (Scale)
-import BoundingBox exposing (BoundingBox)
+import Private.Models exposing (Axis, Scale, BoundingBox)
 import Axis.Orient exposing (Orient)
 import Svg exposing (Svg, g, path)
 import Svg.Attributes exposing (d)

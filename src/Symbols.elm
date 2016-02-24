@@ -3,7 +3,7 @@ module Symbols (circle, square, diamond, triangleUp, triangleDown) where
 import Svg exposing (Svg)
 import Svg.Attributes exposing (cx, cy, r, x, y, width, height, transform, d)
 import Line.Interpolation exposing (linear)
-import Points exposing (Points, TransformedPoints)
+import Private.Models exposing (Points, TransformedPoints)
 import SvgAttributesExtras exposing (rotate)
 
 circle : Int -> List Svg.Attribute -> Float -> Float -> Svg

@@ -1,7 +1,6 @@
 module Axis where
 
-import Scale exposing (Scale)
-import Axis.Model exposing (Axis)
+import Private.Models exposing (Axis, Scale)
 import Axis.Orient exposing (Orient)
 import Svg
 import Svg.Attributes exposing (fill, stroke, shapeRendering)

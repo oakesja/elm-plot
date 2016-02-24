@@ -2,8 +2,8 @@ module Test.Axis.AxisTest where
 
 import Axis.Axis exposing (..)
 import Axis.Orient
-import Scale exposing (Scale)
-import BoundingBox exposing (BoundingBox)
+import Scale
+import Private.Models exposing (BoundingBox, Scale)
 import ElmTest exposing (..)
 import Svg.Attributes exposing (transform)
 
