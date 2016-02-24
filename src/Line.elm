@@ -5,8 +5,8 @@ import Points
 import Svg exposing (Svg, path)
 import Svg.Attributes exposing (d, stroke, strokeWidth, fill)
 
-rescale : Scale a -> Scale b -> Line a b -> TransformedPoints
-rescale xScale yScale line =
+transform : Scale a -> Scale b -> Line a b -> TransformedPoints
+transform xScale yScale line =
   Points.transform xScale yScale line
 
 toSvg : Interpolation -> List Svg.Attribute -> TransformedPoints -> Svg

@@ -1,6 +1,6 @@
 module Points where
 
-import Private.Models exposing (Points, TransformedPoints, Scale)
+import Private.Models exposing (Points, TransformedPoints, Scale, PointValue)
 import Point
 import Svg exposing (Svg)
 
@@ -10,4 +10,4 @@ transform xScale yScale points =
 
 toSvg : (Float -> Float -> Svg) -> TransformedPoints -> List Svg
 toSvg pointToSvg points =
-  List.map (\p -> pointToSvg p.x p.y) points
+  List.map (\p -> pointToSvg p.x.value p.y.value) points

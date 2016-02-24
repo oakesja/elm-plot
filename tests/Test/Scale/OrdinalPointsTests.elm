@@ -18,9 +18,11 @@ transformTests =
   in
     suite "transform"
       [ test "for inputs inside the domain"
-          <| assertEqual [0, 60, 120] <| List.map (transform (createMapping domain 0) range) domain
+          <| assertEqual [0, 60, 120] <| List.map .value <| List.map (transform (createMapping domain 0) range) domain
       , test "for inputs not in the domain"
-          <| assertEqual 0 <| transform (createMapping domain 0) range "d"
+          <| assertEqual 0 <| .value <| transform (createMapping domain 0) range "d"
+      , test "the band width is always 0"
+          <| assertEqual [0, 0, 0] <| List.map .bandWidth <| List.map (transform (createMapping domain 0) range) domain
       ]
 
 ticksTests : Test

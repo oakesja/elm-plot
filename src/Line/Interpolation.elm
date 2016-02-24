@@ -5,7 +5,7 @@ import Private.Models exposing (TransformedPoints, Interpolation)
 linear : Interpolation
 linear points =
   let
-    pointsStrings = List.map (\p -> toString p.x ++ "," ++ toString p.y) points
+    pointsStrings = List.map (\p -> toString p.x.value ++ "," ++ toString p.y.value) points
   in
     if List.length points == 1 then
       join pointsStrings ++ "Z"

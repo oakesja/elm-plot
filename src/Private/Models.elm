@@ -5,13 +5,13 @@ import Axis.Orient exposing (Orient)
 
 type alias Point a b = {x: a, y: b}
 type alias PointValue = { value: Float, bandWidth: Float }
-type alias TransformedPoint = {x: Float, y: Float }
+type alias TransformedPoint = {x: PointValue, y: PointValue }
 type alias Points a b = List (Point a b)
 type alias TransformedPoints = List TransformedPoint
 type alias Line a b = Points a b
 type alias Interpolation = TransformedPoints -> String
 type alias AreaPoint a b = { x : a, y : b, y2 : b }
-type alias TransformedAreaPoint = { x : Float, y : Float, y2 : Float }
+type alias TransformedAreaPoint = { x : PointValue, y : PointValue, y2 : PointValue }
 type alias Area a b = List (AreaPoint a b)
 type alias TransformedArea = List TransformedAreaPoint
 type alias Dimensions = {width: Float, height: Float}
@@ -42,7 +42,7 @@ type alias BoundingBox =
 
 type alias Scale a =
   { range : (Float, Float)
-  , transform : ((Float, Float) -> a -> Float)
+  , transform : ((Float, Float) -> a -> PointValue)
   , createTicks : ((Float, Float) -> List Tick)
   }
 

@@ -44,7 +44,7 @@ addLines points getX getY xScale yScale interpolate attrs plot =
     yScaleWithMargins = Scale.includeMargins -plot.margins.bottom -plot.margins.top yScale
     line =
       List.map (\p -> { x = getX p, y = getY p }) points
-        |> Points.transform xScaleWithMargins yScaleWithMargins
+        |> Line.transform xScaleWithMargins yScaleWithMargins
         |> Line.toSvg interpolate attrs
   in
     { plot | html = List.append plot.html [line] }

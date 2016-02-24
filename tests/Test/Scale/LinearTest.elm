@@ -17,11 +17,13 @@ transformTests =
   in
     suite "transform"
       [ test "for a regular domain"
-          <| assertEqual 4 <| transform (0, 1) range 0.25
+          <| assertEqual 4 <| .value <| transform (0, 1) range 0.25
       , test "for a reverse domain"
-          <| assertEqual 12 <| transform (-1, 0) range -0.25
+          <| assertEqual 12 <| .value <| transform (-1, 0) range -0.25
       , test "for domain where the min and max are equal"
-          <| assertEqual 0 <| transform (1, 1) range 2
+          <| assertEqual 0 <| .value <| transform (1, 1) range 2
+      , test "the band width is always 0"
+          <| assertEqual 0 <| .bandWidth <| transform (0, 1) range 0.25
       ]
 
 ticksTests : Test

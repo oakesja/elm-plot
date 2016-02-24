@@ -2,14 +2,18 @@ module Scale.Linear (transform, createTicks) where
 
 import FloatExtra exposing (ln, roundTo)
 import Utils exposing (extentOf)
-import Private.Models exposing (Tick)
+import Private.Models exposing (Tick, PointValue)
 
-transform : (Float, Float) -> (Float, Float) -> Float -> Float
+transform : (Float, Float) -> (Float, Float) -> Float -> PointValue
 transform domain range x =
-  if fst domain == snd domain then
-    fst range
-  else
-    (((x - fst domain) * (snd range - fst range)) / (snd domain - fst domain)) + fst range
+  let
+    value =
+      if fst domain == snd domain then
+        fst range
+      else
+        (((x - fst domain) * (snd range - fst range)) / (snd domain - fst domain)) + fst range
+  in
+    { value = value, bandWidth = 0 }
 
 -- https://github.com/mbostock/d3/blob/78ce531f79e82275fe50f975e784ee2be097226b/src/scale/linear.js#L96
 createTicks : (Float, Float) -> Int -> (Float, Float) -> List Tick
@@ -25,7 +29,7 @@ createTicks domain numTicks range =
 
 createTick : Int -> (Float, Float) -> (Float, Float) -> Float -> Tick
 createTick sigDigits domain range position =
-  { position = roundTo (transform domain range position) sigDigits
+  { position = roundTo (transform domain range position).value sigDigits
   , label = toString position
   }
 

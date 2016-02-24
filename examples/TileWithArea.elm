@@ -5,21 +5,19 @@ import Plot exposing (..)
 import Plot exposing (..)
 import Line.Interpolation exposing (linear)
 import Scale
-import Point exposing (Point)
 import Svg.Attributes exposing (stroke)
 
 main : Html
 main =
   let
-    xScale = Scale.linear (0.65075, 1.24915) (0, 600)
-    yScale = Scale.linear (0, 9000) (200, 0)
+    xScale = Scale.linear (0.65075, 1.24915) (0, 600) 10
+    yScale = Scale.linear (0, 9000) (200, 0) 10
   in
     createPlot 600 600
       |> addLines lines .x .y xScale yScale linear []
       |> addArea area .x .y .baseline xScale yScale linear [stroke "red"]
       |> toSvg
 
-lines : List Point
 lines =
   [ { x = 0.65075, y = 0.0 }
   , { x = 0.6537, y = 80.0343044306486 }

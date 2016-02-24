@@ -4,7 +4,7 @@ import Scale.Linear
 import Scale.OrdinalPoints
 import Private.Models exposing (PointValue, Tick, Scale)
 
-transform : Scale a -> a -> Float
+transform : Scale a -> a -> PointValue
 transform scale x =
   scale.transform scale.range x
 
