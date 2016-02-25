@@ -1,11 +1,11 @@
-module Scale.OrdinalPoints (transform, createTicks, createMapping) where
+module Scale.OrdinalPoints (interpolate, createTicks, createMapping) where
 
 import Private.Models exposing (Tick, PointValue)
 import Dict exposing (Dict)
 import Sets exposing (Range)
 
-transform : (Range -> Dict String Float) -> Range -> String -> PointValue
-transform mapping range s =
+interpolate : (Range -> Dict String Float) -> Range -> String -> PointValue String
+interpolate mapping range s =
   let
     value =
       case Dict.get s (mapping range) of
@@ -14,7 +14,7 @@ transform mapping range s =
         Nothing ->
           0
   in
-    { value = value, bandWidth = 0 }
+    { value = value, width = 0, originalValue = s }
 
 createTicks : (Range -> Dict String Float) -> Range -> List Tick
 createTicks mapping range =

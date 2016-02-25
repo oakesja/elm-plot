@@ -13,7 +13,8 @@ import Line
 import Axis.View
 import Axis.Orient
 import BoundingBox
-import Svg.Events exposing (onClick)
+import Html.Events exposing (on)
+import Json.Decode exposing (object2, (:=), float, Decoder)
 
 type alias Plot =
   { dimensions: Dimensions
@@ -41,7 +42,7 @@ addPoints points getX getY xScale yScale pointToSvg plot =
     yScaleWithMargins = Scale.includeMargins -plot.margins.bottom -plot.margins.top yScale
     newHtml =
       List.map (\p -> { x = getX p, y = getY p }) points
-        |> Points.transformIntoPoints xScaleWithMargins yScaleWithMargins
+        |> Points.interpolate xScaleWithMargins yScaleWithMargins
         |> Points.toSvg pointToSvg
         |> List.append plot.html
   in
@@ -54,7 +55,7 @@ addLines points getX getY xScale yScale interpolate attrs plot =
     yScaleWithMargins = Scale.includeMargins -plot.margins.bottom -plot.margins.top yScale
     line =
       List.map (\p -> { x = getX p, y = getY p }) points
-        |> Line.transform xScaleWithMargins yScaleWithMargins
+        |> Line.interpolate xScaleWithMargins yScaleWithMargins
         |> Line.toSvg interpolate attrs
   in
     { plot | html = List.append plot.html [line] }
@@ -66,7 +67,7 @@ addArea points getX getY getY2 xScale yScale interpolate attrs plot =
     yScaleWithMargins = Scale.includeMargins -plot.margins.bottom -plot.margins.top yScale
     area =
       List.map (\p -> { x = getX p, y = getY p, y2 = getY2 p }) points
-        |> Area.transform xScaleWithMargins yScaleWithMargins
+        |> Area.interpolate xScaleWithMargins yScaleWithMargins
         |> Area.toSvg interpolate attrs
   in
     { plot | html = List.append plot.html [area] }
@@ -97,20 +98,32 @@ addBars points getX getY xScale yScale orient attrs plot =
     yScaleWithMargins = Scale.includeMargins -plot.margins.bottom -plot.margins.top yScale
     newHtml =
       List.map (\p -> { x = getX p, y = getY p }) points
-        |> Points.transformIntoBands xScaleWithMargins yScaleWithMargins
+        |> Points.interpolate xScaleWithMargins yScaleWithMargins
         |> Bars.toSvg (BoundingBox.from plot.dimensions plot.margins) orient attrs
         |> List.append plot.html
   in
     { plot | html = newHtml }
 
-registerEventHandler : Scale b -> Scale c -> Signal.Address Action -> Plot -> Plot
-registerEventHandler xScale yScale address plot =
-  { plot | attrs = [onClick <| Signal.message address (ClickEvent 50 40)] }
+type alias MouseEvent = { clientX: Float, clientY: Float }
+
+registerOnClick : Scale b -> Scale c -> Signal.Address Action -> Plot -> Plot
+registerOnClick xScale yScale address plot =
+  { plot | attrs = [on "click" clickDecoder (\event -> Signal.message address (ClickEvent event.clientX event.clientY))] }
+
+clickDecoder : Decoder MouseEvent
+clickDecoder =
+  object2 MouseEvent
+    ("clientX" := float)
+    ("clientY" := float)
 
 toSvg : Plot -> Svg
 toSvg plot =
-  svg
-    [ width (toString plot.dimensions.width)
-    , height (toString plot.dimensions.height)
-    ]
-    plot.html
+  let
+    posAttrs =
+      [ width (toString plot.dimensions.width)
+      , height (toString plot.dimensions.height)
+      ]
+  in
+    svg
+      (plot.attrs ++ posAttrs)
+      plot.html

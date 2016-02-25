@@ -9,7 +9,7 @@ tests : Test
 tests =
   suite "Scale.OrdinalBands"
         [ createMappingTests
-        , transformTests
+        , interpolateTests
         , ticksTests
         ]
 
@@ -22,35 +22,42 @@ createMappingTests =
   in
     suite "createMapping"
       [ test "without any paddings"
-          <| assertEqual (expected [0, 40, 80] 40) <| Dict.toList <| createMapping domain 0 0 range
+          <| assertEqual (expected [0, 40, 80] 40)
+          <| Dict.toList <| createMapping domain 0 0 range
       , test "with a padding set"
-          <| assertEqual (expected [7.5, 45, 82.5] 30) <| Dict.toList <| createMapping domain 0.2 0.2 range
+          <| assertEqual (expected [7.5, 45, 82.5] 30)
+          <| Dict.toList <| createMapping domain 0.2 0.2 range
       , test "with a padding and a different outer padding set"
-          <| assertEqual (expected [4, 44, 84] 32) <| Dict.toList <| createMapping domain 0.2 0.1 range
+          <| assertEqual (expected [4, 44, 84] 32)
+          <| Dict.toList <| createMapping domain 0.2 0.1 range
       , test "with a descending range"
-          <| assertEqual (expected [82.5, 45, 7.5] 30) <| Dict.toList <| createMapping domain 0.2 0.2 (120, 0)
+          <| assertEqual (expected [82.5, 45, 7.5] 30)
+          <| Dict.toList <| createMapping domain 0.2 0.2 (120, 0)
       ]
 
-expectedMapping : List String -> List Float -> Float -> List (String, PointValue)
-expectedMapping domain values bandWidth =
-  List.map2 (\d v -> (d, { value = v, bandWidth = bandWidth })) domain values
+expectedMapping : List String -> List Float -> Float -> List (String, PointValue String)
+expectedMapping domain values width =
+  List.map2 (\d v -> (d, { value = v, width = width, originalValue = d })) domain values
 
-transformTests : Test
-transformTests =
+interpolateTests : Test
+interpolateTests =
   let
     domain = ["a", "b", "c"]
     range = (0, 120)
+    expected = expectedInterpolation domain
   in
-    suite "transform"
+    suite "interpolate"
       [ test "for inputs inside the domain"
-          <| assertEqual (expectedTransform [0, 40, 80] 40) <| List.map (transform (createMapping domain 0 0) range) domain
+          <| assertEqual (expected [0, 40, 80] 40)
+          <| List.map (interpolate (createMapping domain 0 0) range) domain
       , test "for inputs not in the domain"
-          <| assertEqual {value = 0, bandWidth = 0} <| transform (createMapping domain 0 0) range "d"
+          <| assertEqual {value = 0, width = 0, originalValue = "d"}
+          <| interpolate (createMapping domain 0 0) range "d"
       ]
 
-expectedTransform : List Float -> Float -> List PointValue
-expectedTransform values bandWidth =
-  List.map (\v -> { value = v, bandWidth = bandWidth }) values
+expectedInterpolation : List String -> List Float -> Float -> List (PointValue String)
+expectedInterpolation domain values width =
+  List.map2 (\d v -> { value = v, width = width, originalValue = d }) domain values
 
 ticksTests : Test
 ticksTests =
@@ -61,7 +68,7 @@ ticksTests =
     suite "ticks"
       [ test "it creates ticks for the given mapping in the middle of the bands"
           <| assertEqual (expectedTicks [20, 60, 100] domain)
-            <| createTicks (createMapping domain 0 0) range
+          <| createTicks (createMapping domain 0 0) range
       ]
 
 expectedTicks : List Float -> List String -> List Tick

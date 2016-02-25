@@ -14,8 +14,8 @@ barAttrsTests : Test
 barAttrsTests =
   let
     point =
-      { x = {value = 50, bandWidth = 20}
-      , y = {value = 40, bandWidth = 10}
+      { x = {value = 50, width = 20, originalValue = 5}
+      , y = {value = 40, width = 10, originalValue = 4}
       }
     boundingBox =
       { xStart = 10

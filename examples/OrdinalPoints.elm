@@ -1,11 +1,10 @@
-module Ordinal where
+module OrdinalPoints where
 
 import Svg exposing (Svg)
 import Plot exposing (..)
 import Scale
 import Axis
 import Axis.Orient
-import Bars
 import Symbols exposing (circle, square, diamond, triangleUp, triangleDown)
 
 main : Svg

@@ -6,15 +6,15 @@ import Scale
 import Svg exposing (Svg, path)
 import Svg.Attributes exposing (d, stroke, strokeWidth)
 
-transform : Scale a -> Scale b -> Area a b -> Area Float Float
-transform xScale yScale area =
+interpolate : Scale a -> Scale b -> Area a b -> Area Float Float
+interpolate xScale yScale area =
   List.map (rescaleAreaPoint xScale yScale) area
 
 rescaleAreaPoint : Scale a -> Scale b -> AreaPoint a b -> AreaPoint Float Float
 rescaleAreaPoint xScale yScale point =
-  { x = .value <| Scale.transform xScale point.x
-  , y = .value <| Scale.transform yScale point.y
-  , y2 = .value <| Scale.transform yScale point.y2
+  { x = .value <| Scale.interpolate xScale point.x
+  , y = .value <| Scale.interpolate yScale point.y
+  , y2 = .value <| Scale.interpolate yScale point.y2
   }
 
 toSvg : Interpolation -> List Svg.Attribute -> Area Float Float-> Svg

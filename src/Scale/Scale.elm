@@ -5,6 +5,6 @@ import Sets exposing (Range)
 
 type alias Scale a =
   { range : Range
-  , transform : (Range -> a -> PointValue)
+  , interpolate : (Range -> a -> PointValue a)
   , createTicks : (Range -> List Tick)
   }

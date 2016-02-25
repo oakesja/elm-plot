@@ -4,8 +4,8 @@ import Svg
 import Axis.Orient exposing (Orient)
 
 type alias Point a b = {x: a, y: b}
-type alias PointValue = { value: Float, bandWidth: Float }
-type alias PointWithBands = {x: PointValue, y: PointValue }
+type alias PointValue a = { value: Float, width: Float, originalValue : a }
+type alias InterpolatedPoint a b = {x: PointValue a, y: PointValue b}
 type alias Points a b = List (Point a b)
 type alias Line a b = Points a b
 type alias Interpolation = Points Float Float -> String

@@ -1,16 +1,17 @@
 module Line where
 
-import Private.Models exposing (Points, Interpolation, Line)
+import Private.Models exposing (Points, Interpolation, Line, InterpolatedPoint)
 import Scale.Scale exposing (Scale)
 import Points
 import Svg exposing (Svg, path)
 import Svg.Attributes exposing (d, stroke, strokeWidth, fill)
 
-transform : Scale a -> Scale b -> Line a b -> Line Float Float
-transform xScale yScale line =
-  Points.transformIntoPoints xScale yScale line
+-- TODO create interpolated line model
+interpolate : Scale a -> Scale b -> Line a b -> List (InterpolatedPoint a b)
+interpolate xScale yScale line =
+  Points.interpolate xScale yScale line
 
-toSvg : Interpolation -> List Svg.Attribute -> Points Float Float -> Svg
+toSvg : Interpolation -> List Svg.Attribute -> List (InterpolatedPoint a b) -> Svg
 toSvg interpolate attrs line =
   let
     attributes =
@@ -23,5 +24,9 @@ toSvg interpolate attrs line =
         attrs
   in
   path
-    ((d <| "M" ++ interpolate line) :: attributes)
+    ((d <| "M" ++ interpolate (linePositions line)) :: attributes)
     []
+
+linePositions : List (InterpolatedPoint a b) -> Points Float Float
+linePositions points =
+  List.map (\p -> {x = p.x.value, y = p.y.value}) points

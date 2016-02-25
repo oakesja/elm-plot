@@ -10,7 +10,7 @@ import Sets exposing (Domain, Range)
 linear : Domain -> Range -> Int -> Scale Float
 linear domain range numTicks =
   { range = range
-  , transform = Scale.Linear.transform domain
+  , interpolate = Scale.Linear.interpolate domain
   , createTicks = Scale.Linear.createTicks domain numTicks
   }
 
@@ -20,7 +20,7 @@ ordinalPoints domain range padding =
     mapping = Scale.OrdinalPoints.createMapping domain padding
   in
     { range = range
-    , transform = Scale.OrdinalPoints.transform mapping
+    , interpolate = Scale.OrdinalPoints.interpolate mapping
     , createTicks = Scale.OrdinalPoints.createTicks mapping
     }
 
@@ -30,14 +30,14 @@ ordinalBands domain range padding outerPadding =
     mapping = Scale.OrdinalBands.createMapping domain padding outerPadding
   in
     { range = range
-    , transform = Scale.OrdinalBands.transform mapping
+    , interpolate = Scale.OrdinalBands.interpolate mapping
     , createTicks = Scale.OrdinalBands.createTicks mapping
     }
 
 -- TODO private move somewhere else
-transform : Scale a -> a -> PointValue
-transform scale x =
-  scale.transform scale.range x
+interpolate : Scale a -> a -> PointValue a
+interpolate scale x =
+  scale.interpolate scale.range x
 
 createTicks : Scale a -> List Tick
 createTicks scale =

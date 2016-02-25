@@ -2,30 +2,65 @@ module Test.Scale.OrdinalPointsTest where
 
 import Scale.OrdinalPoints exposing (..)
 import ElmTest exposing (..)
+import Private.Models exposing (PointValue, Tick)
+import Dict exposing (Dict)
 
 tests : Test
 tests =
   suite "Scale.OrdinalPoints"
-        [ transformTests
+        [ createMappingTests
+        , interpolateTests
         , ticksTests
         ]
 
--- TODO add createMapping tests
-
-transformTests : Test
-transformTests =
+createMappingTests : Test
+createMappingTests =
   let
     domain = ["a", "b", "c"]
     range = (0, 120)
+    expected = expectedMapping domain
   in
-    suite "transform"
-      [ test "for inputs inside the domain"
-          <| assertEqual [0, 60, 120] <| List.map .value <| List.map (transform (createMapping domain 0) range) domain
-      , test "for inputs not in the domain"
-          <| assertEqual 0 <| .value <| transform (createMapping domain 0) range "d"
-      , test "the band width is always 0"
-          <| assertEqual [0, 0, 0] <| List.map .bandWidth <| List.map (transform (createMapping domain 0) range) domain
+    suite "createMapping"
+      [ test "without padding"
+          <| assertEqual (expected [0, 60, 120])
+          <| Dict.toList <| createMapping domain 0 range
+      , test "with a padding"
+          <| assertEqual (expected [30, 60, 90])
+          <| Dict.toList <| createMapping domain 2 range
+      , test "a single item in the input domain is correctly handled"
+          <| assertEqual (expected [60])
+          <| Dict.toList <| createMapping ["a"] 0 range
+      , test "descending range without padding"
+          <| assertEqual (expected [120, 60, 0])
+          <| Dict.toList <| createMapping domain 0 (120, 0)
+      , test "descending range with padding"
+          <| assertEqual (expected [90, 60, 30])
+          <| Dict.toList <| createMapping domain 2 (120, 0)
       ]
+
+expectedMapping : List String -> List Float -> List (String, Float)
+expectedMapping domain values =
+  List.map2 (\d v -> (d, v)) domain values
+
+interpolateTests : Test
+interpolateTests =
+  let
+    domain = ["a", "b", "c"]
+    range = (0, 120)
+    expected = expectedInterpolation domain
+  in
+    suite "interpolate"
+      [ test "for inputs inside the domain"
+          <| assertEqual (expected [0, 60, 120])
+          <| List.map (interpolate (createMapping domain 0) range) domain
+      , test "for inputs not in the domain"
+          <| assertEqual {value = 0, width = 0, originalValue = "d"}
+          <| interpolate (createMapping domain 0) range "d"
+      ]
+
+expectedInterpolation : List String -> List Float -> List (PointValue String)
+expectedInterpolation domain values =
+  List.map2 (\d v -> { value = v, width = 0, originalValue = d }) domain values
 
 ticksTests : Test
 ticksTests =
@@ -34,16 +69,11 @@ ticksTests =
     range = (0, 120)
   in
     suite "ticks"
-      [ test "without padding"
-          <| assertEqual [0, 60, 120] <| List.map .position <| createTicks (createMapping domain 0) range
-      , test "with a padding"
-          <| assertEqual [30, 60, 90] <| List.map .position <| createTicks (createMapping domain 2) range
-      , test "no ticks are returned for an empty domain"
-          <| assertEqual [] <| List.map .position <| createTicks (createMapping [] 0) range
-      , test "a single item in the input domain is correctly handled"
-          <| assertEqual [60] <| List.map .position <| createTicks (createMapping ["a"] 0) range
-      , test "descending range without padding"
-          <| assertEqual [120, 60, 0] <| List.map .position <| createTicks (createMapping domain 0) (120, 0)
-      , test "descending range with padding"
-          <| assertEqual [90, 60, 30] <| List.map .position <| createTicks (createMapping domain 2) (120, 0)
+      [ test "it creates tick for everything in the domain"
+          <| assertEqual (expectedTicks [0, 60, 120] domain)
+          <| createTicks (createMapping domain 0) range
       ]
+
+expectedTicks : List Float -> List String -> List Tick
+expectedTicks values domain =
+  List.map2 (\v d-> { position = v, label = d }) values domain

@@ -1,12 +1,12 @@
-module Scale.Linear (transform, createTicks) where
+module Scale.Linear (interpolate, createTicks) where
 
 import FloatExtra exposing (ln, roundTo)
 import Sets exposing (extentOf)
 import Private.Models exposing (Tick, PointValue)
 import Sets exposing (Domain, Range, Set)
 
-transform : Domain -> Range -> Float -> PointValue
-transform domain range x =
+interpolate : Domain -> Range -> Float -> PointValue Float
+interpolate domain range x =
   let
     value =
       if fst domain == snd domain then
@@ -14,7 +14,7 @@ transform domain range x =
       else
         (((x - fst domain) * (snd range - fst range)) / (snd domain - fst domain)) + fst range
   in
-    { value = value, bandWidth = 0 }
+    { value = value, width = 0, originalValue = x }
 
 -- https://github.com/mbostock/d3/blob/78ce531f79e82275fe50f975e784ee2be097226b/src/scale/linear.js#L96
 createTicks : Domain -> Int -> Range -> List Tick
@@ -30,7 +30,7 @@ createTicks domain numTicks range =
 
 createTick : Int -> Domain -> Range -> Float -> Tick
 createTick sigDigits domain range position =
-  { position = roundTo (transform domain range position).value sigDigits
+  { position = roundTo (interpolate domain range position).value sigDigits
   , label = toString position
   }
 

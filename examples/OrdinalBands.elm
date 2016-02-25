@@ -1,4 +1,4 @@
-module Ordinal where
+module OrdinalBands where
 
 import Svg exposing (Svg)
 import Plot exposing (..)
