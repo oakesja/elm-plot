@@ -3,7 +3,7 @@ module Simple where
 import Html exposing (Html, div)
 import Plot exposing (..)
 import Line.Interpolation exposing (linear)
-import Scale exposing (Scale)
+import Scale
 import Svg.Attributes exposing (cx, cy, r, stroke)
 import Axis
 import Axis.Orient
@@ -16,7 +16,7 @@ main =
       Axis.createAxis yScale Axis.Orient.Left
         |> Axis.outerTickSize 10
         |> Axis.innerTickSize 15
-        |> Axis.innerTickStyle [stroke "red"]
+        |> Axis.innerTickAttributes [stroke "red"]
         |> Axis.title "y axis"
         |> Axis.titleOffset 40
 
@@ -28,20 +28,14 @@ main =
   in
     createPlot 400 400
       |> addLines lines .x .y xScale yScale linear []
-      -- |> addPoints points .x .y xScale yScale (circle 3 [])
-      -- |> addPoints points .x .y xScale yScale (square 5 [])
       |> addPoints points .x .y xScale yScale (diamond 5 [])
-      -- |> addPoints points .x .y xScale yScale (triangleUp 10 [])
-      -- |> addPoints points .x .y xScale yScale (triangleDown 10 [])
       |> addAxis xAxis
       |> addAxis yAxis
       |> toSvg
 
-xScale : Scale Float
 xScale =
   Scale.linear (0, 100) (0, 400) 10
 
-yScale : Scale Float
 yScale =
   Scale.linear (0, 100) (400, 0) 20
 

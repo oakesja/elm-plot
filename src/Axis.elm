@@ -1,6 +1,7 @@
 module Axis where
 
-import Private.Models exposing (Axis, Scale)
+import Axis.Axis exposing (Axis)
+import Scale.Scale exposing (Scale)
 import Axis.Orient exposing (Orient)
 import Svg
 import Svg.Attributes exposing (fill, stroke, shapeRendering)
@@ -14,11 +15,11 @@ createAxis scale orient =
   , outerTickSize = 6
   , tickPadding = 3
   , labelRotation = 0
-  , axisStyle = [ fill "none", stroke "#000", shapeRendering "crispEdges" ]
-  , innerTickStyle = [ fill "none", stroke "#000", shapeRendering "crispEdges" ]
+  , axisAttributes = [ fill "none", stroke "#000", shapeRendering "crispEdges" ]
+  , innerTickAttributes = [ fill "none", stroke "#000", shapeRendering "crispEdges" ]
   , title = Nothing
   , titleOffset = Nothing
-  , titleStyle = []
+  , titleAttributes = []
   }
 
 innerTickSize : Int -> Axis a -> Axis a
@@ -37,13 +38,13 @@ labelRotation : Int -> Axis a -> Axis a
 labelRotation rotation axis =
   { axis | labelRotation = rotation }
 
-axisStyle : List Svg.Attribute -> Axis a -> Axis a
-axisStyle style axis =
-  { axis | axisStyle = style }
+axisAttributes : List Svg.Attribute -> Axis a -> Axis a
+axisAttributes attrs axis =
+  { axis | axisAttributes = attrs }
 
-innerTickStyle : List Svg.Attribute -> Axis a -> Axis a
-innerTickStyle style axis =
-  { axis | innerTickStyle = style }
+innerTickAttributes : List Svg.Attribute -> Axis a -> Axis a
+innerTickAttributes attrs axis =
+  { axis | innerTickAttributes = attrs }
 
 title : String -> Axis a -> Axis a
 title t axis =
@@ -53,6 +54,6 @@ titleOffset : Int -> Axis a -> Axis a
 titleOffset offset axis =
   { axis | titleOffset  = Just offset }
 
-titleStyle : List Svg.Attribute -> Axis a -> Axis a
-titleStyle style axis =
-  { axis | titleStyle  = style }
+titleAttributes : List Svg.Attribute -> Axis a -> Axis a
+titleAttributes attrs axis =
+  { axis | titleAttributes  = attrs }

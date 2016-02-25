@@ -1,9 +1,10 @@
-module Test.Axis.AxisTest where
+module Test.Axis.ViewTest where
 
-import Axis.Axis exposing (..)
+import Axis.View exposing (..)
 import Axis.Orient
 import Scale
-import Private.Models exposing (BoundingBox, Scale)
+import Private.Models exposing (BoundingBox)
+import Scale.Scale exposing (Scale)
 import ElmTest exposing (..)
 import Svg.Attributes exposing (transform)
 

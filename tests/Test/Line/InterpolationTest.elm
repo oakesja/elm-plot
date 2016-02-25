@@ -1,7 +1,7 @@
 module Test.Line.InterpolationTest where
 
 import Line.Interpolation exposing (..)
-import Private.Models exposing (TransformedPoints)
+import Private.Models exposing (Points)
 import ElmTest exposing (..)
 
 tests : Test
@@ -18,6 +18,6 @@ linearTests =
     , test "for more than one point" <| assertEqual "1,2L3,4" <| linear <| createPoints [(1, 2), (3, 4)]
     ]
 
-createPoints : List (Float, Float) -> TransformedPoints
+createPoints : List (Float, Float) -> Points Float Float
 createPoints values =
-  List.map (\p -> {x = {value = fst p, bandWidth = 0}, y = {value = snd p, bandWidth = 0}}) values
+  List.map (\p -> {x = fst p, y = snd p}) values

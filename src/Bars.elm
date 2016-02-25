@@ -1,22 +1,22 @@
 module Bars where
 
-import Private.Models exposing (TransformedPoints, TransformedPoint, BoundingBox)
+import Private.Models exposing (PointWithBands, BoundingBox)
 import Svg exposing (Svg, rect)
 import Svg.Attributes exposing (x, y, height, width)
 
 type Orient = Vertical | Horizontal
 
-toSvg : BoundingBox -> Orient -> List Svg.Attribute -> TransformedPoints -> List Svg
+toSvg : BoundingBox -> Orient -> List Svg.Attribute -> List PointWithBands -> List Svg
 toSvg bBox orient additionalAttrs points =
   List.map (createBar bBox orient additionalAttrs) points
 
-createBar : BoundingBox -> Orient -> List Svg.Attribute -> TransformedPoint -> Svg
+createBar : BoundingBox -> Orient -> List Svg.Attribute -> PointWithBands -> Svg
 createBar bBox orient additionalAttrs point =
   rect
     (barAttrs bBox orient additionalAttrs point)
     []
 
-barAttrs : BoundingBox -> Orient -> List Svg.Attribute -> TransformedPoint -> List Svg.Attribute
+barAttrs : BoundingBox -> Orient -> List Svg.Attribute -> PointWithBands -> List Svg.Attribute
 barAttrs bBox orient additionalAttrs point =
   let
     pos = posInfo bBox orient point
@@ -27,7 +27,7 @@ barAttrs bBox orient additionalAttrs point =
     , height <| toString pos.height
     ] ++ additionalAttrs
 
-posInfo : BoundingBox -> Orient -> TransformedPoint -> {x: Float, y: Float, width: Float, height: Float}
+posInfo : BoundingBox -> Orient -> PointWithBands -> {x: Float, y: Float, width: Float, height: Float}
 posInfo bBox orient point =
   case orient of
     Vertical ->

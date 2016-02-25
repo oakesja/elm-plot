@@ -2,8 +2,9 @@ module Scale.OrdinalBands (transform, createTicks, createMapping) where
 
 import Private.Models exposing (Tick, PointValue)
 import Dict exposing (Dict)
+import Sets exposing (Range)
 
-transform : ((Float, Float) -> Dict String PointValue) -> (Float, Float) -> String -> PointValue
+transform : (Range -> Dict String PointValue) -> Range -> String -> PointValue
 transform mapping range s =
   case Dict.get s (mapping range) of
     Just x ->
@@ -11,12 +12,12 @@ transform mapping range s =
     Nothing ->
       { value = 0, bandWidth = 0 }
 
-createTicks : ((Float, Float) -> Dict String PointValue) -> (Float, Float) -> List Tick
+createTicks : (Range -> Dict String PointValue) -> Range -> List Tick
 createTicks mapping range =
   List.map (\x -> {position = .value (snd x), label = fst x}) (Dict.toList (mapping range))
 
 -- https://github.com/mbostock/d3/blob/6cc03db0de3777f034dc910a7cae2cbecb0ed099/src/scale/ordinal.js#L61
-createMapping : List String -> Float -> Float -> (Float, Float) -> Dict String PointValue
+createMapping : List String -> Float -> Float -> Range -> Dict String PointValue
 createMapping domain padding outerPadding range =
   let
     start = min (fst range) (snd range)

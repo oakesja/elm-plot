@@ -8,7 +8,7 @@ import Scale
 import Points
 import Area
 import Line
-import Axis.Axis
+import Axis.View
 import Axis.Orient
 import BoundingBox
 
@@ -17,6 +17,8 @@ type alias Plot =
   , html : List Svg
   , margins : Margins
   }
+
+-- TODO clean up
 
 createPlot : Float -> Float -> Plot
 createPlot width height =
@@ -32,7 +34,7 @@ addPoints points getX getY xScale yScale pointToSvg plot =
     yScaleWithMargins = Scale.includeMargins -plot.margins.bottom -plot.margins.top yScale
     newHtml =
       List.map (\p -> { x = getX p, y = getY p }) points
-        |> Points.transform xScaleWithMargins yScaleWithMargins
+        |> Points.transformIntoPoints xScaleWithMargins yScaleWithMargins
         |> Points.toSvg pointToSvg
         |> List.append plot.html
   in
@@ -79,7 +81,7 @@ addAxis axis plot =
         , boundingBox = BoundingBox.from plot.dimensions plot.margins
         }
   in
-    { plot | html = List.append plot.html [Axis.Axis.toSvg a] }
+    { plot | html = List.append plot.html [Axis.View.toSvg a] }
 
 addBars : List a -> (a -> b) -> (a -> c) -> Scale b -> Scale c -> Bars.Orient -> List Svg.Attribute -> Plot -> Plot
 addBars points getX getY xScale yScale orient attrs plot =
@@ -88,7 +90,7 @@ addBars points getX getY xScale yScale orient attrs plot =
     yScaleWithMargins = Scale.includeMargins -plot.margins.bottom -plot.margins.top yScale
     newHtml =
       List.map (\p -> { x = getX p, y = getY p }) points
-        |> Points.transform xScaleWithMargins yScaleWithMargins
+        |> Points.transformIntoBands xScaleWithMargins yScaleWithMargins
         |> Bars.toSvg (BoundingBox.from plot.dimensions plot.margins) orient attrs
         |> List.append plot.html
   in

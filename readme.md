@@ -1,16 +1,19 @@
 try to remove html dependency
 append additional svg to plot
 give option of width and height for range of scale
-default padding
 negative dimensions
 negative margins
 handle scales that don't need to change from margins
 padding for normal range and reverse range do not appear to be the same
 better handling for undefined point in ordinal scale
-examples on events
+events
 arcs for pie charts
 custom bands
-consider renaming style to additional attrs
+
+plot
+  - [ ] - margins (most components will need to wait to be created until margins are known)
+  - [ ] - additional svg
+  - [ ] - top level style
 
 examples
   - [ ] linear scale
@@ -19,6 +22,7 @@ examples
   - [ ] ordinal scale point
   - [ ] ordinal scale bands
   - [ ] custom with ordinal scale bands (triangles going to axis from point with band width)
+  - [ ] events
 
 linear scales
   - [x] number of ticks

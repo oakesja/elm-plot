@@ -2,9 +2,9 @@ module Axis.Extent where
 
 import Private.Models exposing (Extent, BoundingBox)
 import Axis.Orient exposing (Orient)
-import Utils exposing (extentOf)
+import Sets exposing (extentOf, Range)
 
-calculateExtent : BoundingBox -> Orient -> (Float, Float) -> Extent
+calculateExtent : BoundingBox -> Orient -> Range -> Extent
 calculateExtent bBox orient range =
   let
     extent = extentOf range

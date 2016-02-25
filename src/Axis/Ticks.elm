@@ -1,7 +1,9 @@
 module Axis.Ticks where
 
 import Axis.Orient exposing (Orient)
-import Private.Models exposing (Axis, Tick, Scale, TickInfo)
+import Private.Models exposing (Tick, TickInfo)
+import Axis.Axis exposing (Axis)
+import Scale.Scale exposing (Scale)
 import Svg exposing (Svg, path, text', g, line)
 import Svg.Attributes exposing (d, fill, stroke, shapeRendering, x, y, transform, y2, x2, dy, textAnchor)
 import SvgAttributesExtras exposing (translate, rotate)
@@ -15,7 +17,7 @@ createTick : Axis a -> TickInfo -> Svg
 createTick axis tickInfo =
   g
     [ translate tickInfo.translation ]
-    [ line ((innerTickLineAttributes axis.orient axis.innerTickSize) ++ axis.innerTickStyle) []
+    [ line ((innerTickLineAttributes axis.orient axis.innerTickSize) ++ axis.innerTickAttributes) []
     , text'
       (labelAttributes axis.orient axis.innerTickSize axis.tickPadding axis.labelRotation)
       [ Svg.text tickInfo.label ]

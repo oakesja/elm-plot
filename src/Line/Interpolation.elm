@@ -1,11 +1,11 @@
 module Line.Interpolation (linear) where
 
-import Private.Models exposing (TransformedPoints, Interpolation)
+import Private.Models exposing (Interpolation)
 
 linear : Interpolation
 linear points =
   let
-    pointsStrings = List.map (\p -> toString p.x.value ++ "," ++ toString p.y.value) points
+    pointsStrings = List.map (\p -> toString p.x ++ "," ++ toString p.y) points
   in
     if List.length points == 1 then
       join pointsStrings ++ "Z"
