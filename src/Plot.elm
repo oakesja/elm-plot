@@ -3,6 +3,8 @@ module Plot where
 import Svg exposing (svg, Svg)
 import Svg.Attributes exposing (width, height)
 import Private.Models exposing (..)
+import Scale.Scale exposing (Scale)
+import Axis.Axis exposing (Axis)
 import Bars
 import Scale
 import Points
@@ -11,12 +13,16 @@ import Line
 import Axis.View
 import Axis.Orient
 import BoundingBox
+import Svg.Events exposing (onClick)
 
 type alias Plot =
   { dimensions: Dimensions
   , html : List Svg
   , margins : Margins
+  , attrs : List Svg.Attribute
   }
+
+type Action = ClickEvent Float Float
 
 -- TODO clean up
 
@@ -25,6 +31,7 @@ createPlot width height =
   { dimensions = { width = width, height = height }
   , html = []
   , margins = {top = 70, bottom = 70, right = 70, left = 70}
+  , attrs = []
   }
 
 addPoints : List a -> (a -> b) -> (a -> c) -> Scale b -> Scale c -> (Float -> Float -> Svg) -> Plot -> Plot
@@ -95,6 +102,10 @@ addBars points getX getY xScale yScale orient attrs plot =
         |> List.append plot.html
   in
     { plot | html = newHtml }
+
+registerEventHandler : Scale b -> Scale c -> Signal.Address Action -> Plot -> Plot
+registerEventHandler xScale yScale address plot =
+  { plot | attrs = [onClick <| Signal.message address (ClickEvent 50 40)] }
 
 toSvg : Plot -> Svg
 toSvg plot =

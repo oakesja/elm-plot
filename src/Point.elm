@@ -1,6 +1,7 @@
 module Point where
 
-import Private.Models exposing (Scale, Point, PointWithBands)
+import Private.Models exposing (Point, PointWithBands)
+import Scale.Scale exposing (Scale)
 import Scale
 
 transformIntoBand : Scale a -> Scale b -> Point a b -> PointWithBands

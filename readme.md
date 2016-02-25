@@ -5,10 +5,14 @@ negative dimensions
 negative margins
 handle scales that don't need to change from margins
 padding for normal range and reverse range do not appear to be the same
-better handling for undefined point in ordinal scale
-events
 arcs for pie charts
 custom bands
+change sets (domain and range) to be model instead of a tuple to clean up code in scales
+tick marks are off for a linear scale
+
+events
+  - [ ] events that require knowledge of where on the plot it was clicked (x, y, band width)
+  - [ ] events that don't require that knowledge (should the user handle these?)
 
 plot
   - [ ] margins (most components will need to wait to be created until margins are known)
@@ -22,11 +26,19 @@ linear scales
 ordinal scales
   - [x] points
   - [x] bands
+    - check case of only domain of length 1 or 2
+    - check y axis and that horizontal bars
   - [ ] specified range
+  - [ ] handle undefined points that are not in the domain
 
 bars
   - [x] orient (horizonal or vertical)
   - [x] style
+
+rules
+  - [ ] vertical y y2 x
+  - [ ] horizonal x x2 y
+  - [ ] additional attributes
 
 symbols
   - [x] circle
