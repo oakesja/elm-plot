@@ -10,6 +10,7 @@ tests =
   suite "Scale.OrdinalBands"
         [ createMappingTests
         , interpolateTests
+        , uninterpolateTests
         , ticksTests
         ]
 
@@ -23,16 +24,16 @@ createMappingTests =
     suite "createMapping"
       [ test "without any paddings"
           <| assertEqual (expected [0, 40, 80] 40)
-          <| Dict.toList <| createMapping domain 0 0 range
+          <| Dict.toList <| .lookup <| createMapping domain 0 0 range
       , test "with a padding set"
           <| assertEqual (expected [7.5, 45, 82.5] 30)
-          <| Dict.toList <| createMapping domain 0.2 0.2 range
+          <| Dict.toList <| .lookup <| createMapping domain 0.2 0.2 range
       , test "with a padding and a different outer padding set"
           <| assertEqual (expected [4, 44, 84] 32)
-          <| Dict.toList <| createMapping domain 0.2 0.1 range
+          <| Dict.toList <| .lookup <| createMapping domain 0.2 0.1 range
       , test "with a descending range"
           <| assertEqual (expected [82.5, 45, 7.5] 30)
-          <| Dict.toList <| createMapping domain 0.2 0.2 (120, 0)
+          <| Dict.toList <| .lookup <| createMapping domain 0.2 0.2 (120, 0)
       ]
 
 expectedMapping : List String -> List Float -> Float -> List (String, PointValue String)
@@ -53,6 +54,25 @@ interpolateTests =
       , test "for inputs not in the domain"
           <| assertEqual {value = 0, width = 0, originalValue = "d"}
           <| interpolate (createMapping domain 0 0) range "d"
+      ]
+
+uninterpolateTests : Test
+uninterpolateTests =
+  let
+    domain = ["a", "b", "c"]
+    range = (0, 120)
+    expected = expectedInterpolation domain
+  in
+    suite "interpolate"
+      [ test "for inputs that match excatly to a domain value"
+          <| assertEqual domain
+          <| List.map (uninterpolate (createMapping domain 0 0) range) [0, 40, 80]
+      , test "for inputs that are close to a domain value"
+          <| assertEqual domain
+          <| List.map (uninterpolate (createMapping domain 0 0) range) [-1, 45, 95]
+      , test "for inputs that are exactly in between two domain values"
+          <| assertEqual "a"
+          <| uninterpolate (createMapping domain 0 0) range 20
       ]
 
 expectedInterpolation : List String -> List Float -> Float -> List (PointValue String)

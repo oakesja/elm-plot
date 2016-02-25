@@ -11,6 +11,7 @@ linear : Domain -> Range -> Int -> Scale Float
 linear domain range numTicks =
   { range = range
   , interpolate = Scale.Linear.interpolate domain
+  , uninterpolate = Scale.Linear.uninterpolate domain
   , createTicks = Scale.Linear.createTicks domain numTicks
   }
 
@@ -21,6 +22,7 @@ ordinalPoints domain range padding =
   in
     { range = range
     , interpolate = Scale.OrdinalPoints.interpolate mapping
+    , uninterpolate = Scale.OrdinalPoints.uninterpolate mapping
     , createTicks = Scale.OrdinalPoints.createTicks mapping
     }
 
@@ -31,6 +33,7 @@ ordinalBands domain range padding outerPadding =
   in
     { range = range
     , interpolate = Scale.OrdinalBands.interpolate mapping
+    , uninterpolate = Scale.OrdinalBands.uninterpolate mapping
     , createTicks = Scale.OrdinalBands.createTicks mapping
     }
 
@@ -38,6 +41,10 @@ ordinalBands domain range padding outerPadding =
 interpolate : Scale a -> a -> PointValue a
 interpolate scale x =
   scale.interpolate scale.range x
+
+uninterpolate : Scale a -> Float -> a
+uninterpolate scale x =
+  scale.uninterpolate scale.range x
 
 createTicks : Scale a -> List Tick
 createTicks scale =

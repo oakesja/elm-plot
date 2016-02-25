@@ -15,6 +15,8 @@ import Axis.Orient
 import BoundingBox
 import Html.Events exposing (on)
 import Json.Decode exposing (object2, (:=), float, Decoder)
+import Scale.Linear
+import Debug
 
 type alias Plot =
   { dimensions: Dimensions
@@ -104,15 +106,24 @@ addBars points getX getY xScale yScale orient attrs plot =
   in
     { plot | html = newHtml }
 
-type alias MouseEvent = { clientX: Float, clientY: Float }
+type alias MouseInfo = { clientX: Float, clientY: Float }
+type alias MouseEvent a b = { x: a, y: b }
 
-registerOnClick : Scale b -> Scale c -> Signal.Address Action -> Plot -> Plot
-registerOnClick xScale yScale address plot =
-  { plot | attrs = [on "click" clickDecoder (\event -> Signal.message address (ClickEvent event.clientX event.clientY))] }
+registerOnClick : Scale b -> Scale c -> (MouseEvent b c -> Signal.Message) -> Plot -> Plot
+registerOnClick xScale yScale createMessage plot =
+  let
+    xScale' = Scale.includeMargins plot.margins.left plot.margins.right xScale
+    yScale' = Scale.includeMargins -plot.margins.bottom -plot.margins.top yScale
+    handler = (\event -> createMessage
+      { x = Scale.uninterpolate xScale' event.clientX
+      , y = Scale.uninterpolate yScale' event.clientY
+      })
+  in
+    { plot | attrs = [on "click" clickDecoder handler] }
 
-clickDecoder : Decoder MouseEvent
+clickDecoder : Decoder MouseInfo
 clickDecoder =
-  object2 MouseEvent
+  object2 MouseInfo
     ("clientX" := float)
     ("clientY" := float)
 

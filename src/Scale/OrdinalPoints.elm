@@ -1,27 +1,24 @@
-module Scale.OrdinalPoints (interpolate, createTicks, createMapping) where
+module Scale.OrdinalPoints (interpolate, createTicks, createMapping, uninterpolate) where
 
 import Private.Models exposing (Tick, PointValue)
 import Dict exposing (Dict)
 import Sets exposing (Range)
+import Scale.Ordinal exposing (..)
 
-interpolate : (Range -> Dict String Float) -> Range -> String -> PointValue String
+interpolate : (Range -> OrdinalMapping) -> Range -> String -> PointValue String
 interpolate mapping range s =
-  let
-    value =
-      case Dict.get s (mapping range) of
-        Just x ->
-          x
-        Nothing ->
-          0
-  in
-    { value = value, width = 0, originalValue = s }
+  Scale.Ordinal.interpolate (mapping range) s
 
-createTicks : (Range -> Dict String Float) -> Range -> List Tick
+uninterpolate : (Range -> OrdinalMapping) -> Range -> Float -> String
+uninterpolate mapping range x =
+  Scale.Ordinal.uninterpolate (mapping range) x
+
+createTicks : (Range -> OrdinalMapping) -> Range -> List Tick
 createTicks mapping range =
-  List.map (\x -> {position = snd x, label = fst x}) (Dict.toList (mapping range))
+  List.map (\x -> {position = .value (snd x), label = fst x}) (Dict.toList (.lookup (mapping range)))
 
 -- https://github.com/mbostock/d3/blob/6cc03db0de3777f034dc910a7cae2cbecb0ed099/src/scale/ordinal.js#L39
-createMapping : List String -> Int -> Range -> Dict String Float
+createMapping : List String -> Int -> Range -> OrdinalMapping
 createMapping domain padding range =
   let
     start = fst range
@@ -29,7 +26,9 @@ createMapping domain padding range =
     step = calculateStep domain padding start stop
     adjustedStart = adjustStart domain padding start step
   in
-    buildMapping adjustedStart step domain Dict.empty
+    { lookup = buildLookup adjustedStart step 0 domain Dict.empty
+    , stepSize = step
+    }
 
 calculateStep : List String -> Int -> Float -> Float -> Float
 calculateStep domain padding start stop =
@@ -44,19 +43,3 @@ adjustStart domain padding start step =
     step
   else
     start + step * (toFloat padding) / 2
-
-buildMapping : Float -> Float -> List String -> Dict String Float -> Dict String Float
-buildMapping start step domain dict =
-  if List.length domain == 0 then
-    dict
-  else
-    buildMapping (start + step) step (List.drop 1 domain)
-      <| Dict.insert (maybeStringToString (List.head domain)) start dict
-
-maybeStringToString : Maybe String -> String
-maybeStringToString s =
-  case s of
-    Just s ->
-      s
-    Nothing ->
-      ""

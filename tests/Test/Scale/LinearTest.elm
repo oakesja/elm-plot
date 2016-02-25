@@ -7,6 +7,7 @@ tests : Test
 tests =
   suite "Scale.Linear"
         [ interpolateTests
+        , uninterpolateTests
         , ticksTests
         ]
 
@@ -22,12 +23,29 @@ interpolateTests =
       , test "for a reverse domain"
           <| assertEqual 12
           <| .value <| interpolate (-1, 0) range -0.25
-      , test "for domain where the min and max are equal"
+      , test "when the min and max of the domain is equal"
           <| assertEqual 0
           <| .value <| interpolate (1, 1) range 2
       , test "the band width is always 0"
           <| assertEqual 0
           <| .width <| interpolate (0, 1) range 0.25
+      ]
+
+uninterpolateTests : Test
+uninterpolateTests =
+  let
+    domain = (0, 1)
+  in
+    suite "uninterpolate"
+      [ test "for a regular domain"
+          <| assertEqual 0.25
+          <| uninterpolate domain (0, 16) 4
+      , test "for a reverse domain"
+          <| assertEqual 0.25
+          <| uninterpolate domain (16, 0) 12
+      , test "when the min and max of the range is equal"
+          <| assertEqual 0
+          <| uninterpolate domain (16, 16) 2
       ]
 
 ticksTests : Test

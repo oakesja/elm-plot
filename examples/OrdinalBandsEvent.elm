@@ -1,4 +1,4 @@
-module Event where
+module OrdinalBandsEvent where
 
 import Plot exposing (..)
 import Scale
@@ -9,29 +9,27 @@ import Debug
 import StartApp.Simple as StartApp
 import Scale.Scale exposing (Scale)
 import Svg exposing (Svg)
+import Bars
 
 main : Signal Svg
 main =
   StartApp.start { model = model, view = view, update = update }
 
-type Action = Click Float Float
+type Action = Click String Float
 
 type alias Model =
-  { points : List { x: Float, y : Float}, xScale : Scale Float, yScale : Scale Float}
+  { points : List { x: String, y : Float}, xScale : Scale String, yScale : Scale Float}
 
 model : Model
 model =
   { points =
-    [ {x = 10, y = 10}
-    , {x = 50, y = 50}
-    , {x = 100, y = 100}
-    , {x = 150, y = 150}
-    , {x = 200, y = 200}
-    , {x = 250, y = 250}
-    , {x = 300, y = 300}
-    , {x = 400, y = 400}
+    [ {x = "a", y = 10}
+    , {x = "b", y = 50}
+    , {x = "c", y = 100}
+    , {x = "d", y = 400}
+    , {x = "e", y = 150}
     ]
-  , xScale = Scale.linear (0, 400) (0, 400) 10
+  , xScale = Scale.ordinalBands ["a", "b", "c", "d"] (0, 400) 0 0.2
   , yScale = Scale.linear (0, 400) (400, 0) 10
   }
 
@@ -51,7 +49,7 @@ view address model =
       Axis.createAxis model.xScale Axis.Orient.Bottom
   in
     createPlot 400 400
-      |> addPoints model.points .x .y model.xScale model.yScale (circle 5 [])
+      |> addBars model.points .x .y model.xScale model.yScale Bars.Vertical []
       |> addAxis xAxis
       |> addAxis yAxis
       |> registerOnClick model.xScale model.yScale (\me -> Signal.message address <| Click me.x me.y)
