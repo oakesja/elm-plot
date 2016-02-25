@@ -14,7 +14,9 @@ transform mapping range s =
 
 createTicks : (Range -> Dict String PointValue) -> Range -> List Tick
 createTicks mapping range =
-  List.map (\x -> {position = .value (snd x), label = fst x}) (Dict.toList (mapping range))
+  List.map
+    (\x -> {position = .value (snd x) + (.bandWidth (snd x) / 2), label = fst x}) 
+    (Dict.toList (mapping range))
 
 -- https://github.com/mbostock/d3/blob/6cc03db0de3777f034dc910a7cae2cbecb0ed099/src/scale/ordinal.js#L61
 createMapping : List String -> Float -> Float -> Range -> Dict String PointValue

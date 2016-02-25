@@ -24,7 +24,7 @@ main =
       |> toSvg
 
 xScale =
-  Scale.ordinalBands ["a", "b", "c", "d"] (0, 400) 0.1 1.0
+  Scale.ordinalBands ["a", "b", "c", "d"] (0, 400) 0 0.2
 
 yScale =
   Scale.linear (0, 400) (400, 0) 10

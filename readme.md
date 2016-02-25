@@ -11,18 +11,9 @@ arcs for pie charts
 custom bands
 
 plot
-  - [ ] - margins (most components will need to wait to be created until margins are known)
-  - [ ] - additional svg
-  - [ ] - top level style
-
-examples
-  - [ ] linear scale
-  - [ ] each point type
-  - [ ] custom point
-  - [ ] ordinal scale point
-  - [ ] ordinal scale bands
-  - [ ] custom with ordinal scale bands (triangles going to axis from point with band width)
-  - [ ] events
+  - [ ] margins (most components will need to wait to be created until margins are known)
+  - [ ] additional svg
+  - [ ] top level style
 
 linear scales
   - [x] number of ticks
@@ -62,6 +53,15 @@ axis
   - [x] title - default none
   - [x] title offset
   - [x] title style
+
+examples
+  - [ ] linear scale
+  - [ ] each point type
+  - [ ] custom point
+  - [ ] ordinal scale point
+  - [ ] ordinal scale bands
+  - [ ] custom with ordinal scale bands (triangles going to axis from point with band width)
+  - [ ] events  
 
 Design
 

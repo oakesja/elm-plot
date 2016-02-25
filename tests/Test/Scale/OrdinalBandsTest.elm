@@ -59,8 +59,8 @@ ticksTests =
     range = (0, 120)
   in
     suite "ticks"
-      [ test "it creates ticks for the given mapping"
-          <| assertEqual (expectedTicks [0, 40, 80] domain)
+      [ test "it creates ticks for the given mapping in the middle of the bands"
+          <| assertEqual (expectedTicks [20, 60, 100] domain)
             <| createTicks (createMapping domain 0 0) range
       ]
 

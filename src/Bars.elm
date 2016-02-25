@@ -31,14 +31,14 @@ posInfo : BoundingBox -> Orient -> PointWithBands -> {x: Float, y: Float, width:
 posInfo bBox orient point =
   case orient of
     Vertical ->
-      { x = point.x.value - (point.x.bandWidth / 2)
+      { x = point.x.value
       , y = point.y.value
       , width = point.x.bandWidth
       , height = bBox.yEnd - point.y.value
       }
     Horizontal ->
       { x = bBox.xStart
-      , y = point.y.value - (point.y.bandWidth / 2)
+      , y = point.y.value
       , width = point.x.value - bBox.xStart
       , height = point.y.bandWidth
       }
