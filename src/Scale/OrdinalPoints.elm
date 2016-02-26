@@ -5,21 +5,21 @@ import Dict exposing (Dict)
 import Sets exposing (Range)
 import Scale.Ordinal exposing (..)
 
-interpolate : (Range -> OrdinalMapping) -> Range -> String -> PointValue String
-interpolate mapping range s =
-  Scale.Ordinal.interpolate (mapping range) s
+interpolate : (List String -> Range -> OrdinalMapping) -> List String -> Range -> String -> PointValue String
+interpolate mapping domain range s =
+  Scale.Ordinal.interpolate (mapping domain range) s
 
-uninterpolate : (Range -> OrdinalMapping) -> Range -> Float -> String
-uninterpolate mapping range x =
-  Scale.Ordinal.uninterpolate (mapping range) x
+uninterpolate : (List String -> Range -> OrdinalMapping) -> List String -> Range -> Float -> String
+uninterpolate mapping domain range x =
+  Scale.Ordinal.uninterpolate (mapping domain range) x
 
-createTicks : (Range -> OrdinalMapping) -> Range -> List Tick
-createTicks mapping range =
-  Scale.Ordinal.createTicks (mapping range) (\label pv -> {position = pv.value, label = label})
+createTicks : (List String -> Range -> OrdinalMapping) -> List String -> Range -> List Tick
+createTicks mapping domain range =
+  Scale.Ordinal.createTicks (mapping domain range) (\label pv -> {position = pv.value, label = label})
 
 -- https://github.com/mbostock/d3/blob/6cc03db0de3777f034dc910a7cae2cbecb0ed099/src/scale/ordinal.js#L39
-createMapping : List String -> Int -> Range -> OrdinalMapping
-createMapping domain padding range =
+createMapping : Int -> List String -> Range -> OrdinalMapping
+createMapping padding domain range =
   let
     start = fst range
     stop = snd range

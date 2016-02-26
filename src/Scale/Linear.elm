@@ -24,8 +24,8 @@ uninterpolate domain range y =
     ((y - fst range) * (snd domain - fst domain) / (snd range - fst range)) + fst domain
 
 -- https://github.com/mbostock/d3/blob/78ce531f79e82275fe50f975e784ee2be097226b/src/scale/linear.js#L96
-createTicks : Domain -> Int -> Range -> List Tick
-createTicks domain numTicks range =
+createTicks : Int -> Domain -> Range -> List Tick
+createTicks numTicks domain range =
   let
     extent = extentOf domain
     step = stepSize extent (toFloat numTicks)

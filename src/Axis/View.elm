@@ -12,7 +12,7 @@ import Axis.Ticks
 import Axis.Extent exposing (calculateExtent)
 import Axis.Title
 
-toSvg : Axis a -> Svg
+toSvg : Axis a b -> Svg
 toSvg axis =
   let
     extent = calculateExtent axis.boundingBox axis.orient axis.scale.range
@@ -40,13 +40,13 @@ axisTranslation bBox orient =
   in
     translate pos
 
-axisSvg : Axis a -> Svg
+axisSvg : Axis a b -> Svg
 axisSvg axis =
   path
      ((d <| pathString axis.boundingBox axis.scale axis.orient axis.outerTickSize) :: axis.axisAttributes)
      []
 
-pathString : BoundingBox -> Scale a -> Orient -> Int -> String
+pathString : BoundingBox -> Scale a b -> Orient -> Int -> String
 pathString bBox scale orient tickSize =
   let
     extent = extentOf scale.range

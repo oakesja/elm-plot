@@ -7,7 +7,7 @@ import Svg exposing (Svg, path)
 import Svg.Attributes exposing (d, stroke, strokeWidth, fill)
 
 -- TODO create interpolated line model
-interpolate : Scale a -> Scale b -> Line a b -> List (InterpolatedPoint a b)
+interpolate : Scale x a -> Scale y b -> Line a b -> List (InterpolatedPoint a b)
 interpolate xScale yScale line =
   Points.interpolate xScale yScale line
 

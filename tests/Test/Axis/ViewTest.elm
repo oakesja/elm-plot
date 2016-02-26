@@ -55,7 +55,7 @@ pathStringTests =
       <| assertEqual "M10,-8V0H90V-8" <| pathString boundingBox scale Axis.Orient.Top 8
     ]
 
-scale : Scale Float
+scale : Scale (Float, Float) Float
 scale =
   Scale.linear (10, 90) (10, 90) 1
 

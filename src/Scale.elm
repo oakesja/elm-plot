@@ -7,55 +7,54 @@ import Private.Models exposing (PointValue, Tick)
 import Scale.Scale exposing (Scale)
 import Sets exposing (Domain, Range)
 
-linear : Domain -> Range -> Int -> Scale Float
+linear : (Float, Float) -> Range -> Int -> Scale (Float, Float) Float
 linear domain range numTicks =
-  { range = range
-  , interpolate = Scale.Linear.interpolate domain
-  , uninterpolate = Scale.Linear.uninterpolate domain
-  , createTicks = Scale.Linear.createTicks domain numTicks
+  { domain = domain
+  , range = range
+  , interpolate = Scale.Linear.interpolate
+  , uninterpolate = Scale.Linear.uninterpolate
+  , createTicks = Scale.Linear.createTicks numTicks
   }
 
-ordinalPoints : List String -> Range -> Int -> Scale String
+ordinalPoints : List String -> Range -> Int -> Scale (List String) String
 ordinalPoints domain range padding =
   let
-    mapping = Scale.OrdinalPoints.createMapping domain padding
+    mapping = Scale.OrdinalPoints.createMapping padding
   in
-    { range = range
+    { domain = domain
+    , range = range
     , interpolate = Scale.OrdinalPoints.interpolate mapping
     , uninterpolate = Scale.OrdinalPoints.uninterpolate mapping
     , createTicks = Scale.OrdinalPoints.createTicks mapping
     }
 
-ordinalBands : List String -> Range -> Float -> Float -> Scale String
+ordinalBands : List String -> Range -> Float -> Float -> Scale (List String) String
 ordinalBands domain range padding outerPadding =
   let
-    mapping = Scale.OrdinalBands.createMapping domain padding outerPadding
+    mapping = Scale.OrdinalBands.createMapping padding outerPadding
   in
-    { range = range
+    { domain = domain
+    , range = range
     , interpolate = Scale.OrdinalBands.interpolate mapping
     , uninterpolate = Scale.OrdinalBands.uninterpolate mapping
     , createTicks = Scale.OrdinalBands.createTicks mapping
     }
 
-updateRange : Range -> Scale a -> Scale a
-updateRange range scale =
-  { scale | range = range }
-
 -- TODO private move somewhere else
-interpolate : Scale a -> a -> PointValue a
+interpolate : Scale a b -> b -> PointValue b
 interpolate scale x =
-  scale.interpolate scale.range x
+  scale.interpolate scale.domain scale.range x
 
-uninterpolate : Scale a -> Float -> a
+uninterpolate : Scale a b -> Float -> b
 uninterpolate scale x =
-  scale.uninterpolate scale.range x
+  scale.uninterpolate scale.domain scale.range x
 
-createTicks : Scale a -> List Tick
+createTicks : Scale a b -> List Tick
 createTicks scale =
-  scale.createTicks scale.range
+  scale.createTicks scale.domain scale.range
 
 -- TODO does not work for reversed ranges
-includeMargins : Float -> Float -> Scale a -> Scale a
+includeMargins : Float -> Float -> Scale a b -> Scale a b
 includeMargins lowM highM scale =
   let
     rLow = (fst scale.range) + lowM

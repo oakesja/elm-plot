@@ -5,7 +5,7 @@ import Scale.Scale exposing (Scale)
 import Point
 import Svg exposing (Svg, rect)
 
-interpolate : Scale a -> Scale b -> Points a b -> List (InterpolatedPoint a b)
+interpolate : Scale x a -> Scale y b -> Points a b -> List (InterpolatedPoint a b)
 interpolate xScale yScale points =
   List.map (Point.interpolate xScale yScale) points
 

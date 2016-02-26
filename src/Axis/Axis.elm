@@ -5,8 +5,8 @@ import Svg
 import Scale.Scale exposing (Scale)
 import Private.Models exposing (BoundingBox)
 
-type alias Axis a =
-  { scale : Scale a
+type alias Axis a b =
+  { scale : Scale a b
   , orient : Orient
   , boundingBox : BoundingBox
   , innerTickSize : Int

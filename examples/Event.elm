@@ -19,7 +19,7 @@ main =
 type Action = Click Float Float | Wheel Float
 
 type alias Model =
-  { points : List { x: Float, y : Float}, xScale : Scale Float, yScale : Scale Float}
+  { points : List { x: Float, y : Float}, xScale : Scale (Float, Float) Float, yScale : Scale (Float, Float) Float}
 
 model : Model
 model =
@@ -33,8 +33,8 @@ model =
     , {x = 300, y = 300}
     , {x = 400, y = 400}
     ]
-  , xScale = Scale.linear (0, 400) (0, 400) 10
-  , yScale = Scale.linear (0, 400) (400, 0) 10
+  , xScale = Scale.linear (0, 400) (0, 400) 2
+  , yScale = Scale.linear (0, 400) (400, 0) 2
   }
 
 -- update : Plot.Action -> Model -> Model
@@ -45,9 +45,20 @@ update action model =
     Wheel delta ->
       let
         d = Debug.log "delta" delta
-        newRange = ((fst model.yScale.range + delta), (fst model.yScale.range - delta))
+        change = abs ((fst model.yScale.domain) - (snd model.yScale.domain)) * 0.25
+        newDomain =
+          if d > 0 then
+            ((fst model.yScale.domain) - change, (snd model.yScale.domain) + change)
+          else
+            ((fst model.yScale.domain) + change, (snd model.yScale.domain) - change)
+
+        yScale = model.yScale
+        newyScale = { yScale | domain = newDomain }
+
+        xScale = model.xScale
+        newxScale = { xScale | domain = newDomain }
       in
-        { model | yScale = Scale.updateRange (Debug.log "new range" newRange) model.yScale }
+        { model | yScale = newyScale, xScale = newxScale }
 
 -- view : Signal.Address Plot.Action -> Model -> Svg
 view address model =

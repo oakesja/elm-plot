@@ -9,11 +9,11 @@ import Svg.Attributes exposing (d, fill, stroke, shapeRendering, x, y, transform
 import SvgAttributesExtras exposing (translate, rotate)
 import Scale
 
-createTicks : Axis a -> List Svg
+createTicks : Axis a b -> List Svg
 createTicks axis =
   List.map (createTick axis) (createTickInfos axis.scale axis.orient)
 
-createTick : Axis a -> TickInfo -> Svg
+createTick : Axis a b -> TickInfo -> Svg
 createTick axis tickInfo =
   g
     [ translate tickInfo.translation ]
@@ -65,11 +65,11 @@ innerTickLinePos orient tickSize =
     Axis.Orient.Right ->
       (tickSize, 0)
 
-createTickInfos : Scale a -> Orient -> List TickInfo
+createTickInfos : Scale a b -> Orient -> List TickInfo
 createTickInfos scale orient =
   List.map (createTickInfo scale orient) (Scale.createTicks scale)
 
-createTickInfo : Scale a -> Orient -> Tick -> TickInfo
+createTickInfo : Scale a b -> Orient -> Tick -> TickInfo
 createTickInfo scale orient tick =
   let
     translation =

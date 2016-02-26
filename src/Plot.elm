@@ -35,7 +35,7 @@ createPlot width height =
   , attrs = []
   }
 
-addPoints : List a -> (a -> b) -> (a -> c) -> Scale b -> Scale c -> (Float -> Float -> Svg) -> Plot -> Plot
+addPoints : List a -> (a -> b) -> (a -> c) -> Scale x b -> Scale y c -> (Float -> Float -> Svg) -> Plot -> Plot
 addPoints points getX getY xScale yScale pointToSvg plot =
   let
     xScaleWithMargins = Scale.includeMargins plot.margins.left plot.margins.right xScale
@@ -48,7 +48,7 @@ addPoints points getX getY xScale yScale pointToSvg plot =
   in
     { plot | html = newHtml }
 
-addLines : List a ->  (a -> b) -> (a -> c) -> Scale b -> Scale c -> Interpolation -> List Svg.Attribute -> Plot -> Plot
+addLines : List a ->  (a -> b) -> (a -> c) -> Scale x b -> Scale y c -> Interpolation -> List Svg.Attribute -> Plot -> Plot
 addLines points getX getY xScale yScale interpolate attrs plot =
   let
     xScaleWithMargins = Scale.includeMargins plot.margins.left plot.margins.right xScale
@@ -60,7 +60,7 @@ addLines points getX getY xScale yScale interpolate attrs plot =
   in
     { plot | html = List.append plot.html [line] }
 
-addArea : List a ->  (a -> b) -> (a -> c) -> (a -> c) -> Scale b -> Scale c -> Interpolation -> List Svg.Attribute -> Plot -> Plot
+addArea : List a ->  (a -> b) -> (a -> c) -> (a -> c) -> Scale x b -> Scale y c -> Interpolation -> List Svg.Attribute -> Plot -> Plot
 addArea points getX getY getY2 xScale yScale interpolate attrs plot =
   let
     xScaleWithMargins = Scale.includeMargins plot.margins.left plot.margins.right xScale
@@ -72,7 +72,7 @@ addArea points getX getY getY2 xScale yScale interpolate attrs plot =
   in
     { plot | html = List.append plot.html [area] }
 
-addAxis : Axis a -> Plot -> Plot
+addAxis : Axis a b -> Plot -> Plot
 addAxis axis plot =
   let
     scale = case axis.orient of
@@ -91,7 +91,7 @@ addAxis axis plot =
   in
     { plot | html = List.append plot.html [Axis.View.toSvg a] }
 
-addBars : List a -> (a -> b) -> (a -> c) -> Scale b -> Scale c -> Bars.Orient -> List Svg.Attribute -> Plot -> Plot
+addBars : List a -> (a -> b) -> (a -> c) -> Scale x b -> Scale y c -> Bars.Orient -> List Svg.Attribute -> Plot -> Plot
 addBars points getX getY xScale yScale orient attrs plot =
   let
     xScaleWithMargins = Scale.includeMargins plot.margins.left plot.margins.right xScale
@@ -107,7 +107,7 @@ addBars points getX getY xScale yScale orient attrs plot =
 type alias MouseInfo = { clientX: Float, clientY: Float }
 type alias MouseEvent a b = { x: a, y: b }
 
-registerOnClick : Scale b -> Scale c -> (MouseEvent b c -> Signal.Message) -> Plot -> Plot
+registerOnClick : Scale a b -> Scale d c -> (MouseEvent b c -> Signal.Message) -> Plot -> Plot
 registerOnClick xScale yScale createMessage plot =
   let
     xScale' = Scale.includeMargins plot.margins.left plot.margins.right xScale

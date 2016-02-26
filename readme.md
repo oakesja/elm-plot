@@ -9,7 +9,8 @@ arcs for pie charts
 custom bands
 change sets (domain and range) to be model instead of a tuple to clean up code in scales
 be able to update domain and ranges for scale
-
+consider adding zooming as part of the framework, only makes sense for linear scales though
+don't draw points outsize of bounding box
 
 events
   - [ ] events that require knowledge of where on the plot it was clicked (x, y, band width)
