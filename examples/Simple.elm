@@ -14,15 +14,11 @@ main =
   let
     yAxis =
       Axis.createAxis yScale Axis.Orient.Left
-        |> Axis.outerTickSize 10
-        |> Axis.innerTickSize 15
         |> Axis.innerTickAttributes [stroke "red"]
         |> Axis.title "y axis"
-        |> Axis.titleOffset 40
 
     xAxis =
       Axis.createAxis xScale Axis.Orient.Bottom
-        |> Axis.tickPadding 5
         |> Axis.labelRotation -45
         |> Axis.title "x axis"
   in
@@ -31,6 +27,7 @@ main =
       |> addPoints points .x .y xScale yScale (diamond 5 [])
       |> addAxis xAxis
       |> addAxis yAxis
+      |> margins {top = 50, bottom = 50, right = 50, left = 100}
       |> toSvg
 
 xScale =

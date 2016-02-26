@@ -10,3 +10,7 @@ find predicate list =
         Just first
       else
         find predicate rest
+
+toList : a -> List a
+toList x =
+  [x]        

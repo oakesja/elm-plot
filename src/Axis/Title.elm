@@ -29,7 +29,7 @@ titleAttrs extent orient innerTickSize tickPadding attrs offset =
       Just o ->
         sign * o
       Nothing ->
-        sign * (innerTickSize + tickPadding + 40)
+        sign * (innerTickSize + tickPadding + 30)
     posAttrs =
       if orient == Axis.Orient.Top || orient == Axis.Orient.Bottom then
         [x <| toString middle, y <| toString calOffset]
