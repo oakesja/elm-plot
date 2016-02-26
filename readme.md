@@ -8,7 +8,6 @@ padding for normal range and reverse range do not appear to be the same
 arcs for pie charts
 custom bands
 change sets (domain and range) to be model instead of a tuple to clean up code in scales
-tick marks are off for a linear scale
 
 events
   - [ ] events that require knowledge of where on the plot it was clicked (x, y, band width)

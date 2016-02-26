@@ -29,6 +29,10 @@ uninterpolate mapping x =
       Nothing ->
         ""
 
+createTicks : OrdinalMapping -> (String -> PointValue String -> Tick) -> List Tick
+createTicks mapping createTick =
+  List.map (\v -> createTick (fst v) (snd v))  <| Dict.toList <| mapping.lookup
+
 buildLookup : Float -> Float -> Float -> List String -> Dict String (PointValue String) -> Dict String (PointValue String)
 buildLookup start step width domain dict =
   if List.length domain == 0 then

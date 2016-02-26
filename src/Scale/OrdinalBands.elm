@@ -15,9 +15,7 @@ uninterpolate mapping range x =
 
 createTicks : (Range -> OrdinalMapping) -> Range -> List Tick
 createTicks mapping range =
-  List.map
-    (\x -> {position = .value (snd x) + (.width (snd x) / 2), label = fst x})
-    (Dict.toList (.lookup (mapping range)))
+  Scale.Ordinal.createTicks (mapping range) (\label pv -> {position = pv.value + pv.width / 2, label = label})
 
 -- https://github.com/mbostock/d3/blob/6cc03db0de3777f034dc910a7cae2cbecb0ed099/src/scale/ordinal.js#L61
 createMapping : List String -> Float -> Float -> Range -> OrdinalMapping
