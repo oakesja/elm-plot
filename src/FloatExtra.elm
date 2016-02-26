@@ -6,7 +6,7 @@ ln x =
 
 roundTo : Float -> Int -> Float
 roundTo x numPlaces =
-  let
-    offset = 10 ^ numPlaces
-  in
-    toFloat (round (x * offset)) / offset
+  if numPlaces > 0 then
+    toFloat (round (x * 10 ^ numPlaces)) / 10 ^ numPlaces
+  else
+    x  
