@@ -9,12 +9,14 @@ import Debug
 import StartApp.Simple as StartApp
 import Scale.Scale exposing (Scale)
 import Svg exposing (Svg)
+import Html.Events exposing (on)
+import Json.Decode exposing (object1, (:=), float, Decoder)
 
 main : Signal Svg
 main =
   StartApp.start { model = model, view = view, update = update }
 
-type Action = Click Float Float
+type Action = Click Float Float | Wheel Float
 
 type alias Model =
   { points : List { x: Float, y : Float}, xScale : Scale Float, yScale : Scale Float}
@@ -40,6 +42,12 @@ update action model =
   case action of
     Click xPos yPos ->
       Debug.log "model" { model | points = { x = xPos, y = yPos } :: model.points }
+    Wheel delta ->
+      let
+        d = Debug.log "delta" delta
+        newRange = ((fst model.yScale.range + delta), (fst model.yScale.range - delta))
+      in
+        { model | yScale = Scale.updateRange (Debug.log "new range" newRange) model.yScale }
 
 -- view : Signal.Address Plot.Action -> Model -> Svg
 view address model =
@@ -55,4 +63,12 @@ view address model =
       |> addAxis xAxis
       |> addAxis yAxis
       |> registerOnClick model.xScale model.yScale (\me -> Signal.message address <| Click me.x me.y)
+      |> additionalAttributes [on "wheel" wheelDecoder (\event -> Signal.message address (Wheel event.deltaY))]
       |> toSvg
+
+type alias WheelEvent = { deltaY : Float }
+
+wheelDecoder : Decoder WheelEvent
+wheelDecoder =
+  object1 WheelEvent
+    ("deltaY" := float)

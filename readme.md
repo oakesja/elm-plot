@@ -8,6 +8,8 @@ padding for normal range and reverse range do not appear to be the same
 arcs for pie charts
 custom bands
 change sets (domain and range) to be model instead of a tuple to clean up code in scales
+be able to update domain and ranges for scale
+
 
 events
   - [ ] events that require knowledge of where on the plot it was clicked (x, y, band width)
@@ -16,7 +18,7 @@ events
 plot
   - [ ] margins (most components will need to wait to be created until margins are known)
   - [ ] additional svg
-  - [ ] top level style
+  - [x] top level style
 
 linear scales
   - [x] number of ticks

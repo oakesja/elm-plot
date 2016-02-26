@@ -37,6 +37,10 @@ ordinalBands domain range padding outerPadding =
     , createTicks = Scale.OrdinalBands.createTicks mapping
     }
 
+updateRange : Range -> Scale a -> Scale a
+updateRange range scale =
+  { scale | range = range }
+
 -- TODO private move somewhere else
 interpolate : Scale a -> a -> PointValue a
 interpolate scale x =
@@ -50,6 +54,7 @@ createTicks : Scale a -> List Tick
 createTicks scale =
   scale.createTicks scale.range
 
+-- TODO does not work for reversed ranges
 includeMargins : Float -> Float -> Scale a -> Scale a
 includeMargins lowM highM scale =
   let

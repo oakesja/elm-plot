@@ -15,8 +15,6 @@ import Axis.Orient
 import BoundingBox
 import Html.Events exposing (on)
 import Json.Decode exposing (object2, (:=), float, Decoder)
-import Scale.Linear
-import Debug
 
 type alias Plot =
   { dimensions: Dimensions
@@ -119,7 +117,11 @@ registerOnClick xScale yScale createMessage plot =
       , y = Scale.uninterpolate yScale' event.clientY
       })
   in
-    { plot | attrs = [on "click" clickDecoder handler] }
+    { plot | attrs = (on "click" clickDecoder handler) :: plot.attrs }
+
+additionalAttributes : List Svg.Attribute -> Plot -> Plot
+additionalAttributes attrs plot =
+  { plot | attrs = plot.attrs ++ attrs }
 
 clickDecoder : Decoder MouseInfo
 clickDecoder =
