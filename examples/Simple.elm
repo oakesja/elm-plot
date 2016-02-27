@@ -4,7 +4,7 @@ import Html exposing (Html, div)
 import Plot exposing (..)
 import Line.Interpolation exposing (linear)
 import Scale
-import Svg.Attributes exposing (cx, cy, r, stroke)
+import Svg.Attributes exposing (cx, cy, r, fill, stroke)
 import Axis
 import Axis.Orient
 import Symbols exposing (circle, square, diamond, triangleUp, triangleDown)
@@ -24,7 +24,7 @@ main =
   in
     createPlot 400 400
       |> addLines lines .x .y xScale yScale linear []
-      |> addPoints points .x .y xScale yScale (diamond 5 [])
+      |> addPoints points .x .y xScale yScale (diamond 8 [fill "red"])
       |> addAxis xAxis
       |> addAxis yAxis
       |> margins {top = 50, bottom = 50, right = 50, left = 100}

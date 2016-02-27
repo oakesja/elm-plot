@@ -1,8 +1,5 @@
 module Private.Models where
 
-import Svg
-import Axis.Orient exposing (Orient)
-
 type alias Point a b = {x: a, y: b}
 type alias PointValue a = { value: Float, width: Float, originalValue : a }
 type alias InterpolatedPoint a b = {x: PointValue a, y: PointValue b}
