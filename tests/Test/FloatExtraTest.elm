@@ -12,13 +12,13 @@ roundTests : Test
 roundTests =
   suite "roundTo"
     [ test "rounding float with no decimal places"
-        <| assertEqual 3 <| roundTo 3 0
+        <| assertEqual 3 (roundTo 3 0)
     , test "rounding float with more decimal places than it has"
-        <| assertEqual 3.10 <| roundTo 3.1 2
+        <| assertEqual 3.10 (roundTo 3.1 2)
     , test "rounding float down"
-        <| assertEqual 3.14 <| roundTo 3.14159 2
+        <| assertEqual 3.14 (roundTo 3.14159 2)
     , test "rounding float up"
-        <| assertEqual 3.142 <| roundTo 3.14159 3
+        <| assertEqual 3.142 (roundTo 3.14159 3)
     , test "when given a negative numbe returns the number"
-        <| assertEqual 3 <| roundTo 3 -1
+        <| assertEqual 3 (roundTo 3 -1)
     ]

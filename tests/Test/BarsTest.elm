@@ -27,11 +27,11 @@ barAttrsTests =
     suite "barAttrs"
       [ test "for a top orient"
           <| assertEqual [x "50", y "40", width "20", height "60"]
-            <| barAttrs boundingBox Bars.Vertical [] point
+          <| barAttrs boundingBox Bars.Vertical [] point
       , test "for a vertical orient"
           <| assertEqual [x "10", y "40", width "40", height "10"]
-            <| barAttrs boundingBox Bars.Horizontal [] point
+          <| barAttrs boundingBox Bars.Horizontal [] point
       , test "additional svg attributes are added to the position attributes"
           <| assertEqual [x "10", y "40", width "40", height "10", stroke "red"]
-            <| barAttrs boundingBox Bars.Horizontal [stroke "red"] point
+          <| barAttrs boundingBox Bars.Horizontal [stroke "red"] point
       ]

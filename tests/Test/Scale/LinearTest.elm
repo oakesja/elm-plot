@@ -19,16 +19,16 @@ interpolateTests =
     suite "interpolate"
       [ test "for a regular domain"
           <| assertEqual 4
-          <| .value <| interpolate (0, 1) range 0.25
+          <| (interpolate (0, 1) range 0.25).value
       , test "for a reverse domain"
           <| assertEqual 12
-          <| .value <| interpolate (-1, 0) range -0.25
+          <| (interpolate (-1, 0) range -0.25).value
       , test "when the min and max of the domain is equal"
           <| assertEqual 0
-          <| .value <| interpolate (1, 1) range 2
+          <| (interpolate (1, 1) range 2).value
       , test "the band width is always 0"
           <| assertEqual 0
-          <| .width <| interpolate (0, 1) range 0.25
+          <| (interpolate (0, 1) range 0.25).width
       ]
 
 uninterpolateTests : Test
@@ -56,29 +56,29 @@ createTicksTests =
     suite "createTicks"
       [ test "for a regular domain and 1 tick"
           <| assertEqual [0, 10]
-          <| List.map .position <| createTicks 1 (0, 1) range
+          <| List.map .position (createTicks 1 (0, 1) range)
       , test "for a regular domain and 2 ticks"
           <| assertEqual [0, 5, 10]
-          <| List.map .position <| createTicks 2 (0, 1) range
+          <| List.map .position (createTicks 2 (0, 1) range)
       , test "for a regular domain and 5 ticks"
           <| assertEqual [0, 2, 4, 6, 8, 10]
-          <| List.map .position <| createTicks 5 (0, 1) range
+          <| List.map .position (createTicks 5 (0, 1) range)
       , test "for a regular domain and 10 ticks"
           <| assertEqual [0..10]
-          <| List.map .position <| createTicks 10 (0, 1) range
+          <| List.map .position (createTicks 10 (0, 1) range)
       , test "for a reverse domain and 1 tick"
           <| assertEqual [10, 0]
-          <| List.map .position <| createTicks 1 (1, 0) range
+          <| List.map .position (createTicks 1 (1, 0) range)
       , test "for a reverse domain and 2 ticks"
           <| assertEqual [10, 5, 0]
-          <| List.map .position <| createTicks 2 (1, 0) range
+          <| List.map .position (createTicks 2 (1, 0) range)
       , test "for a reverse domain and 5 ticks"
           <| assertEqual [10, 8, 6, 4, 2, 0]
-          <| List.map .position <| createTicks 5 (1, 0) range
+          <| List.map .position (createTicks 5 (1, 0) range)
       , test "for a reverse domain and 10 ticks"
           <| assertEqual (List.reverse [0..10])
-          <| List.map .position <| createTicks 10 (1, 0) range
+          <| List.map .position (createTicks 10 (1, 0) range)
       , test "for a larger domain when no rounding should take place"
           <| assertEqual [70, 102.5, 135, 167.5, 200, 232.5, 265, 297.5, 330]
-          <| List.map .position <| createTicks 10 (0, 400) (70, 330)
+          <| List.map .position (createTicks 10 (0, 400) (70, 330))
       ]

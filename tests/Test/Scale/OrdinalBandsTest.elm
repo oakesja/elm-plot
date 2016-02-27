@@ -24,16 +24,16 @@ createMappingTests =
     suite "createMapping"
       [ test "without any paddings"
           <| assertEqual (expected [0, 40, 80] 40)
-          <| Dict.toList <| .lookup <| (createMapping 0 0) domain range
+          <| Dict.toList (createMapping 0 0 domain range).lookup
       , test "with a padding set"
           <| assertEqual (expected [7.5, 45, 82.5] 30)
-          <| Dict.toList <| .lookup <| createMapping 0.2 0.2 domain range
+          <| Dict.toList (createMapping 0.2 0.2 domain range).lookup
       , test "with a padding and a different outer padding set"
           <| assertEqual (expected [4, 44, 84] 32)
-          <| Dict.toList <| .lookup <| createMapping 0.2 0.1 domain range
+          <| Dict.toList (createMapping 0.2 0.1 domain range).lookup
       , test "with a descending range"
           <| assertEqual (expected [82.5, 45, 7.5] 30)
-          <| Dict.toList <| .lookup <| createMapping 0.2 0.2 domain (120, 0)
+          <| Dict.toList (createMapping 0.2 0.2 domain (120, 0)).lookup
       ]
 
 expectedMapping : List String -> List Float -> Float -> List (String, PointValue String)

@@ -27,35 +27,51 @@ calculateExtentTests =
   in
     suite "calculateExtent"
       [ test "for top orient and range fits inside the bounding box"
-          <| assertEqual (createExtent 10 90) <| calculateExtent' Axis.Orient.Top range
+          <| assertEqual (createExtent 10 90)
+          <| calculateExtent' Axis.Orient.Top range
       , test "for bottom orient and range fits inside the bounding box"
-          <| assertEqual (createExtent 10 90) <| calculateExtent' Axis.Orient.Bottom range
+          <| assertEqual (createExtent 10 90)
+          <| calculateExtent' Axis.Orient.Bottom range
       , test "for left orient and range fits inside the bounding box"
-          <| assertEqual (createExtent 10 90) <| calculateExtent' Axis.Orient.Left range
+          <| assertEqual (createExtent 10 90)
+          <| calculateExtent' Axis.Orient.Left range
       , test "for right orient and range fits inside the bounding box"
-          <| assertEqual (createExtent 10 90) <| calculateExtent' Axis.Orient.Right range
+          <| assertEqual (createExtent 10 90)
+          <| calculateExtent' Axis.Orient.Right range
       , test "for top orient and descending range fits inside the bounding box"
-          <| assertEqual (createExtent 10 90) <| calculateExtent' Axis.Orient.Top descendingRange
+          <| assertEqual (createExtent 10 90)
+          <| calculateExtent' Axis.Orient.Top descendingRange
       , test "for bottom orient and descending range fits inside the bounding box"
-          <| assertEqual (createExtent 10 90) <| calculateExtent' Axis.Orient.Bottom descendingRange
+          <| assertEqual (createExtent 10 90)
+          <| calculateExtent' Axis.Orient.Bottom descendingRange
       , test "for left orient and descending range fits inside the bounding box"
-          <| assertEqual (createExtent 10 90) <| calculateExtent' Axis.Orient.Left descendingRange
+          <| assertEqual (createExtent 10 90)
+          <| calculateExtent' Axis.Orient.Left descendingRange
       , test "for right orient and descending range fits inside the bounding box"
-          <| assertEqual (createExtent 10 90) <| calculateExtent' Axis.Orient.Right descendingRange
+          <| assertEqual (createExtent 10 90)
+          <| calculateExtent' Axis.Orient.Right descendingRange
       , test "for top orient and range that does not inside the bounding box"
-          <| assertEqual (createExtent 5 95) <| calculateExtent' Axis.Orient.Top largeRange
+          <| assertEqual (createExtent 5 95)
+          <| calculateExtent' Axis.Orient.Top largeRange
       , test "for bottom orient and range that does not inside the bounding box"
-          <| assertEqual (createExtent 5 95) <| calculateExtent' Axis.Orient.Bottom largeRange
+          <| assertEqual (createExtent 5 95)
+          <| calculateExtent' Axis.Orient.Bottom largeRange
       , test "for left orient and range that does not inside the bounding box"
-          <| assertEqual (createExtent 2 97) <| calculateExtent' Axis.Orient.Left largeRange
+          <| assertEqual (createExtent 2 97)
+          <| calculateExtent' Axis.Orient.Left largeRange
       , test "for right orient and range that does not inside the bounding box"
-          <| assertEqual (createExtent 2 97) <| calculateExtent' Axis.Orient.Right largeRange
+          <| assertEqual (createExtent 2 97)
+          <| calculateExtent' Axis.Orient.Right largeRange
       , test "for top orient and descending range that does not inside the bounding box"
-          <| assertEqual (createExtent 5 95) <| calculateExtent' Axis.Orient.Top largeDescending
+          <| assertEqual (createExtent 5 95)
+          <| calculateExtent' Axis.Orient.Top largeDescending
       , test "for bottom orient and descending range that does not inside the bounding box"
-          <| assertEqual (createExtent 5 95) <| calculateExtent' Axis.Orient.Bottom largeDescending
+          <| assertEqual (createExtent 5 95)
+          <| calculateExtent' Axis.Orient.Bottom largeDescending
       , test "for left orient and descending range that does not inside the bounding box"
-          <| assertEqual (createExtent 2 97) <| calculateExtent' Axis.Orient.Left largeDescending
+          <| assertEqual (createExtent 2 97)
+          <| calculateExtent' Axis.Orient.Left largeDescending
       , test "for right orient and descending range that does not inside the bounding box"
-          <| assertEqual (createExtent 2 97) <| calculateExtent' Axis.Orient.Right largeDescending
+          <| assertEqual (createExtent 2 97)
+          <| calculateExtent' Axis.Orient.Right largeDescending
       ]
