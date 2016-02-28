@@ -11,6 +11,7 @@ change sets (domain and range) to be model instead of a tuple to clean up code i
 be able to update domain and ranges for scale
 consider adding zooming as part of the framework, only makes sense for linear scales though
 don't draw points outside of bounding box but how to handle lines and areas that cross bounding box
+consider doing grid lines seperate from axises to allow when to draw and how many ticks
 
 events
   - [ ] events that require knowledge of where on the plot it was clicked (x, y, band width)
@@ -39,7 +40,7 @@ bars
 
 rules
   - [ ] vertical y y2 x
-  - [ ] horizonal x x2 y
+  - [ ] horizontal x x2 y
   - [ ] additional attributes
 
 symbols

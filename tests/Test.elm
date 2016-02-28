@@ -6,7 +6,7 @@ import Test.Scale.LinearTest as ScaleLinearTest
 import Test.Axis.ViewTest as AxisViewTest
 import Test.Axis.TicksTest as TicksTest
 import Test.Axis.TitleTest as TitleTest
-import Test.Axis.ExtentTest as ExtentTest
+import Test.SetsTest as SetsTest
 import Test.FloatExtraTest as FloatExtraTest
 import Test.Scale.OrdinalPointsTest as OrdinalPointsTest
 import Test.Scale.OrdinalBandsTest as OrdinalBandsTest
@@ -19,7 +19,7 @@ tests =
         , AxisViewTest.tests
         , TicksTest.tests
         , TitleTest.tests
-        , ExtentTest.tests
+        , SetsTest.tests
         , ScaleLinearTest.tests
         , FloatExtraTest.tests
         , OrdinalPointsTest.tests

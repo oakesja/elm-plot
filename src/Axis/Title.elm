@@ -3,7 +3,7 @@ module Axis.Title where
 import Svg exposing (Svg, text, text')
 import Svg.Attributes exposing (x, y, textAnchor)
 import Axis.Orient exposing (Orient)
-import Private.Models exposing (Extent)
+import Sets exposing (Extent)
 import SvgAttributesExtras exposing (rotate)
 
 createTitle : Extent -> Orient -> Int -> Int -> List Svg.Attribute -> Maybe Int ->  Maybe String -> List Svg
@@ -23,7 +23,7 @@ titleSvg extent orient innerTickSize tickPadding attrs offset title =
 titleAttrs : Extent -> Orient -> Int -> Int -> List Svg.Attribute -> Maybe Int -> List Svg.Attribute
 titleAttrs extent orient innerTickSize tickPadding attrs offset =
   let
-    middle = ((extent.stop - extent.start) / 2) + extent.start
+    middle = ((snd extent - fst extent) / 2) + fst extent
     sign = if orient == Axis.Orient.Top || orient == Axis.Orient.Left then -1 else 1
     calOffset = case offset of
       Just o ->

@@ -23,10 +23,10 @@ main =
         |> Axis.title "x axis"
   in
     createPlot 400 400
-      |> addLines lines .x .y xScale yScale linear []
-      |> addPoints points .x .y xScale yScale (diamond 8 [fill "red"])
       |> addAxis xAxis
       |> addAxis yAxis
+      |> addLines lines .x .y xScale yScale linear []
+      |> addPoints points .x .y xScale yScale (diamond 8 [fill "red"])
       |> margins {top = 50, bottom = 50, right = 50, left = 100}
       |> toSvg
 

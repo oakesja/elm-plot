@@ -3,9 +3,10 @@ module Scale where
 import Scale.Linear
 import Scale.OrdinalPoints
 import Scale.OrdinalBands
-import Private.Models exposing (PointValue, Tick)
+import Private.Models exposing (PointValue, Tick, BoundingBox)
 import Scale.Scale exposing (Scale)
-import Sets exposing (Domain, Range)
+import Scale.Type exposing (ScaleType)
+import Sets exposing (Domain, Range, calculateExtent)
 
 linear : (Float, Float) -> Range -> Int -> Scale (Float, Float) Float
 linear domain range numTicks =
@@ -53,11 +54,6 @@ createTicks : Scale a b -> List Tick
 createTicks scale =
   scale.createTicks scale.domain scale.range
 
--- TODO does not work for reversed ranges
-includeMargins : Float -> Float -> Scale a b -> Scale a b
-includeMargins lowM highM scale =
-  let
-    rLow = (fst scale.range) + lowM
-    rHigh = (snd scale.range) - highM
-  in
-    { scale | range = (rLow, rHigh) }
+rescale : BoundingBox -> ScaleType -> Scale a b -> Scale a b
+rescale bBox sType scale =
+    { scale | range = calculateExtent bBox sType scale.range }

@@ -6,16 +6,15 @@ import Scale.Scale exposing (Scale)
 import Axis.Orient exposing (Orient)
 import Svg exposing (Svg, g, path)
 import Svg.Attributes exposing (d)
-import Sets exposing (extentOf)
+import Sets exposing (extentOf, calculateAxisExtent)
 import SvgAttributesExtras exposing (translate)
 import Axis.Ticks
-import Axis.Extent exposing (calculateExtent)
 import Axis.Title
 
 toSvg : Axis a b -> Svg
 toSvg axis =
   let
-    extent = calculateExtent axis.boundingBox axis.orient axis.scale.range
+    extent = calculateAxisExtent axis.boundingBox axis.orient axis.scale.range
   in
     g
       [ axisTranslation axis.boundingBox axis.orient ]

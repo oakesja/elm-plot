@@ -9,8 +9,6 @@ type alias Interpolation = Points Float Float -> String
 type alias AreaPoint a b = { x : a, y : b, y2 : b }
 type alias Area a b = List (AreaPoint a b)
 type alias Dimensions = {width: Float, height: Float}
-type alias Margins = {top: Float, bottom: Float, right: Float, left: Float}
-type alias Extent = { start : Float, stop : Float }
 
 type alias BoundingBox =
   { xStart : Float
