@@ -11,10 +11,7 @@ be able to update domain and ranges for scale
 consider adding panning and zooming as part of the framework, only makes sense for linear scales though
 don't draw points outside of bounding box but how to handle lines and areas that cross bounding box
 consider doing grid lines separate from axises to allow when to draw and how many ticks
-
-events
-  - [ ] events that require knowledge of where on the plot it was clicked (x, y, band width)
-  - [ ] events that don't require that knowledge (should the user handle these?)
+adding events to an individual line or point
 
 plot
   - [x] margins (most components will need to wait to be created until margins are known)

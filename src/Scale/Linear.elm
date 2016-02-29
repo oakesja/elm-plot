@@ -1,4 +1,4 @@
-module Scale.Linear (interpolate, createTicks, uninterpolate) where
+module Scale.Linear (interpolate, createTicks, uninterpolate, inDomain) where
 
 import FloatExtra exposing (ln, roundTo)
 import Sets exposing (extentOf)
@@ -22,6 +22,13 @@ uninterpolate domain range y =
     fst domain
   else
     ((y - fst range) * (snd domain - fst domain) / (snd range - fst range)) + fst domain
+
+inDomain : Domain -> Float -> Bool
+inDomain domain x =
+  let
+    extent = extentOf (domain)
+  in
+    (x >= fst extent) && (x <= snd extent)
 
 -- https://github.com/mbostock/d3/blob/78ce531f79e82275fe50f975e784ee2be097226b/src/scale/linear.js#L96
 createTicks : Int -> Domain -> Range -> List Tick

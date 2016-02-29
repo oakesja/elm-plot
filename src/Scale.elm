@@ -15,6 +15,7 @@ linear domain range numTicks =
   , interpolate = Scale.Linear.interpolate
   , uninterpolate = Scale.Linear.uninterpolate
   , createTicks = Scale.Linear.createTicks numTicks
+  , inDomain = Scale.Linear.inDomain
   }
 
 ordinalPoints : List String -> Range -> Int -> Scale (List String) String
@@ -27,6 +28,7 @@ ordinalPoints domain range padding =
     , interpolate = Scale.OrdinalPoints.interpolate mapping
     , uninterpolate = Scale.OrdinalPoints.uninterpolate mapping
     , createTicks = Scale.OrdinalPoints.createTicks mapping
+    , inDomain = Scale.OrdinalPoints.inDomain
     }
 
 ordinalBands : List String -> Range -> Float -> Float -> Scale (List String) String
@@ -39,6 +41,7 @@ ordinalBands domain range padding outerPadding =
     , interpolate = Scale.OrdinalBands.interpolate mapping
     , uninterpolate = Scale.OrdinalBands.uninterpolate mapping
     , createTicks = Scale.OrdinalBands.createTicks mapping
+    , inDomain = Scale.OrdinalBands.inDomain
     }
 
 -- TODO private move somewhere else
@@ -57,3 +60,7 @@ createTicks scale =
 rescale : BoundingBox -> ScaleType -> Scale a b -> Scale a b
 rescale bBox sType scale =
     { scale | range = calculateExtent bBox sType scale.range }
+
+inDomain : Scale a b -> b -> Bool
+inDomain scale point =
+  scale.inDomain scale.domain point

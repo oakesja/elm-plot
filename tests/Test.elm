@@ -11,6 +11,7 @@ import Test.FloatExtraTest as FloatExtraTest
 import Test.Scale.OrdinalPointsTest as OrdinalPointsTest
 import Test.Scale.OrdinalBandsTest as OrdinalBandsTest
 import Test.BarsTest as BarsTest
+import Test.PointsTest as PointsTest
 
 tests : Test
 tests =
@@ -25,6 +26,7 @@ tests =
         , OrdinalPointsTest.tests
         , OrdinalBandsTest.tests
         , BarsTest.tests
+        , PointsTest.tests
         ]
 
 port runner : Signal (Task.Task x ())

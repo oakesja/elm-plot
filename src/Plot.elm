@@ -1,7 +1,7 @@
 module Plot where
 
-import Svg exposing (svg, Svg)
-import Svg.Attributes exposing (width, height)
+import Svg exposing (svg, Svg, g)
+import Svg.Attributes exposing (width, height, x, y)
 import Private.Models exposing (Dimensions, Interpolation, BoundingBox)
 import Scale.Scale exposing (Scale)
 import Axis.Axis exposing (Axis)
@@ -17,6 +17,7 @@ import Html.Events exposing (on)
 import Json.Decode exposing (object2, (:=), float, Decoder)
 import ListExtra exposing (toList)
 import Scale.Type
+import SvgAttributesExtras exposing (translate)
 
 type alias MouseInfo = { clientX: Float, clientY: Float }
 type alias MouseEvent a b = { x: a, y: b }
@@ -31,7 +32,9 @@ type alias Margins =
 type alias Plot =
   { dimensions: Dimensions
   , margins: Margins
-  , svgs: List (BoundingBox -> List Svg)
+  , points: List (BoundingBox -> List Svg)
+  , marks: List (BoundingBox -> List Svg)
+  , axes: List (BoundingBox -> Svg)
   , eventHandlers: List (BoundingBox -> Svg.Attribute)
   , attrs: List Svg.Attribute
   }
@@ -40,7 +43,9 @@ createPlot : Float -> Float -> Plot
 createPlot w h =
   { dimensions = { width = w, height = h }
   , margins = { top = 50, bottom = 50, right = 50, left = 50 }
-  , svgs = []
+  , points = []
+  , marks = []
+  , axes = []
   , eventHandlers = []
   , attrs = [width (toString w), height (toString h)]
   }
@@ -61,7 +66,7 @@ addPoints points getX getY xScale yScale pointToSvg plot =
         |> Points.interpolate (rescaleX bBox xScale) (rescaleY bBox yScale)
         |> Points.toSvg pointToSvg
   in
-    addSvg svg plot
+    { plot | points = List.append plot.points [svg] }
 
 addLines : List a ->  (a -> b) -> (a -> c) -> Scale x b -> Scale y c -> Interpolation -> List Svg.Attribute -> Plot -> Plot
 addLines points getX getY xScale yScale interpolate attrs plot =
@@ -110,9 +115,9 @@ addAxis axis plot =
               , boundingBox = bBox
             }
       in
-        [Axis.View.toSvg a]
+        Axis.View.toSvg a
   in
-    addSvg svg plot
+    { plot | axes = List.append plot.axes [svg] }
 
 onClick : Scale a b -> Scale d c -> (MouseEvent b c -> Signal.Message) -> Plot -> Plot
 onClick xScale yScale createMessage plot =
@@ -131,10 +136,26 @@ toSvg : Plot -> Svg
 toSvg plot =
   let
     bBox = BoundingBox.from plot.dimensions plot.margins
-    svgs = List.concat (List.map (\s -> s bBox) plot.svgs)
+    axes = List.map (\s -> s bBox) plot.axes
+    marks = createMarks bBox plot.marks
     events = List.map (\s -> s bBox) plot.eventHandlers
+    points = List.concat (List.map (\s -> s bBox) plot.points)
   in
-    svg (plot.attrs ++ events) svgs
+    svg (plot.attrs ++ events) (axes ++ [marks] ++ points)
+
+createMarks : BoundingBox -> List (BoundingBox -> List Svg) -> Svg
+createMarks bBox marks =
+  let
+    adjustedMarks = List.concat (List.map (\s -> s bBox) marks)
+  in
+    svg
+      [
+      width (toString (bBox.xEnd - bBox.xStart))
+      , height (toString (bBox.yEnd - bBox.yStart))
+      -- , x (toString bBox.xStart)
+      -- , y (toString bBox.yStart)
+      ]
+      adjustedMarks
 
 -- private
 rescaleX : BoundingBox -> Scale a b -> Scale a b
@@ -147,7 +168,7 @@ rescaleY bBox scale =
 
 addSvg : (BoundingBox -> List Svg) -> Plot -> Plot
 addSvg svg plot =
-  { plot | svgs = List.append plot.svgs [svg] }
+  { plot | marks = List.append plot.marks [svg] }
 
 clickDecoder : Decoder MouseInfo
 clickDecoder =

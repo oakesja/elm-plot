@@ -2,14 +2,14 @@ module Line where
 
 import Private.Models exposing (Points, Interpolation, Line, InterpolatedPoint)
 import Scale.Scale exposing (Scale)
-import Points
+import Point
 import Svg exposing (Svg, path)
 import Svg.Attributes exposing (d, stroke, strokeWidth, fill)
 
 -- TODO create interpolated line model
 interpolate : Scale x a -> Scale y b -> Line a b -> List (InterpolatedPoint a b)
 interpolate xScale yScale line =
-  Points.interpolate xScale yScale line
+  List.map (Point.interpolate xScale yScale) line
 
 toSvg : Interpolation -> List Svg.Attribute -> List (InterpolatedPoint a b) -> Svg
 toSvg interpolate attrs line =
