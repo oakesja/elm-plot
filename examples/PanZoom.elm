@@ -10,6 +10,7 @@ import Scale.Scale exposing (Scale)
 import Svg exposing (Svg)
 import Html.Events exposing (on)
 import Json.Decode exposing (object1, object2, (:=), float, Decoder)
+import Zoom
 
 main : Signal Svg
 main =
@@ -27,7 +28,6 @@ type alias Model =
   }
 
 type Action = Wheel Float | DragStart Float Float | Drag Float Float | DragEnd
-type Zoom = In | Out
 
 model : Model
 model =
@@ -54,13 +54,13 @@ update action model =
       let
         direction =
           if delta > 0 then
-            In
+            Zoom.Out
           else
-            Out
+            Zoom.In
       in
         { model
-          | yScale = zoom 0.25 direction model.yScale
-          , xScale = zoom 0.25 direction model.xScale
+          | yScale = Scale.zoom model.yScale 0.25 direction
+          , xScale = Scale.zoom model.xScale 0.25 direction
         }
     DragStart x y ->
       { model
@@ -74,8 +74,8 @@ update action model =
           deltaY = y - model.dragPosition.y
         in
           { model
-            | xScale = pan deltaX model.xScale
-            , yScale = pan deltaY model.yScale
+            | xScale = Scale.pan model.xScale deltaX
+            , yScale = Scale.pan model.yScale deltaY
             , dragPosition = { x = x, y = y }
           }
       else
@@ -103,28 +103,6 @@ view address model =
       |> addAxis yAxis
       |> attributes events
       |> toSvg
-
-
-zoom : Float -> Zoom -> Scale (Float, Float) Float -> Scale (Float, Float) Float
-zoom percentZoom direction scale =
-  let
-    change = abs ((fst scale.domain) - (snd scale.domain)) * percentZoom
-    newDomain =
-      case direction of
-        In ->
-          ((fst scale.domain) - change, (snd scale.domain) + change)
-        Out ->
-          ((fst scale.domain) + change, (snd scale.domain) - change)
-  in
-    { scale | domain = newDomain }
-
-pan : Float -> Scale (Float, Float) Float -> Scale (Float, Float) Float
-pan change scale =
-  let
-    newX = (fst scale.domain) + change
-    newY = (snd scale.domain) + change
-  in
-    { scale | domain = (newX, newY) }
 
 wheelDecoder : Decoder WheelEvent
 wheelDecoder =

@@ -1,9 +1,10 @@
-module Scale.Linear (interpolate, createTicks, uninterpolate) where
+module Scale.Linear (interpolate, createTicks, uninterpolate, pan, zoom) where
 
 import FloatExtra exposing (ln, roundTo)
 import Sets exposing (extentOf)
 import Private.Models exposing (Tick, PointValue)
 import Sets exposing (Domain, Range, Set)
+import Zoom
 
 interpolate : Domain -> Range -> Float -> PointValue Float
 interpolate domain range x =
@@ -22,6 +23,21 @@ uninterpolate domain range y =
     fst domain
   else
     ((y - fst range) * (snd domain - fst domain) / (snd range - fst range)) + fst domain
+
+zoom : Domain -> Float -> Zoom.Direction -> Domain
+zoom domain percentZoom direction =
+  let
+    change = (snd domain - fst domain) * percentZoom
+  in
+    case direction of
+      Zoom.Out ->
+        ((fst domain) - change, (snd domain) + change)
+      Zoom.In ->
+        ((fst domain) + change, (snd domain) - change)
+
+pan : Domain -> Float -> Domain
+pan domain change =
+  (fst domain + change, snd domain + change)
 
 -- https://github.com/mbostock/d3/blob/78ce531f79e82275fe50f975e784ee2be097226b/src/scale/linear.js#L96
 createTicks : Int -> Domain -> Range -> List Tick

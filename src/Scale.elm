@@ -7,6 +7,7 @@ import Private.Models exposing (PointValue, Tick, BoundingBox)
 import Scale.Scale exposing (Scale)
 import Scale.Type exposing (ScaleType)
 import Sets exposing (Domain, Range, calculateExtent)
+import Zoom
 
 linear : (Float, Float) -> Range -> Int -> Scale (Float, Float) Float
 linear domain range numTicks =
@@ -57,3 +58,11 @@ createTicks scale =
 rescale : BoundingBox -> ScaleType -> Scale a b -> Scale a b
 rescale bBox sType scale =
     { scale | range = calculateExtent bBox sType scale.range }
+
+zoom : Scale (Float, Float) Float -> Float -> Zoom.Direction ->  Scale (Float, Float) Float
+zoom scale percentChange direction =
+  { scale | domain = Scale.Linear.zoom scale.domain percentChange direction }
+
+pan : Scale (Float, Float) Float -> Float -> Scale (Float, Float) Float
+pan scale change =
+  { scale | domain = Scale.Linear.pan scale.domain change }
