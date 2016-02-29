@@ -22,10 +22,12 @@ type alias Model =
   { points : List { x : Float, y : Float }
   , xScale : Scale (Float, Float) Float
   , yScale : Scale (Float, Float) Float
-  , dragPosition : { x : Float, y :Float }
+  , dragging : Bool
+  , dragPosition : { x : Float, y : Float }
   }
 
-type Action = Wheel Float | DragStart Float Float | Drag Float Float
+type Action = Wheel Float | DragStart Float Float | Drag Float Float | DragEnd
+type Zoom = In | Out
 
 model : Model
 model =
@@ -41,6 +43,7 @@ model =
     ]
   , xScale = Scale.linear (0, 400) (0, 400) 5
   , yScale = Scale.linear (0, 400) (400, 0) 5
+  , dragging = False
   , dragPosition = { x = 0, y = 0 }
   }
 
@@ -49,22 +52,36 @@ update action model =
   case action of
     Wheel delta ->
       let
-        change = abs ((fst model.yScale.domain) - (snd model.yScale.domain)) * 0.25
-        newDomain =
+        direction =
           if delta > 0 then
-            ((fst model.yScale.domain) - change, (snd model.yScale.domain) + change)
+            In
           else
-            ((fst model.yScale.domain) + change, (snd model.yScale.domain) - change)
-        yScale = model.yScale
-        newyScale = { yScale | domain = newDomain }
-        xScale = model.xScale
-        newxScale = { xScale | domain = newDomain }
+            Out
       in
-        { model | yScale = newyScale, xScale = newxScale }
+        { model
+          | yScale = zoom 0.25 direction model.yScale
+          , xScale = zoom 0.25 direction model.xScale
+        }
     DragStart x y ->
-      { model | dragPosition = Debug.log "drag start" { x = x, y = y } }
+      { model
+        | dragging = True
+        , dragPosition = { x = x, y = y }
+      }
     Drag x y ->
-      { model | dragPosition = Debug.log "drag" { x = x, y = y } }
+      if model.dragging then
+        let
+          deltaX = model.dragPosition.x - x
+          deltaY = y - model.dragPosition.y
+        in
+          { model
+            | xScale = pan deltaX model.xScale
+            , yScale = pan deltaY model.yScale
+            , dragPosition = { x = x, y = y }
+          }
+      else
+        model
+    DragEnd ->
+      { model | dragging = False }
 
 view : Signal.Address Action -> Model -> Svg
 view address model =
@@ -75,8 +92,9 @@ view address model =
       Axis.createAxis model.xScale Axis.Orient.Bottom
     events =
       [ on "wheel" wheelDecoder (\event -> Signal.message address (Wheel event.deltaY))
-      , on "dragstart" dragDecoder (\event -> Signal.message address (DragStart event.clientX event.clientY))
-      , on "dragover" dragDecoder (\event -> Signal.message address (Drag event.clientX event.clientY))
+      , on "mousedown" dragDecoder (\event -> Signal.message address (DragStart event.clientX event.clientY))
+      , on "mousemove" dragDecoder (\event -> Signal.message address (Drag event.clientX event.clientY))
+      , on "mouseup" dragDecoder (\_ -> Signal.message address (DragEnd))
       ]
   in
     createPlot 400 400
@@ -85,6 +103,28 @@ view address model =
       |> addAxis yAxis
       |> attributes events
       |> toSvg
+
+
+zoom : Float -> Zoom -> Scale (Float, Float) Float -> Scale (Float, Float) Float
+zoom percentZoom direction scale =
+  let
+    change = abs ((fst scale.domain) - (snd scale.domain)) * percentZoom
+    newDomain =
+      case direction of
+        In ->
+          ((fst scale.domain) - change, (snd scale.domain) + change)
+        Out ->
+          ((fst scale.domain) + change, (snd scale.domain) - change)
+  in
+    { scale | domain = newDomain }
+
+pan : Float -> Scale (Float, Float) Float -> Scale (Float, Float) Float
+pan change scale =
+  let
+    newX = (fst scale.domain) + change
+    newY = (snd scale.domain) + change
+  in
+    { scale | domain = (newX, newY) }
 
 wheelDecoder : Decoder WheelEvent
 wheelDecoder =
