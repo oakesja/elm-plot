@@ -1,4 +1,4 @@
-module Scale.Linear (interpolate, createTicks, uninterpolate, pan, zoom, panInPixels) where
+module Scale.Linear (interpolate, createTicks, uninterpolate, pan, zoom, panInPixels, inDomain) where
 
 import FloatExtra exposing (ln, roundTo)
 import Sets exposing (extentOf)
@@ -48,8 +48,15 @@ panInPixels domain range pxChange =
   in
     if isInfinite change then
       domain
-    else 
+    else
       pan domain change
+
+inDomain : Domain -> Float -> Bool
+inDomain domain x =
+  let
+    extent = extentOf (domain)
+  in
+    (x >= fst extent) && (x <= snd extent)
 
 -- https://github.com/mbostock/d3/blob/78ce531f79e82275fe50f975e784ee2be097226b/src/scale/linear.js#L96
 createTicks : Int -> Domain -> Range -> List Tick

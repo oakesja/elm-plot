@@ -13,6 +13,7 @@ tests =
         , zoomTests
         , panTests
         , panInPixelsTests
+        , inDomainTests
         ]
 
 interpolateTests : Test
@@ -145,4 +146,30 @@ panInPixelsTests =
     , test "pan when range has the same start and end"
         <| assertEqual (0, 1)
         <| panInPixels (0, 1) (100, 100) 10
+    ]
+
+inDomainTests : Test
+inDomainTests =
+  suite "inDomain"
+    [ test "in the domain for an ascending domain"
+        <| assertEqual True
+        <| inDomain (0, 1) 0.5
+    , test "less than the min of domain for an ascending domain"
+        <| assertEqual False
+        <| inDomain (0, 1) -1
+    , test "greater than the max of domain for an ascending domain"
+        <| assertEqual False
+        <| inDomain (0, 1) 2
+    , test "in the domain for an descending domain"
+        <| assertEqual True
+        <| inDomain (1, 0) 0.5
+    , test "less than the min of domain for an descending domain"
+        <| assertEqual False
+        <| inDomain (1, 0) -1
+    , test "greater than the max of domain for an descending domain"
+        <| assertEqual False
+        <| inDomain (1, 0) 2
+    , test "equal to the min or max of the domain"
+        <| assertEqual [True, True]
+        <| List.map (inDomain (1, 0)) [0, 1] 
     ]

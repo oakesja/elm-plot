@@ -9,4 +9,5 @@ type alias Scale a b =
   , interpolate : (a -> Range -> b -> PointValue b)
   , uninterpolate : (a -> Range -> Float -> b)
   , createTicks : (a -> Range -> List Tick)
+  , inDomain : (a -> b -> Bool)
   }

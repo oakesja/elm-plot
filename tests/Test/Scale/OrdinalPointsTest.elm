@@ -12,6 +12,7 @@ tests =
         , interpolateTests
         , uninterpolateTests
         , ticksTests
+        , inDomainTests
         ]
 
 createMappingTests : Test
@@ -97,3 +98,14 @@ ticksTests =
 expectedTicks : List Float -> List String -> List Tick
 expectedTicks values domain =
   List.map2 (\v d-> { position = v, label = d }) values domain
+
+inDomainTests : Test
+inDomainTests =
+  suite "inDomain"
+    [ test "for a value that is in the list of strings for the domain"
+        <| assertEqual True
+        <| inDomain ["a"] "a"
+    , test "for a value that is not in the list of strings for the domain"
+        <| assertEqual False
+        <| inDomain ["a"] "b"
+    ]

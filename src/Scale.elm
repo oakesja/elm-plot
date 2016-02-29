@@ -16,6 +16,7 @@ linear domain range numTicks =
   , interpolate = Scale.Linear.interpolate
   , uninterpolate = Scale.Linear.uninterpolate
   , createTicks = Scale.Linear.createTicks numTicks
+  , inDomain = Scale.Linear.inDomain
   }
 
 ordinalPoints : List String -> Range -> Int -> Scale (List String) String
@@ -28,6 +29,7 @@ ordinalPoints domain range padding =
     , interpolate = Scale.OrdinalPoints.interpolate mapping
     , uninterpolate = Scale.OrdinalPoints.uninterpolate mapping
     , createTicks = Scale.OrdinalPoints.createTicks mapping
+    , inDomain = Scale.OrdinalPoints.inDomain
     }
 
 ordinalBands : List String -> Range -> Float -> Float -> Scale (List String) String
@@ -40,6 +42,7 @@ ordinalBands domain range padding outerPadding =
     , interpolate = Scale.OrdinalBands.interpolate mapping
     , uninterpolate = Scale.OrdinalBands.uninterpolate mapping
     , createTicks = Scale.OrdinalBands.createTicks mapping
+    , inDomain = Scale.OrdinalBands.inDomain
     }
 
 -- TODO private move somewhere else
@@ -69,4 +72,8 @@ pan scale change =
 
 panInPixels : Scale (Float, Float) Float -> Float -> Scale (Float, Float) Float
 panInPixels scale change =
-  { scale | domain = Scale.Linear.panInPixels scale.domain scale.range change }  
+  { scale | domain = Scale.Linear.panInPixels scale.domain scale.range change }
+
+inDomain : Scale a b -> b -> Bool
+inDomain scale point =
+  scale.inDomain scale.domain point
