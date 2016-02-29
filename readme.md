@@ -1,4 +1,3 @@
-try to remove html dependency
 append additional svg to plot
 give option of width and height for range of scale
 negative dimensions
@@ -11,14 +10,14 @@ change sets (domain and range) to be model instead of a tuple to clean up code i
 be able to update domain and ranges for scale
 consider adding zooming as part of the framework, only makes sense for linear scales though
 don't draw points outside of bounding box but how to handle lines and areas that cross bounding box
-consider doing grid lines seperate from axises to allow when to draw and how many ticks
+consider doing grid lines separate from axises to allow when to draw and how many ticks
 
 events
   - [ ] events that require knowledge of where on the plot it was clicked (x, y, band width)
   - [ ] events that don't require that knowledge (should the user handle these?)
 
 plot
-  - [ ] margins (most components will need to wait to be created until margins are known)
+  - [x] margins (most components will need to wait to be created until margins are known)
   - [ ] additional svg
   - [x] top level style
 
@@ -38,7 +37,7 @@ bars
   - [x] orient (horizonal or vertical)
   - [x] style
 
-rules
+rules (are these actually useful?)
   - [ ] vertical y y2 x
   - [ ] horizontal x x2 y
   - [ ] additional attributes

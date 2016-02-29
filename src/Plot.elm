@@ -18,6 +18,9 @@ import Json.Decode exposing (object2, (:=), float, Decoder)
 import ListExtra exposing (toList)
 import Scale.Type
 
+type alias MouseInfo = { clientX: Float, clientY: Float }
+type alias MouseEvent a b = { x: a, y: b }
+
 type alias Margins =
   { top: Float
   , bottom: Float
@@ -29,6 +32,7 @@ type alias Plot =
   { dimensions: Dimensions
   , margins: Margins
   , svgs: List (BoundingBox -> List Svg)
+  , eventHandlers: List (BoundingBox -> Svg.Attribute)
   , attrs: List Svg.Attribute
   }
 
@@ -37,6 +41,7 @@ createPlot w h =
   { dimensions = { width = w, height = h }
   , margins = { top = 50, bottom = 50, right = 50, left = 50 }
   , svgs = []
+  , eventHandlers = []
   , attrs = [width (toString w), height (toString h)]
   }
 
@@ -53,7 +58,7 @@ addPoints points getX getY xScale yScale pointToSvg plot =
   let
     svg = \bBox ->
       List.map (\p -> { x = getX p, y = getY p }) points
-        |> Points.interpolate (rescaleX bBox xScale) (rescaleX bBox yScale)
+        |> Points.interpolate (rescaleX bBox xScale) (rescaleY bBox yScale)
         |> Points.toSvg pointToSvg
   in
     addSvg svg plot
@@ -63,7 +68,7 @@ addLines points getX getY xScale yScale interpolate attrs plot =
   let
     svg = \bBox ->
       List.map (\p -> { x = getX p, y = getY p }) points
-        |> Line.interpolate (rescaleX bBox xScale) (rescaleX bBox yScale)
+        |> Line.interpolate (rescaleX bBox xScale) (rescaleY bBox yScale)
         |> Line.toSvg interpolate attrs
         |> toList
   in
@@ -74,7 +79,7 @@ addArea points getX getY getY2 xScale yScale interpolate attrs plot =
   let
     svg = \bBox ->
       List.map (\p -> { x = getX p, y = getY p, y2 = getY2 p }) points
-        |> Area.interpolate (rescaleX bBox xScale) (rescaleX bBox yScale)
+        |> Area.interpolate (rescaleX bBox xScale) (rescaleY bBox yScale)
         |> Area.toSvg interpolate attrs
         |> toList
   in
@@ -85,7 +90,7 @@ addBars points getX getY xScale yScale orient attrs plot =
   let
     svg = \bBox ->
       List.map (\p -> { x = getX p, y = getY p }) points
-        |> Points.interpolate (rescaleX bBox xScale) (rescaleX bBox yScale)
+        |> Points.interpolate (rescaleX bBox xScale) (rescaleY bBox yScale)
         |> Bars.toSvg bBox orient attrs
   in
     addSvg svg plot
@@ -97,9 +102,9 @@ addAxis axis plot =
       let
         scale =
           if axis.orient == Axis.Orient.Top || axis.orient == Axis.Orient.Bottom then
-            Scale.rescale bBox Scale.Type.XScale axis.scale
+            rescaleX bBox axis.scale
           else
-            Scale.rescale bBox Scale.Type.YScale axis.scale
+            rescaleY bBox axis.scale
         a = { axis
               | scale = scale
               , boundingBox = bBox
@@ -109,35 +114,27 @@ addAxis axis plot =
   in
     addSvg svg plot
 
+onClick : Scale a b -> Scale d c -> (MouseEvent b c -> Signal.Message) -> Plot -> Plot
+onClick xScale yScale createMessage plot =
+  let
+    handler = \bBox ->
+        on "click" clickDecoder
+          <| \event -> createMessage
+              { x = Scale.uninterpolate (rescaleX bBox xScale) event.clientX
+              , y = Scale.uninterpolate (rescaleY bBox yScale) event.clientY
+              }
+  in
+    { plot | eventHandlers =  handler :: plot.eventHandlers }
+
+
 toSvg : Plot -> Svg
 toSvg plot =
   let
     bBox = BoundingBox.from plot.dimensions plot.margins
     svgs = List.concat (List.map (\s -> s bBox) plot.svgs)
+    events = List.map (\s -> s bBox) plot.eventHandlers
   in
-    svg plot.attrs svgs
-
--- TODO cleanup
--- type alias MouseInfo = { clientX: Float, clientY: Float }
--- type alias MouseEvent a b = { x: a, y: b }
---
--- registerOnClick : Scale a b -> Scale d c -> (MouseEvent b c -> Signal.Message) -> Plot -> Plot
--- registerOnClick xScale yScale createMessage plot =
---   let
---     xScale' = Scale.includeMargins plot.margins.left plot.margins.right xScale
---     yScale' = Scale.includeMargins -plot.margins.bottom -plot.margins.top yScale
---     handler = (\event -> createMessage
---       { x = Scale.uninterpolate xScale' event.clientX
---       , y = Scale.uninterpolate yScale' event.clientY
---       })
---   in
---     { plot | attrs = (on "click" clickDecoder handler) :: plot.attrs }
---
--- clickDecoder : Decoder MouseInfo
--- clickDecoder =
---   object2 MouseInfo
---     ("clientX" := float)
---     ("clientY" := float)
+    svg (plot.attrs ++ events) svgs
 
 -- private
 rescaleX : BoundingBox -> Scale a b -> Scale a b
@@ -151,3 +148,9 @@ rescaleY bBox scale =
 addSvg : (BoundingBox -> List Svg) -> Plot -> Plot
 addSvg svg plot =
   { plot | svgs = List.append plot.svgs [svg] }
+
+clickDecoder : Decoder MouseInfo
+clickDecoder =
+  object2 MouseInfo
+    ("clientX" := float)
+    ("clientY" := float)
