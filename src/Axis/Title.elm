@@ -1,10 +1,10 @@
 module Axis.Title where
 
 import Svg exposing (Svg, text, text')
-import Svg.Attributes exposing (x, y, textAnchor)
+import Svg.Attributes exposing (textAnchor)
 import Axis.Orient exposing (Orient)
 import Sets exposing (Extent)
-import SvgAttributesExtras exposing (rotate)
+import SvgAttributesExtra exposing (rotate, x, y)
 
 createTitle : Extent -> Orient -> Int -> Int -> List Svg.Attribute -> Maybe Int ->  Maybe String -> List Svg
 createTitle extent orient innerTickSize tickPadding attrs offset title =
@@ -32,8 +32,8 @@ titleAttrs extent orient innerTickSize tickPadding attrs offset =
         sign * (innerTickSize + tickPadding + 30)
     posAttrs =
       if orient == Axis.Orient.Top || orient == Axis.Orient.Bottom then
-        [x <| toString middle, y <| toString calOffset]
+        [x middle, y calOffset]
       else
-        [x <| toString calOffset, y <| toString middle, rotate (calOffset, middle) (sign * 90) ]
+        [x calOffset, y middle, rotate (calOffset, middle) (sign * 90) ]
   in
     (textAnchor "middle") :: posAttrs ++ attrs

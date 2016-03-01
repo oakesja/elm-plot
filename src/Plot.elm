@@ -1,7 +1,7 @@
 module Plot where
 
 import Svg exposing (svg, Svg)
-import Svg.Attributes exposing (width, height)
+import SvgAttributesExtra exposing (width, height)
 import Private.Models exposing (Dimensions, Interpolation, BoundingBox)
 import Scale.Scale exposing (Scale)
 import Axis.Axis exposing (Axis)
@@ -42,7 +42,7 @@ createPlot w h =
   , margins = { top = 50, bottom = 50, right = 50, left = 50 }
   , svgs = []
   , eventHandlers = []
-  , attrs = [width (toString w), height (toString h)]
+  , attrs = [width w, height h]
   }
 
 attributes : List Svg.Attribute -> Plot -> Plot

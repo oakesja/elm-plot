@@ -2,12 +2,8 @@ append additional svg to plot
 give option of width and height for range of scale
 negative dimensions
 negative margins
-handle scales that don't need to change from margins
-padding for normal range and reverse range do not appear to be the same
 arcs for pie charts
-custom bands
 change sets (domain and range) to be model instead of a tuple to clean up code in scales
-be able to update domain and ranges for scale
 don't draw points outside of bounding box but how to handle lines and areas that cross bounding box
 consider doing grid lines separate from axises to allow when to draw and how many ticks
 

@@ -1,22 +1,22 @@
 module Symbols (circle, square, diamond, triangleUp, triangleDown) where
 
 import Svg exposing (Svg)
-import Svg.Attributes exposing (cx, cy, r, x, y, width, height, transform, d)
+import Svg.Attributes exposing (d)
 import Line.Interpolation exposing (linear)
 import Private.Models exposing (Points)
-import SvgAttributesExtras exposing (rotate)
+import SvgAttributesExtra exposing (rotate, cx, cy, r, x, y, width, height)
 
 circle : Int -> List Svg.Attribute -> Float -> Float -> Svg
 circle radius addionalAttrs x y =
-  createSvg Svg.circle  addionalAttrs [cx (toString x), cy (toString y), r (toString radius)]
+  createSvg Svg.circle  addionalAttrs [cx x, cy y, r radius]
 
 square : Float -> List Svg.Attribute -> Float -> Float -> Svg
 square length addionalAttrs xPos yPos =
   createSvg Svg.rect addionalAttrs
-    [ x <| toString (xPos - length / 2)
-    , y <| toString (yPos - length / 2)
-    , width <| toString length
-    , height <| toString length
+    [ x (xPos - length / 2)
+    , y (yPos - length / 2)
+    , width length
+    , height length
     ]
 
 diamond : Float -> List Svg.Attribute -> Float -> Float -> Svg

@@ -7,7 +7,7 @@ import Axis.Orient exposing (Orient)
 import Svg exposing (Svg, g, path)
 import Svg.Attributes exposing (d)
 import Sets exposing (extentOf, calculateAxisExtent)
-import SvgAttributesExtras exposing (translate)
+import SvgAttributesExtra exposing (translate)
 import Axis.Ticks
 import Axis.Title
 
