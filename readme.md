@@ -9,8 +9,8 @@ consider doing grid lines separate from axises to allow when to draw and how man
 better default colors for marks
 
 events
-  - [ ] events that require knowledge of where on the plot it was clicked (x, y, band width)
-  - [ ] events that don't require that knowledge (should the user handle these?)
+  - [x] events that require knowledge of where on the plot it was clicked (x, y, band width)
+  - [x] events that don't require that knowledge (should the user handle these?)
 
 plot
   - [x] margins (most components will need to wait to be created until margins are known)
@@ -67,11 +67,11 @@ axis
 examples
   - [ ] linear scale
   - [ ] each point type
-  - [ ] custom point - clicking on point removes it from the model
-  - [ ] ordinal scale point
-  - [ ] ordinal scale bands
+  - [x] custom point - clicking on point removes it from the model
+  - [x] ordinal scale point
+  - [x] ordinal scale bands
   - [ ] custom with ordinal scale bands (triangles going to axis from point with band width)
-  - [ ] events  
+  - [x] events  
 
 Design
 

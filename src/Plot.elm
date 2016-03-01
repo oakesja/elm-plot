@@ -136,7 +136,6 @@ toSvg plot =
   in
     svg (plot.attrs ++ events) svgs
 
--- private
 rescaleX : BoundingBox -> Scale a b -> Scale a b
 rescaleX bBox scale =
   Scale.rescale bBox Scale.Type.XScale scale
