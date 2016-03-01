@@ -8,7 +8,6 @@ arcs for pie charts
 custom bands
 change sets (domain and range) to be model instead of a tuple to clean up code in scales
 be able to update domain and ranges for scale
-consider adding panning and zooming as part of the framework, only makes sense for linear scales though
 don't draw points outside of bounding box but how to handle lines and areas that cross bounding box
 consider doing grid lines separate from axises to allow when to draw and how many ticks
 

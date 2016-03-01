@@ -41,7 +41,7 @@ model =
     , {x = 250, y = 150}
     , {x = 300, y = 200}
     ]
-  , xScale = Scale.linear (0, 400) (0, 400) 5
+  , xScale = Scale.linear (0, 4) (0, 400) 5
   , yScale = Scale.linear (0, 400) (400, 0) 5
   , dragging = False
   , dragPosition = { x = 0, y = 0 }
@@ -74,8 +74,8 @@ update action model =
           deltaY = y - model.dragPosition.y
         in
           { model
-            | xScale = Scale.pan model.xScale deltaX
-            , yScale = Scale.pan model.yScale deltaY
+            | xScale = Scale.panInPixels model.xScale deltaX
+            , yScale = Scale.panInPixels model.yScale deltaY
             , dragPosition = { x = x, y = y }
           }
       else
@@ -98,7 +98,7 @@ view address model =
       ]
   in
     createPlot 400 400
-      |> addPoints model.points .x .y model.xScale model.yScale (circle 5 [])
+      |> addPoints model.points (\p -> p.x / 100) .y model.xScale model.yScale (circle 5 [])
       |> addAxis xAxis
       |> addAxis yAxis
       |> attributes events

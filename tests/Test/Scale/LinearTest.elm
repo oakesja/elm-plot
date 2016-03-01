@@ -12,6 +12,7 @@ tests =
         , createTicksTests
         , zoomTests
         , panTests
+        , panInPixelsTests
         ]
 
 interpolateTests : Test
@@ -118,4 +119,30 @@ panTests =
     , test "pan negative with descending domain"
         <| assertEqual (90, -10)
         <| pan (100, 0) -10
+    ]
+
+panInPixelsTests : Test
+panInPixelsTests =
+  suite "panInPixels"
+    [ test "pan positive with ascending domain"
+        <| assertEqual (0.1, 1.1)
+        <| panInPixels (0, 1) (0, 100) 10
+    , test "pan negative with ascending domain"
+        <| assertEqual (-0.1, 0.9)
+        <| panInPixels (0, 1) (0, 100) -10
+    , test "pan positive with descending domain"
+        <| assertEqual (1.1, 0.1)
+        <| panInPixels (1, 0) (0, 100) 10
+    , test "pan negative with descending domain"
+        <| assertEqual (0.9, -0.1)
+        <| panInPixels (1, 0) (0, 100) -10
+    , test "pan positive with descending range"
+        <| assertEqual (0.1, 1.1)
+        <| panInPixels (0, 1) (100, 0) 10
+    , test "pan negative with descending range"
+        <| assertEqual (-0.1, 0.9)
+        <| panInPixels (0, 1) (100, 0) -10
+    , test "pan when range has the same start and end"
+        <| assertEqual (0, 1)
+        <| panInPixels (0, 1) (100, 100) 10
     ]

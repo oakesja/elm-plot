@@ -1,4 +1,4 @@
-module Scale.Linear (interpolate, createTicks, uninterpolate, pan, zoom) where
+module Scale.Linear (interpolate, createTicks, uninterpolate, pan, zoom, panInPixels) where
 
 import FloatExtra exposing (ln, roundTo)
 import Sets exposing (extentOf)
@@ -38,6 +38,18 @@ zoom domain percentZoom direction =
 pan : Domain -> Float -> Domain
 pan domain change =
   (fst domain + change, snd domain + change)
+
+panInPixels : Domain -> Range -> Float -> Domain
+panInPixels domain range pxChange =
+  let
+    dExtent = extentOf domain
+    rExtent = extentOf range
+    change = (pxChange / (snd rExtent - fst rExtent)) * (snd dExtent - fst dExtent)
+  in
+    if isInfinite change then
+      domain
+    else 
+      pan domain change
 
 -- https://github.com/mbostock/d3/blob/78ce531f79e82275fe50f975e784ee2be097226b/src/scale/linear.js#L96
 createTicks : Int -> Domain -> Range -> List Tick

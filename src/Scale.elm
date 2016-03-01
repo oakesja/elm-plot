@@ -66,3 +66,7 @@ zoom scale percentChange direction =
 pan : Scale (Float, Float) Float -> Float -> Scale (Float, Float) Float
 pan scale change =
   { scale | domain = Scale.Linear.pan scale.domain change }
+
+panInPixels : Scale (Float, Float) Float -> Float -> Scale (Float, Float) Float
+panInPixels scale change =
+  { scale | domain = Scale.Linear.panInPixels scale.domain scale.range change }  
