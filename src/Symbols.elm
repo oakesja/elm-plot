@@ -1,10 +1,10 @@
 module Symbols (circle, square, diamond, triangleUp, triangleDown, cross) where
 
 import Svg exposing (Svg, g, line)
-import Svg.Attributes exposing (d, x1, x2, y1, y2, stroke, strokeWidth)
+import Svg.Attributes exposing (d, stroke, strokeWidth)
 import Line.Interpolation exposing (linear)
 import Private.Models exposing (Points)
-import SvgAttributesExtra exposing (rotate, cx, cy, r, x, y, width, height)
+import SvgAttributesExtra exposing (rotate, cx, cy, r, x, y, width, height, x1, x2, y1, y2)
 
 circle : Int -> List Svg.Attribute -> Float -> Float -> a -> b -> Svg
 circle radius additionalAttrs x y origX origY =
@@ -51,17 +51,17 @@ cross length additionalAttrs xPos yPos origX origY =
   g
     additionalAttrs
     [ line
-        ( [ x1 (toString (xPos - length / 2))
-          , y1 (toString (yPos - length / 2))
-          , x2 (toString (xPos + length / 2))
-          , y2 (toString (yPos + length / 2))
+        ( [ x1 (xPos - length / 2)
+          , y1 (yPos - length / 2)
+          , x2 (xPos + length / 2)
+          , y2 (yPos + length / 2)
           ] ++ attrs )
         []
     , line
-        ( [ x1 (toString (xPos - length / 2))
-          , y1 (toString (yPos + length / 2))
-          , x2 (toString (xPos + length / 2))
-          , y2 (toString (yPos - length / 2))
+        ( [ x1 (xPos - length / 2)
+          , y1 (yPos + length / 2)
+          , x2 (xPos + length / 2)
+          , y2 (yPos - length / 2)
           ] ++ attrs )
         []
     ]

@@ -7,6 +7,8 @@ change sets (domain and range) to be model instead of a tuple to clean up code i
 don't draw points outside of bounding box but how to handle lines and areas that cross bounding box
 consider doing grid lines separate from axises to allow when to draw and how many ticks
 better default colors for marks
+different interpolation methods
+different scales
 
 events
   - [x] events that require knowledge of where on the plot it was clicked (x, y, band width)
@@ -33,10 +35,10 @@ bars
   - [x] orient (horizonal or vertical)
   - [x] style
 
-rules (are these actually useful?)
-  - [ ] vertical y y2 x
-  - [ ] horizontal x x2 y
-  - [ ] additional attributes
+rules (are these actually useful?) (should this be the addition of one or multiple rules?)
+  - [x] vertical x
+  - [x] horizontal y
+  - [x] additional attributes
 
 symbols
   - [x] circle

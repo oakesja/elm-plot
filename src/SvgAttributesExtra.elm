@@ -11,11 +11,19 @@ rotate : (number, number) -> Int -> Svg.Attribute
 rotate pos rotation =
   transform <| "rotate(" ++ (toString rotation) ++ "," ++ (toString (fst pos)) ++ "," ++ (toString (snd pos)) ++ ")"
 
-x2 : Int -> Svg.Attribute
+x1 : number -> Svg.Attribute
+x1 x =
+  Svg.Attributes.x1 (toString x)
+
+y1 : number -> Svg.Attribute
+y1 y =
+  Svg.Attributes.y1 (toString y)
+
+x2 : number -> Svg.Attribute
 x2 x =
   Svg.Attributes.x2 (toString x)
 
-y2 : Int -> Svg.Attribute
+y2 : number -> Svg.Attribute
 y2 y =
   Svg.Attributes.y2 (toString y)
 

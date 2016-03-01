@@ -17,6 +17,7 @@ import Html.Events exposing (on)
 import Json.Decode exposing (object2, (:=), float, Decoder)
 import ListExtra exposing (toList)
 import Scale.Type
+import Rules
 
 type alias MouseInfo = { clientX: Float, clientY: Float }
 type alias MouseEvent a b = { x: a, y: b }
@@ -114,6 +115,14 @@ addAxis axis plot =
   in
     addSvg svg plot
 
+verticalRules : List a -> Scale x a -> List Svg.Attribute -> Plot -> Plot
+verticalRules vals scale attrs plot =
+  addRule vals scale attrs Rules.Vertical rescaleX plot
+
+horizontalRules : List a -> Scale x a -> List Svg.Attribute -> Plot -> Plot
+horizontalRules vals scale attrs plot =
+  addRule vals scale attrs Rules.Horizontal rescaleY plot
+
 onClick : Scale a b -> Scale d c -> (MouseEvent b c -> Signal.Message) -> Plot -> Plot
 onClick xScale yScale createMessage plot =
   let
@@ -135,6 +144,15 @@ toSvg plot =
     events = List.map (\s -> s bBox) plot.eventHandlers
   in
     svg (plot.attrs ++ events) svgs
+
+addRule : List a -> Scale x a -> List Svg.Attribute -> Rules.Direction -> (BoundingBox -> Scale x a -> Scale x a) -> Plot -> Plot
+addRule vals scale attrs direction rescale plot =
+  let
+    svg = \bBox ->
+      Rules.interpolate vals (rescale bBox scale)
+        |> Rules.toSvgs bBox attrs direction
+  in
+    addSvg svg plot
 
 rescaleX : BoundingBox -> Scale a b -> Scale a b
 rescaleX bBox scale =
