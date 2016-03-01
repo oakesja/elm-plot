@@ -6,12 +6,12 @@ import Line.Interpolation exposing (linear)
 import Private.Models exposing (Points)
 import SvgAttributesExtra exposing (rotate, cx, cy, r, x, y, width, height)
 
-circle : Int -> List Svg.Attribute -> Float -> Float -> Svg
-circle radius additionalAttrs x y =
+circle : Int -> List Svg.Attribute -> Float -> Float -> a -> b -> Svg
+circle radius additionalAttrs x y origX origY =
   createSvg Svg.circle  additionalAttrs [cx x, cy y, r radius]
 
-square : Float -> List Svg.Attribute -> Float -> Float -> Svg
-square length additionalAttrs xPos yPos =
+square : Float -> List Svg.Attribute -> Float -> Float -> a -> b -> Svg
+square length additionalAttrs xPos yPos origX origY =
   createSvg Svg.rect additionalAttrs
     [ x (xPos - length / 2)
     , y (yPos - length / 2)
@@ -19,28 +19,28 @@ square length additionalAttrs xPos yPos =
     , height length
     ]
 
-diamond : Float -> List Svg.Attribute -> Float -> Float -> Svg
-diamond length additionalAttrs xPos yPos =
-  square length ((rotate (xPos, yPos) 45) :: additionalAttrs) xPos yPos
+diamond : Float -> List Svg.Attribute -> Float -> Float -> a -> b -> Svg
+diamond length additionalAttrs xPos yPos origX origY =
+  square length ((rotate (xPos, yPos) 45) :: additionalAttrs) xPos yPos origX origY
 
-triangleUp : Float -> List Svg.Attribute -> Float -> Float -> Svg
-triangleUp length additionalAttrs xPos yPos =
+triangleUp : Float -> List Svg.Attribute -> Float -> Float -> a -> b -> Svg
+triangleUp length additionalAttrs xPos yPos origX origY =
   pathSvg additionalAttrs
       [ { x = xPos, y = yPos - length / 2 }
       , { x = xPos - length / 2, y = yPos + length / 2}
       , { x = xPos + length / 2, y = yPos + length / 2}
       ]
 
-triangleDown : Float -> List Svg.Attribute -> Float -> Float -> Svg
-triangleDown length additionalAttrs xPos yPos =
+triangleDown : Float -> List Svg.Attribute -> Float -> Float -> a -> b -> Svg
+triangleDown length additionalAttrs xPos yPos origX origY =
   pathSvg additionalAttrs
       [ { x = xPos, y = yPos + length / 2 }
       , { x = xPos - length / 2, y = yPos - length / 2}
       , { x = xPos + length / 2, y = yPos - length / 2}
       ]
 
-cross : Float -> List Svg.Attribute -> Float -> Float -> Svg
-cross length additionalAttrs xPos yPos =
+cross : Float -> List Svg.Attribute -> Float -> Float -> a -> b -> Svg
+cross length additionalAttrs xPos yPos origX origY =
   let
     attrs =
       if List.isEmpty additionalAttrs then

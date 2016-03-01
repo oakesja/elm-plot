@@ -53,7 +53,7 @@ margins : Margins -> Plot -> Plot
 margins m plot =
   { plot | margins = m }
 
-addPoints : List a -> (a -> b) -> (a -> c) -> Scale x b -> Scale y c -> (Float -> Float -> Svg) -> Plot -> Plot
+addPoints : List a -> (a -> b) -> (a -> c) -> Scale x b -> Scale y c -> (Float -> Float -> b -> c -> Svg) -> Plot -> Plot
 addPoints points getX getY xScale yScale pointToSvg plot =
   let
     svg = \bBox ->

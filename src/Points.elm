@@ -9,6 +9,6 @@ interpolate : Scale x a -> Scale y b -> Points a b -> InterpolatedPoints a b
 interpolate xScale yScale points =
   List.map (Point.interpolate xScale yScale) points
 
-toSvg : (Float -> Float -> Svg) -> InterpolatedPoints a b -> List Svg
+toSvg : (Float -> Float -> a -> b -> Svg) -> InterpolatedPoints a b -> List Svg
 toSvg pointToSvg points =
-  List.map (\p -> pointToSvg p.x.value p.y.value) points
+  List.map (\p -> pointToSvg p.x.value p.y.value p.x.originalValue p.y.originalValue) points
