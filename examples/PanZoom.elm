@@ -4,7 +4,7 @@ import Plot exposing (..)
 import Scale
 import Axis
 import Axis.Orient
-import Symbols exposing (circle, square, diamond, triangleUp, triangleDown)
+import Symbols exposing (circle)
 import StartApp.Simple as StartApp
 import Scale.Scale exposing (Scale)
 import Svg exposing (Svg)
@@ -18,13 +18,13 @@ main =
 
 type alias WheelEvent = { deltaY : Float }
 type alias DragEvent = { clientX : Float, clientY : Float }
-
+type alias Point = { x : Float, y : Float }
 type alias Model =
-  { points : List { x : Float, y : Float }
+  { points : List Point
   , xScale : Scale (Float, Float) Float
   , yScale : Scale (Float, Float) Float
   , dragging : Bool
-  , dragPosition : { x : Float, y : Float }
+  , dragPosition : Point
   }
 
 type Action = Wheel Float | DragStart Float Float | Drag Float Float | DragEnd
@@ -32,17 +32,17 @@ type Action = Wheel Float | DragStart Float Float | Drag Float Float | DragEnd
 model : Model
 model =
   { points =
-    [ {x = 200, y = 100}
-    , {x = 150, y = 150}
-    , {x = 100, y = 200}
-    , {x = 150, y = 250}
-    , {x = 200, y = 300}
-    , {x = 250, y = 250}
-    , {x = 250, y = 150}
-    , {x = 300, y = 200}
+    [ {x = 2.0, y = 100}
+    , {x = 1.5, y = 150}
+    , {x = 1.0, y = 200}
+    , {x = 1.5, y = 250}
+    , {x = 2.0, y = 300}
+    , {x = 2.5, y = 250}
+    , {x = 2.5, y = 150}
+    , {x = 3.0, y = 200}
     ]
-  , xScale = Scale.linear (0, 4) (0, 400) 5
-  , yScale = Scale.linear (0, 400) (400, 0) 5
+  , xScale = Scale.linear (0, 4) (0, 800) 5
+  , yScale = Scale.linear (0, 400) (800, 0) 5
   , dragging = False
   , dragPosition = { x = 0, y = 0 }
   }
@@ -86,10 +86,6 @@ update action model =
 view : Signal.Address Action -> Model -> Svg
 view address model =
   let
-    yAxis =
-      Axis.createAxis model.yScale Axis.Orient.Left
-    xAxis =
-      Axis.createAxis model.xScale Axis.Orient.Bottom
     events =
       [ on "wheel" wheelDecoder (\event -> Signal.message address (Wheel event.deltaY))
       , on "mousedown" dragDecoder (\event -> Signal.message address (DragStart event.clientX event.clientY))
@@ -97,10 +93,10 @@ view address model =
       , on "mouseup" dragDecoder (\_ -> Signal.message address (DragEnd))
       ]
   in
-    createPlot 400 400
-      |> addPoints model.points (\p -> p.x / 100) .y model.xScale model.yScale (circle 5 [])
-      |> addAxis xAxis
-      |> addAxis yAxis
+    createPlot 800 800
+      |> addPoints model.points .x .y model.xScale model.yScale (circle 5 [])
+      |> addAxis (Axis.createAxis model.yScale Axis.Orient.Left)
+      |> addAxis (Axis.createAxis model.xScale Axis.Orient.Bottom)
       |> attributes events
       |> toSvg
 

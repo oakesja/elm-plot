@@ -1,20 +1,20 @@
-module OrdinalPoints where
+module OrdinalBands where
 
 import Svg exposing (Svg)
 import Plot exposing (..)
 import Scale
 import Axis
 import Axis.Orient
-import Symbols exposing (circle)
+import Bars
 
 main : Svg
 main =
   let
+    xScale = Scale.ordinalBands ["a", "b", "c", "d"] (0, 800) 0.2 0.2
     yScale = Scale.linear (0, 400) (800, 0) 10
-    xScale = Scale.ordinalPoints ["a", "b", "c", "d"] (0, 800) 0
   in
     createPlot 800 800
-      |> addPoints points .x .y xScale yScale (circle 5 [])
+      |> addBars points .x .y xScale yScale Bars.Vertical []
       |> addAxis (Axis.createAxis xScale Axis.Orient.Bottom)
       |> addAxis (Axis.createAxis yScale Axis.Orient.Left)
       |> toSvg
@@ -25,4 +25,5 @@ points =
   , {x = "b", y = 50}
   , {x = "c", y = 100}
   , {x = "d", y = 400}
+  , {x = "e", y = 150}
   ]

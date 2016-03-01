@@ -67,7 +67,7 @@ axis
 examples
   - [ ] linear scale
   - [ ] each point type
-  - [ ] custom point
+  - [ ] custom point - clicking on point removes it from the model
   - [ ] ordinal scale point
   - [ ] ordinal scale bands
   - [ ] custom with ordinal scale bands (triangles going to axis from point with band width)
