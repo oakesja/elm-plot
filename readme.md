@@ -6,6 +6,7 @@ arcs for pie charts
 change sets (domain and range) to be model instead of a tuple to clean up code in scales
 don't draw points outside of bounding box but how to handle lines and areas that cross bounding box
 consider doing grid lines separate from axises to allow when to draw and how many ticks
+better default colors for marks
 
 events
   - [ ] events that require knowledge of where on the plot it was clicked (x, y, band width)
@@ -40,7 +41,7 @@ rules (are these actually useful?)
 symbols
   - [x] circle
   - [x] square
-  - [ ] cross
+  - [x] cross
   - [x] diamond
   - [x] triangle up
   - [x] triangle down
