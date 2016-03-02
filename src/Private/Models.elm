@@ -19,6 +19,13 @@ type alias BoundingBox =
   , yEnd : Float
   }
 
+type alias Margins =
+  { top: Float
+  , bottom: Float
+  , right: Float
+  , left: Float
+  }  
+
 type alias Tick =
   { position : Float
   , label : String

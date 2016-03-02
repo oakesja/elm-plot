@@ -2,7 +2,7 @@ module Plot where
 
 import Svg exposing (svg, Svg)
 import SvgAttributesExtra exposing (width, height)
-import Private.Models exposing (Dimensions, Interpolation, BoundingBox)
+import Private.Models exposing (Dimensions, Interpolation, BoundingBox, Margins)
 import Scale.Scale exposing (Scale)
 import Axis.Axis exposing (Axis)
 import Bars
@@ -21,13 +21,6 @@ import Rules
 
 type alias MouseInfo = { clientX: Float, clientY: Float }
 type alias MouseEvent a b = { x: a, y: b }
-
-type alias Margins =
-  { top: Float
-  , bottom: Float
-  , right: Float
-  , left: Float
-  }
 
 type alias Plot =
   { dimensions: Dimensions
