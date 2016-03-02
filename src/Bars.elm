@@ -2,7 +2,7 @@ module Bars where
 
 import Private.Models exposing (InterpolatedPoint, BoundingBox)
 import Svg exposing (Svg, rect)
-import Svg.Attributes exposing (x, y, height, width)
+import SvgAttributesExtra exposing (x, y, height, width)
 
 type Orient = Vertical | Horizontal
 
@@ -21,10 +21,10 @@ barAttrs bBox orient additionalAttrs point =
   let
     pos = posInfo bBox orient point
   in
-    [ x <| toString pos.x
-    , y <| toString pos.y
-    , width <| toString pos.width
-    , height <| toString pos.height
+    [ x pos.x
+    , y pos.y
+    , width pos.width
+    , height pos.height
     ] ++ additionalAttrs
 
 posInfo : BoundingBox -> Orient -> InterpolatedPoint a b -> {x: Float, y: Float, width: Float, height: Float}

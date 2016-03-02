@@ -1,6 +1,7 @@
 module Test.Scale.LinearTest where
 
 import Scale.Linear exposing (..)
+import Zoom
 import ElmTest exposing (..)
 
 tests : Test
@@ -9,6 +10,9 @@ tests =
         [ interpolateTests
         , uninterpolateTests
         , createTicksTests
+        , zoomTests
+        , panTests
+        , panInPixelsTests
         ]
 
 interpolateTests : Test
@@ -82,3 +86,63 @@ createTicksTests =
           <| assertEqual [70, 102.5, 135, 167.5, 200, 232.5, 265, 297.5, 330]
           <| List.map .position (createTicks 10 (0, 400) (70, 330))
       ]
+
+zoomTests : Test
+zoomTests =
+  suite "zoom"
+    [ test "zoom in"
+        <| assertEqual (25, 75)
+        <| zoom (0, 100) 0.25 Zoom.In
+    , test "zoom out"
+        <| assertEqual (-25, 125)
+        <| zoom (0, 100) 0.25 Zoom.Out
+    , test "zoom in descending domain"
+        <| assertEqual (75, 25)
+        <| zoom (100, 0) 0.25 Zoom.In
+    , test "zoom out"
+        <| assertEqual (125, -25)
+        <| zoom (100, 0) 0.25 Zoom.Out
+    ]
+
+panTests : Test
+panTests =
+  suite "pan"
+    [ test "pan positive with ascending domain"
+        <| assertEqual (10, 110)
+        <| pan (0, 100) 10
+    , test "pan negative with ascending domain"
+        <| assertEqual (-10, 90)
+        <| pan (0, 100) -10
+    , test "pan positive with descending domain"
+        <| assertEqual (110, 10)
+        <| pan (100, 0) 10
+    , test "pan negative with descending domain"
+        <| assertEqual (90, -10)
+        <| pan (100, 0) -10
+    ]
+
+panInPixelsTests : Test
+panInPixelsTests =
+  suite "panInPixels"
+    [ test "pan positive with ascending domain"
+        <| assertEqual (0.1, 1.1)
+        <| panInPixels (0, 1) (0, 100) 10
+    , test "pan negative with ascending domain"
+        <| assertEqual (-0.1, 0.9)
+        <| panInPixels (0, 1) (0, 100) -10
+    , test "pan positive with descending domain"
+        <| assertEqual (1.1, 0.1)
+        <| panInPixels (1, 0) (0, 100) 10
+    , test "pan negative with descending domain"
+        <| assertEqual (0.9, -0.1)
+        <| panInPixels (1, 0) (0, 100) -10
+    , test "pan positive with descending range"
+        <| assertEqual (0.1, 1.1)
+        <| panInPixels (0, 1) (100, 0) 10
+    , test "pan negative with descending range"
+        <| assertEqual (-0.1, 0.9)
+        <| panInPixels (0, 1) (100, 0) -10
+    , test "pan when range has the same start and end"
+        <| assertEqual (0, 1)
+        <| panInPixels (0, 1) (100, 100) 10
+    ]

@@ -1,50 +1,77 @@
-module Symbols (circle, square, diamond, triangleUp, triangleDown) where
+module Symbols (circle, square, diamond, triangleUp, triangleDown, cross) where
 
-import Svg exposing (Svg)
-import Svg.Attributes exposing (cx, cy, r, x, y, width, height, transform, d)
+import Svg exposing (Svg, g, line)
+import Svg.Attributes exposing (d, stroke, strokeWidth)
 import Line.Interpolation exposing (linear)
 import Private.Models exposing (Points)
-import SvgAttributesExtras exposing (rotate)
+import SvgAttributesExtra exposing (rotate, cx, cy, r, x, y, width, height, x1, x2, y1, y2)
 
-circle : Int -> List Svg.Attribute -> Float -> Float -> Svg
-circle radius addionalAttrs x y =
-  createSvg Svg.circle  addionalAttrs [cx (toString x), cy (toString y), r (toString radius)]
+circle : Int -> List Svg.Attribute -> Float -> Float -> a -> b -> Svg
+circle radius additionalAttrs x y origX origY =
+  createSvg Svg.circle  additionalAttrs [cx x, cy y, r radius]
 
-square : Float -> List Svg.Attribute -> Float -> Float -> Svg
-square length addionalAttrs xPos yPos =
-  createSvg Svg.rect addionalAttrs
-    [ x <| toString (xPos - length / 2)
-    , y <| toString (yPos - length / 2)
-    , width <| toString length
-    , height <| toString length
+square : Float -> List Svg.Attribute -> Float -> Float -> a -> b -> Svg
+square length additionalAttrs xPos yPos origX origY =
+  createSvg Svg.rect additionalAttrs
+    [ x (xPos - length / 2)
+    , y (yPos - length / 2)
+    , width length
+    , height length
     ]
 
-diamond : Float -> List Svg.Attribute -> Float -> Float -> Svg
-diamond length addionalAttrs xPos yPos =
-  square length ((rotate (xPos, yPos) 45) :: addionalAttrs) xPos yPos
+diamond : Float -> List Svg.Attribute -> Float -> Float -> a -> b -> Svg
+diamond length additionalAttrs xPos yPos origX origY =
+  square length ((rotate (xPos, yPos) 45) :: additionalAttrs) xPos yPos origX origY
 
-triangleUp : Float -> List Svg.Attribute -> Float -> Float -> Svg
-triangleUp length addionalAttrs xPos yPos =
-  pathSvg addionalAttrs
+triangleUp : Float -> List Svg.Attribute -> Float -> Float -> a -> b -> Svg
+triangleUp length additionalAttrs xPos yPos origX origY =
+  pathSvg additionalAttrs
       [ { x = xPos, y = yPos - length / 2 }
       , { x = xPos - length / 2, y = yPos + length / 2}
       , { x = xPos + length / 2, y = yPos + length / 2}
       ]
 
-triangleDown : Float -> List Svg.Attribute -> Float -> Float -> Svg
-triangleDown length addionalAttrs xPos yPos =
-  pathSvg addionalAttrs
+triangleDown : Float -> List Svg.Attribute -> Float -> Float -> a -> b -> Svg
+triangleDown length additionalAttrs xPos yPos origX origY =
+  pathSvg additionalAttrs
       [ { x = xPos, y = yPos + length / 2 }
       , { x = xPos - length / 2, y = yPos - length / 2}
       , { x = xPos + length / 2, y = yPos - length / 2}
       ]
 
+cross : Float -> List Svg.Attribute -> Float -> Float -> a -> b -> Svg
+cross length additionalAttrs xPos yPos origX origY =
+  let
+    attrs =
+      if List.isEmpty additionalAttrs then
+        [ stroke "black"]
+      else
+        additionalAttrs
+  in
+  g
+    additionalAttrs
+    [ line
+        ( [ x1 (xPos - length / 2)
+          , y1 (yPos - length / 2)
+          , x2 (xPos + length / 2)
+          , y2 (yPos + length / 2)
+          ] ++ attrs )
+        []
+    , line
+        ( [ x1 (xPos - length / 2)
+          , y1 (yPos + length / 2)
+          , x2 (xPos + length / 2)
+          , y2 (yPos - length / 2)
+          ] ++ attrs )
+        []
+    ]
+
 pathSvg : List Svg.Attribute -> Points Float Float -> Svg
-pathSvg addionalAttrs points =
-  createSvg Svg.path addionalAttrs [ d <| "M" ++ linear points]
+pathSvg additionalAttrs points =
+  createSvg Svg.path additionalAttrs [ d <| "M" ++ linear points]
 
 createSvg : (List Svg.Attribute -> List Svg -> Svg) -> List Svg.Attribute -> List Svg.Attribute -> Svg
-createSvg svgFunc addionalAttrs posAttrs =
+createSvg svgFunc additionalAttrs posAttrs =
   svgFunc
-    (List.append posAttrs addionalAttrs)
+    (List.append posAttrs additionalAttrs)
     []

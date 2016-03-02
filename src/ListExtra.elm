@@ -5,7 +5,7 @@ find predicate list =
   case list of
     [] ->
       Nothing
-    first::rest ->
+    first :: rest ->
       if predicate first then
         Just first
       else
@@ -13,4 +13,4 @@ find predicate list =
 
 toList : a -> List a
 toList x =
-  [x]        
+  [x]

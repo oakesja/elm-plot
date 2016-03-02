@@ -22,19 +22,21 @@ main =
         |> Axis.labelRotation -45
         |> Axis.title "x axis"
   in
-    createPlot 400 400
+    createPlot 800 800
       |> addAxis xAxis
       |> addAxis yAxis
       |> addLines lines .x .y xScale yScale linear []
       |> addPoints points .x .y xScale yScale (diamond 8 [fill "red"])
       |> margins {top = 50, bottom = 50, right = 50, left = 100}
+      |> verticalRules [50, 80] xScale []
+      |> horizontalRules [50, 10] yScale []
       |> toSvg
 
 xScale =
-  Scale.linear (0, 100) (0, 400) 10
+  Scale.linear (0, 100) (0, 800) 10
 
 yScale =
-  Scale.linear (0, 100) (400, 0) 20
+  Scale.linear (0, 100) (800, 0) 20
 
 points : List { x : Float, y : Float }
 points =

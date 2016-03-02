@@ -5,8 +5,8 @@ import Private.Models exposing (Tick, TickInfo)
 import Axis.Axis exposing (Axis)
 import Scale.Scale exposing (Scale)
 import Svg exposing (Svg, path, text', g, line)
-import Svg.Attributes exposing (d, fill, stroke, shapeRendering, x, y, transform, y2, x2, dy, textAnchor)
-import SvgAttributesExtras exposing (translate, rotate)
+import Svg.Attributes exposing (d, fill, stroke, shapeRendering, transform, dy, textAnchor)
+import SvgAttributesExtra exposing (translate, rotate, y2, x2, x, y)
 import Scale
 
 createTicks : Axis a b -> List Svg
@@ -28,9 +28,7 @@ labelAttributes : Orient -> Int -> Int -> Int -> List Svg.Attribute
 labelAttributes orient tickSize tickPadding rotation =
   let
     pos = innerTickLinePos orient (tickSize + tickPadding)
-    xString = toString (fst pos)
-    yString = toString (snd pos)
-    posAttrs = [x xString, y yString]
+    posAttrs = [x (fst pos), y (snd pos)]
     anchorAttrs = case orient of
       Axis.Orient.Top ->
         [dy "0em", textAnchor "middle"]
@@ -51,7 +49,7 @@ innerTickLineAttributes orient tickSize =
   let
     pos = innerTickLinePos orient tickSize
   in
-    [ x2 (toString (fst pos)), y2 (toString (snd pos)) ]
+    [ x2 (fst pos), y2 (snd pos) ]
 
 innerTickLinePos : Orient -> Int -> (Int, Int)
 innerTickLinePos orient tickSize =

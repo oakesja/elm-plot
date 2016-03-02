@@ -2,16 +2,17 @@ append additional svg to plot
 give option of width and height for range of scale
 negative dimensions
 negative margins
-handle scales that don't need to change from margins
-padding for normal range and reverse range do not appear to be the same
 arcs for pie charts
-custom bands
 change sets (domain and range) to be model instead of a tuple to clean up code in scales
-be able to update domain and ranges for scale
-consider adding panning and zooming as part of the framework, only makes sense for linear scales though
 don't draw points outside of bounding box but how to handle lines and areas that cross bounding box
 consider doing grid lines separate from axises to allow when to draw and how many ticks
-adding events to an individual line or point
+better default colors for marks
+different interpolation methods
+different scales
+
+events
+  - [x] events that require knowledge of where on the plot it was clicked (x, y, band width)
+  - [x] events that don't require that knowledge (should the user handle these?)
 
 plot
   - [x] margins (most components will need to wait to be created until margins are known)
@@ -34,15 +35,15 @@ bars
   - [x] orient (horizonal or vertical)
   - [x] style
 
-rules (are these actually useful?)
-  - [ ] vertical y y2 x
-  - [ ] horizontal x x2 y
-  - [ ] additional attributes
+rules (are these actually useful?) (should this be the addition of one or multiple rules?)
+  - [x] vertical x
+  - [x] horizontal y
+  - [x] additional attributes
 
 symbols
   - [x] circle
   - [x] square
-  - [ ] cross
+  - [x] cross
   - [x] diamond
   - [x] triangle up
   - [x] triangle down
@@ -68,11 +69,11 @@ axis
 examples
   - [ ] linear scale
   - [ ] each point type
-  - [ ] custom point
-  - [ ] ordinal scale point
-  - [ ] ordinal scale bands
+  - [x] custom point - clicking on point removes it from the model
+  - [x] ordinal scale point
+  - [x] ordinal scale bands
   - [ ] custom with ordinal scale bands (triangles going to axis from point with band width)
-  - [ ] events  
+  - [x] events  
 
 Design
 
