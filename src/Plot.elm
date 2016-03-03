@@ -9,7 +9,7 @@ import Bars
 import Scale
 import Points
 import Area
-import Line
+import Path
 import Axis.View
 import Axis.Orient
 import BoundingBox
@@ -62,8 +62,8 @@ addLines points getX getY xScale yScale interpolate attrs plot =
   let
     svg = \bBox ->
       List.map (\p -> { x = getX p, y = getY p }) points
-        |> Line.interpolate (rescaleX bBox xScale) (rescaleY bBox yScale)
-        |> Line.toSvg interpolate attrs
+        |> Path.interpolate bBox (rescaleX bBox xScale) (rescaleY bBox yScale)
+        |> Path.toSvg interpolate attrs
         |> toList
   in
     addSvg svg plot
