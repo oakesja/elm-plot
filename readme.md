@@ -9,6 +9,7 @@ consider doing grid lines separate from axises to allow when to draw and how man
 better default colors for marks
 different interpolation methods
 different scales
+axis placement should be based on ranges of both axises not by bounding box (change range to start at non-zeros)
 
 events
   - [x] events that require knowledge of where on the plot it was clicked (x, y, band width)
@@ -100,4 +101,4 @@ Design
 1. Signals
   User specify events that it wants to handle for marks. When that event occurs
   an action is sent to user to handle. If some type of UI changes need to be made
-  then the user sends that action along with a function to transform the thing.
+  then the user sends that action along with a function to transform the thing.   

@@ -73,7 +73,7 @@ addArea points getX getY getY2 xScale yScale interpolate attrs plot =
   let
     svg = \bBox ->
       List.map (\p -> { x = getX p, y = getY p, y2 = getY2 p }) points
-        |> Area.interpolate (rescaleX bBox xScale) (rescaleY bBox yScale)
+        |> Area.interpolate bBox (rescaleX bBox xScale) (rescaleY bBox yScale)
         |> Area.toSvg interpolate attrs
         |> toList
   in

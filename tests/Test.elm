@@ -13,6 +13,7 @@ import Test.Scale.OrdinalBandsTest as OrdinalBandsTest
 import Test.BarsTest as BarsTest
 import Test.PointsTest as PointsTest
 import Test.LineTest as LineTest
+import Test.PolygonTest as PolygonTest
 
 tests : Test
 tests =
@@ -29,6 +30,7 @@ tests =
         , BarsTest.tests
         , PointsTest.tests
         , LineTest.tests
+        , PolygonTest.tests
         ]
 
 port runner : Signal (Task.Task x ())

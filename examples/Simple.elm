@@ -30,6 +30,7 @@ main =
       |> margins {top = 50, bottom = 50, right = 50, left = 100}
       |> verticalRules [50, 80] xScale []
       |> horizontalRules [50, 10] yScale []
+      |> addArea area .x .y1 .y2 xScale yScale linear []
       |> toSvg
 
 xScale =
@@ -71,4 +72,12 @@ lines =
   , { x =  110,  y =  -10}
   , { x =  80, y =  70}
   , { x =  110, y =  110}
+  ]
+
+area =
+  [ { x = -10, y1 = -10, y2 = -10}
+  , { x = 25, y1 = 30, y2 = -10}
+  , { x = 50, y1 = 50, y2 = -10}
+  , { x = 75, y1 = 30, y2 = -10}
+  , { x = 110, y1 = -10, y2 = -10}
   ]
