@@ -1,4 +1,4 @@
-module SvgAttributesExtra where
+module Extras.SvgAttributes where
 
 import Svg
 import Svg.Attributes exposing (transform)

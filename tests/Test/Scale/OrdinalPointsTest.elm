@@ -2,8 +2,10 @@ module Test.Scale.OrdinalPointsTest where
 
 import Scale.OrdinalPoints exposing (..)
 import ElmTest exposing (..)
-import Private.Models exposing (PointValue, Tick)
+import Private.Models exposing (PointValue)
+import Tick exposing (Tick)
 import Dict exposing (Dict)
+import Extras.Set as Set
 
 tests : Test
 tests =
@@ -19,7 +21,7 @@ createMappingTests : Test
 createMappingTests =
   let
     domain = ["a", "b", "c"]
-    range = (0, 120)
+    range = Set.createFromTuple (0, 120)
     expected = expectedMapping domain
   in
     suite "createMapping"
@@ -34,10 +36,10 @@ createMappingTests =
           <| Dict.toList (createMapping 0 ["a"] range).lookup
       , test "descending range without padding"
           <| assertEqual (expected [120, 60, 0])
-          <| Dict.toList (createMapping 0 domain (120, 0)).lookup
+          <| Dict.toList (createMapping 0 domain (Set.createFromTuple (120, 0))).lookup
       , test "descending range with padding"
           <| assertEqual (expected [90, 60, 30])
-          <| Dict.toList (createMapping 2 domain (120, 0)).lookup
+          <| Dict.toList (createMapping 2 domain (Set.createFromTuple (120, 0))).lookup
       ]
 
 expectedMapping : List String -> List Float -> List (String, PointValue String)
@@ -48,7 +50,7 @@ interpolateTests : Test
 interpolateTests =
   let
     domain = ["a", "b", "c"]
-    range = (0, 120)
+    range = Set.createFromTuple (0, 120)
     expected = expectedInterpolation domain
   in
     suite "interpolate"
@@ -60,6 +62,7 @@ interpolateTests =
           <| interpolate (createMapping 0) domain range "d"
       ]
 
+-- TODO abstract
 expectedInterpolation : List String -> List Float -> List (PointValue String)
 expectedInterpolation domain values =
   List.map2 (\d v -> { value = v, width = 0, originalValue = d }) domain values
@@ -68,7 +71,7 @@ uninterpolateTests : Test
 uninterpolateTests =
   let
     domain = ["a", "b", "c"]
-    range = (0, 120)
+    range = Set.createFromTuple (0, 120)
     expected = expectedInterpolation domain
   in
     suite "interpolate"
@@ -87,7 +90,7 @@ ticksTests : Test
 ticksTests =
   let
     domain = ["a", "b", "c"]
-    range = (0, 120)
+    range = Set.createFromTuple (0, 120)
   in
     suite "ticks"
       [ test "it creates tick for everything in the domain"
@@ -95,6 +98,7 @@ ticksTests =
           <| createTicks (createMapping 0) domain range
       ]
 
+-- TODO abstract
 expectedTicks : List Float -> List String -> List Tick
 expectedTicks values domain =
   List.map2 (\v d-> { position = v, label = d }) values domain

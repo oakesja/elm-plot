@@ -1,7 +1,7 @@
 module Test.LineTest where
 
 import Line exposing (..)
-import Private.Models exposing (BoundingBox)
+import BoundingBox exposing (BoundingBox)
 import ElmTest exposing (..)
 
 tests : Test
@@ -79,8 +79,4 @@ line p1 p2 =
 
 bBox : BoundingBox
 bBox =
-  { xStart = 1
-  , xEnd = 2
-  , yStart = 1
-  , yEnd = 2
-  }
+  BoundingBox.create 1 2 1 2

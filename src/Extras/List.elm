@@ -1,4 +1,4 @@
-module ListExtra where
+module Extras.List where
 
 find : (a -> Bool) -> List a -> Maybe a
 find predicate list =

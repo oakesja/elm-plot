@@ -1,22 +1,44 @@
 module Axis where
 
-import Axis.Axis exposing (Axis)
-import Scale.Scale exposing (Scale)
 import Axis.Orient exposing (Orient)
+import Scale.Scale exposing (Scale)
 import Svg
 import Svg.Attributes exposing (fill, stroke, shapeRendering)
+import BoundingBox exposing (BoundingBox)
 
-createAxis : Scale a b -> Orient -> Axis a b
-createAxis scale orient =
+type alias Axis a b =
+  { scale : Scale a b
+  , orient : Orient
+  , boundingBox : BoundingBox
+  , innerTickSize : Int
+  , outerTickSize : Int
+  , tickPadding : Int
+  , labelRotation : Int
+  , axisAttributes : List Svg.Attribute
+  , innerTickAttributes : List Svg.Attribute
+  , title : Maybe String
+  , titleOffset : Maybe Int
+  , titleAttributes : List Svg.Attribute
+  }
+
+create : Scale a b -> Orient -> Axis a b
+create scale orient =
+  let
+    defaultLineAttrs =
+      [ fill "none"
+      , stroke "#000"
+      , shapeRendering "crispEdges"
+      ]
+  in
   { scale = scale
   , orient = orient
-  , boundingBox = { xStart = 0, xEnd = 0, yStart = 0, yEnd = 0 }
+  , boundingBox = BoundingBox.init
   , innerTickSize = 6
   , outerTickSize = 6
   , tickPadding = 3
   , labelRotation = 0
-  , axisAttributes = [ fill "none", stroke "#000", shapeRendering "crispEdges" ]
-  , innerTickAttributes = [ fill "none", stroke "#000", shapeRendering "crispEdges" ]
+  , axisAttributes = defaultLineAttrs
+  , innerTickAttributes = defaultLineAttrs
   , title = Nothing
   , titleOffset = Nothing
   , titleAttributes = []

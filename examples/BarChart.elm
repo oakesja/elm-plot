@@ -5,7 +5,7 @@ import Plot exposing (..)
 import Scale
 import Axis
 import Axis.Orient
-import Bars
+import Bars.Orient
 
 main : Svg
 main =
@@ -14,9 +14,9 @@ main =
     yScale = Scale.linear (0, 400) (800, 0) 10
   in
     createPlot 800 800
-      |> addBars points .x .y xScale yScale Bars.Vertical []
-      |> addAxis (Axis.createAxis xScale Axis.Orient.Bottom)
-      |> addAxis (Axis.createAxis yScale Axis.Orient.Left)
+      |> addBars points .x .y xScale yScale Bars.Orient.Vertical []
+      |> addAxis (Axis.create xScale Axis.Orient.Bottom)
+      |> addAxis (Axis.create yScale Axis.Orient.Left)
       |> toSvg
 
 points : List { x : String, y : Float }

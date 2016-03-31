@@ -47,7 +47,7 @@ view : Signal.Address Action -> Model -> Svg
 view address model =
   createPlot 800 800
     |> addPoints model.points .x .y model.xScale model.yScale (circle 5 [])
-    |> addAxis (Axis.createAxis model.xScale Axis.Orient.Bottom)
-    |> addAxis (Axis.createAxis model.yScale Axis.Orient.Left)
+    |> addAxis (Axis.create model.xScale Axis.Orient.Bottom)
+    |> addAxis (Axis.create model.yScale Axis.Orient.Left)
     |> onClick model.xScale model.yScale (\e -> Signal.message address (Click e.x e.y))
     |> toSvg

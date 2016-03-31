@@ -2,10 +2,11 @@ module Rules where
 
 import Scale.Scale exposing (Scale)
 import Scale
-import Private.Models exposing (PointValue, BoundingBox)
+import Private.Models exposing (PointValue)
+import BoundingBox exposing (BoundingBox)
 import Svg exposing (Svg, line)
 import Svg.Attributes exposing (stroke)
-import SvgAttributesExtra exposing (x1, x2, y1, y2)
+import Extras.SvgAttributes exposing (x1, x2, y1, y2)
 
 type Direction = Vertical | Horizontal
 
@@ -13,8 +14,8 @@ interpolate : List a -> Scale x a -> List (PointValue a)
 interpolate vals scale =
   List.map (Scale.interpolate scale) vals
 
-toSvgs : BoundingBox -> List Svg.Attribute -> Direction -> List (PointValue a) -> List Svg
-toSvgs bBox attrs direction points =
+toSvg : BoundingBox -> List Svg.Attribute -> Direction -> List (PointValue a) -> List Svg
+toSvg bBox attrs direction points =
   List.map (createRule bBox attrs direction) points
 
 createRule : BoundingBox -> List Svg.Attribute -> Direction -> PointValue a -> Svg

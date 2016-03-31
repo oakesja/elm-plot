@@ -1,7 +1,8 @@
 module Scale.Scale where
 
-import Private.Models exposing (PointValue, Tick)
-import Sets exposing (Range)
+import Private.Models exposing (PointValue)
+import Tick exposing (Tick)
+import Extras.Set exposing (Range)
 
 type alias Scale a b =
   { domain : a

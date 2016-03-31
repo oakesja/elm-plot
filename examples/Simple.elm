@@ -13,12 +13,12 @@ main : Html
 main =
   let
     yAxis =
-      Axis.createAxis yScale Axis.Orient.Left
+      Axis.create yScale Axis.Orient.Left
         |> Axis.innerTickAttributes [stroke "red"]
         |> Axis.title "y axis"
 
     xAxis =
-      Axis.createAxis xScale Axis.Orient.Bottom
+      Axis.create xScale Axis.Orient.Bottom
         |> Axis.labelRotation -45
         |> Axis.title "x axis"
   in
@@ -28,8 +28,8 @@ main =
       |> addLines lines .x .y xScale yScale linear []
       |> addPoints points .x .y xScale yScale (diamond 8 [fill "red"])
       |> margins {top = 50, bottom = 50, right = 50, left = 100}
-      |> verticalRules [50, 80] xScale []
-      |> horizontalRules [50, 10] yScale []
+      |> addVerticalRules [50, 80] xScale []
+      |> addHorizontalRules [50, 10] yScale []
       |> addArea area .x .y1 .y2 xScale yScale linear []
       |> addTitle "really cool title" []
       |> toSvg

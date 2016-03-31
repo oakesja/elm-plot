@@ -15,8 +15,8 @@ main =
   in
     createPlot 800 800
       |> addPoints points .x .y xScale yScale (circle 5 [])
-      |> addAxis (Axis.createAxis xScale Axis.Orient.Bottom)
-      |> addAxis (Axis.createAxis yScale Axis.Orient.Left)
+      |> addAxis (Axis.create xScale Axis.Orient.Bottom)
+      |> addAxis (Axis.create yScale Axis.Orient.Left)
       |> toSvg
 
 points : List { x : String, y : Float }

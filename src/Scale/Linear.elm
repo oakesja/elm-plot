@@ -1,50 +1,50 @@
 module Scale.Linear (interpolate, createTicks, uninterpolate, pan, zoom, panInPixels, inDomain) where
 
-import FloatExtra exposing (ln, roundTo)
-import Sets exposing (extentOf)
-import Private.Models exposing (Tick, PointValue)
-import Sets exposing (Domain, Range, Set)
+import Extras.Float exposing (ln, roundTo)
+import Private.Models exposing (PointValue)
+import Tick exposing (Tick)
+import Extras.Set as Set exposing (Domain, Range, Set)
 import Zoom
 
 interpolate : Domain -> Range -> Float -> PointValue Float
 interpolate domain range x =
   let
     value =
-      if fst domain == snd domain then
-        fst range
+      if domain.start == domain.end then
+        range.start
       else
-        (((x - fst domain) * (snd range - fst range)) / (snd domain - fst domain)) + fst range
+        (((x - domain.start) * (range.end - range.start)) / (domain.end - domain.start)) + range.start
   in
     { value = value, width = 0, originalValue = x }
 
 uninterpolate : Domain -> Range -> Float -> Float
 uninterpolate domain range y =
-  if fst range == snd range then
-    fst domain
+  if range.start == range.end then
+    domain.start
   else
-    ((y - fst range) * (snd domain - fst domain) / (snd range - fst range)) + fst domain
+    ((y - range.start) * (domain.end - domain.start) / (range.end - range.start)) + domain.start
 
 zoom : Domain -> Float -> Zoom.Direction -> Domain
 zoom domain percentZoom direction =
   let
-    change = (snd domain - fst domain) * percentZoom
+    change = (domain.end - domain.start) * percentZoom
   in
     case direction of
       Zoom.Out ->
-        ((fst domain) - change, (snd domain) + change)
+        Set.create (domain.start - change) (domain.end + change)
       Zoom.In ->
-        ((fst domain) + change, (snd domain) - change)
+        Set.create (domain.start + change) (domain.end - change)
 
 pan : Domain -> Float -> Domain
 pan domain change =
-  (fst domain + change, snd domain + change)
+  Set.create (domain.start + change) (domain.end + change)
 
 panInPixels : Domain -> Range -> Float -> Domain
 panInPixels domain range pxChange =
   let
-    dExtent = extentOf domain
-    rExtent = extentOf range
-    change = (pxChange / (snd rExtent - fst rExtent)) * (snd dExtent - fst dExtent)
+    dExtent = Set.extentOf domain
+    rExtent = Set.extentOf range
+    change = (pxChange / (rExtent.end - rExtent.start)) * (dExtent.end - dExtent.start)
   in
     if isInfinite change then
       domain
@@ -54,32 +54,32 @@ panInPixels domain range pxChange =
 inDomain : Domain -> Float -> Bool
 inDomain domain x =
   let
-    extent = extentOf (domain)
+    extent = Set.extentOf (domain)
   in
-    (x >= fst extent) && (x <= snd extent)
+    (x >= extent.start) && (x <= extent.end)
 
 -- https://github.com/mbostock/d3/blob/78ce531f79e82275fe50f975e784ee2be097226b/src/scale/linear.js#L96
 createTicks : Int -> Domain -> Range -> List Tick
 createTicks numTicks domain range =
   let
-    extent = extentOf domain
+    extent = Set.extentOf domain
     step = stepSize extent (toFloat numTicks)
-    min = (toFloat (ceiling (fst extent / step))) * step
-    max = (toFloat (floor (snd extent / step))) * step + step * 0.5
+    min = (toFloat (ceiling (extent.start / step))) * step
+    max = (toFloat (floor (extent.end / step))) * step + step * 0.5
   in
     makeTicks min max step
       |> List.map (createTick (significantDigits step) domain range)
 
 createTick : Int -> Domain -> Range -> Float -> Tick
 createTick sigDigits domain range position =
-  { position = roundTo (interpolate domain range position).value sigDigits
-  , label = toString position
-  }
+  Tick.create
+    (roundTo (interpolate domain range position).value sigDigits)
+    (toString position)
 
 stepSize : Set -> Float -> Float
 stepSize extent numTicks =
   let
-    span = snd extent - fst extent
+    span = Set.span extent
     step = toFloat (10 ^ (floor((ln (span/ numTicks) /ln 10))))
     err = numTicks / span * step
   in

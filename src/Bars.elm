@@ -1,10 +1,12 @@
 module Bars where
 
-import Private.Models exposing (InterpolatedPoint, BoundingBox)
+import Private.Models exposing (InterpolatedPoint)
+import BoundingBox exposing (BoundingBox)
 import Svg exposing (Svg, rect)
-import SvgAttributesExtra exposing (x, y, height, width)
+import Extras.SvgAttributes exposing (x, y, height, width)
+import Bars.Orient exposing (Orient)
 
-type Orient = Vertical | Horizontal
+type alias PosInfo = {x: Float, y: Float, width: Float, height: Float}
 
 toSvg : BoundingBox -> Orient -> List Svg.Attribute -> List (InterpolatedPoint a b) -> List Svg
 toSvg bBox orient additionalAttrs points =
@@ -27,16 +29,16 @@ barAttrs bBox orient additionalAttrs point =
     , height pos.height
     ] ++ additionalAttrs
 
-posInfo : BoundingBox -> Orient -> InterpolatedPoint a b -> {x: Float, y: Float, width: Float, height: Float}
+posInfo : BoundingBox -> Orient -> InterpolatedPoint a b -> PosInfo
 posInfo bBox orient point =
   case orient of
-    Vertical ->
+    Bars.Orient.Vertical ->
       { x = point.x.value
       , y = point.y.value
       , width = point.x.width
       , height = bBox.yEnd - point.y.value
       }
-    Horizontal ->
+    Bars.Orient.Horizontal ->
       { x = bBox.xStart
       , y = point.y.value
       , width = point.x.value - bBox.xStart

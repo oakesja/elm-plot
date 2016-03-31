@@ -3,47 +3,63 @@ module Scale where
 import Scale.Linear
 import Scale.OrdinalPoints
 import Scale.OrdinalBands
-import Private.Models exposing (PointValue, Tick, BoundingBox)
+import Private.Models exposing (PointValue)
+import Tick exposing (Tick)
+import BoundingBox exposing (BoundingBox)
 import Scale.Scale exposing (Scale)
 import Scale.Type exposing (ScaleType)
-import Sets exposing (Domain, Range, calculateExtent)
+import Extras.Set as Set exposing (Set, calculateExtent)
 import Zoom
 
-linear : (Float, Float) -> Range -> Int -> Scale (Float, Float) Float
+-- TODO consider a more functional approach to this
+
+linear : (Float, Float) -> (Float, Float) -> Int -> Scale Set Float
 linear domain range numTicks =
-  { domain = domain
-  , range = range
+  { domain = Set.createFromTuple domain
+  , range = Set.createFromTuple range
   , interpolate = Scale.Linear.interpolate
   , uninterpolate = Scale.Linear.uninterpolate
   , createTicks = Scale.Linear.createTicks numTicks
   , inDomain = Scale.Linear.inDomain
   }
 
-ordinalPoints : List String -> Range -> Int -> Scale (List String) String
+ordinalPoints : List String -> (Float, Float) -> Int -> Scale (List String) String
 ordinalPoints domain range padding =
   let
     mapping = Scale.OrdinalPoints.createMapping padding
   in
     { domain = domain
-    , range = range
+    , range = Set.createFromTuple range
     , interpolate = Scale.OrdinalPoints.interpolate mapping
     , uninterpolate = Scale.OrdinalPoints.uninterpolate mapping
     , createTicks = Scale.OrdinalPoints.createTicks mapping
     , inDomain = Scale.OrdinalPoints.inDomain
     }
 
-ordinalBands : List String -> Range -> Float -> Float -> Scale (List String) String
+ordinalBands : List String -> (Float, Float) -> Float -> Float -> Scale (List String) String
 ordinalBands domain range padding outerPadding =
   let
     mapping = Scale.OrdinalBands.createMapping padding outerPadding
   in
     { domain = domain
-    , range = range
+    , range = Set.createFromTuple range
     , interpolate = Scale.OrdinalBands.interpolate mapping
     , uninterpolate = Scale.OrdinalBands.uninterpolate mapping
     , createTicks = Scale.OrdinalBands.createTicks mapping
     , inDomain = Scale.OrdinalBands.inDomain
     }
+
+zoom : Scale Set Float -> Float -> Zoom.Direction ->  Scale Set Float
+zoom scale percentChange direction =
+  { scale | domain = Scale.Linear.zoom scale.domain percentChange direction }
+
+pan : Scale Set Float -> Float -> Scale Set Float
+pan scale change =
+  { scale | domain = Scale.Linear.pan scale.domain change }
+
+panInPixels : Scale Set Float -> Float -> Scale Set Float
+panInPixels scale change =
+  { scale | domain = Scale.Linear.panInPixels scale.domain scale.range change }
 
 -- TODO private move somewhere else
 interpolate : Scale a b -> b -> PointValue b
@@ -62,17 +78,13 @@ rescale : BoundingBox -> ScaleType -> Scale a b -> Scale a b
 rescale bBox sType scale =
     { scale | range = calculateExtent bBox sType scale.range }
 
-zoom : Scale (Float, Float) Float -> Float -> Zoom.Direction ->  Scale (Float, Float) Float
-zoom scale percentChange direction =
-  { scale | domain = Scale.Linear.zoom scale.domain percentChange direction }
+rescaleX : BoundingBox -> Scale a b -> Scale a b
+rescaleX bBox scale =
+  rescale bBox Scale.Type.XScale scale
 
-pan : Scale (Float, Float) Float -> Float -> Scale (Float, Float) Float
-pan scale change =
-  { scale | domain = Scale.Linear.pan scale.domain change }
-
-panInPixels : Scale (Float, Float) Float -> Float -> Scale (Float, Float) Float
-panInPixels scale change =
-  { scale | domain = Scale.Linear.panInPixels scale.domain scale.range change }
+rescaleY : BoundingBox -> Scale a b -> Scale a b
+rescaleY bBox scale =
+  rescale bBox Scale.Type.YScale scale
 
 inDomain : Scale a b -> b -> Bool
 inDomain scale point =

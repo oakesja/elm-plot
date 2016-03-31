@@ -1,4 +1,4 @@
-module FloatExtra where
+module Extras.Float where
 
 ln : Float -> Float
 ln x =
@@ -9,4 +9,4 @@ roundTo x numPlaces =
   if numPlaces > 0 then
     toFloat (round (x * 10 ^ numPlaces)) / 10 ^ numPlaces
   else
-    x  
+    x

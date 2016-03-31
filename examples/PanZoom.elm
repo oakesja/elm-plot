@@ -95,8 +95,8 @@ view address model =
   in
     createPlot 800 800
       |> addPoints model.points .x .y model.xScale model.yScale (circle 5 [])
-      |> addAxis (Axis.createAxis model.yScale Axis.Orient.Left)
-      |> addAxis (Axis.createAxis model.xScale Axis.Orient.Bottom)
+      |> addAxis (Axis.create model.yScale Axis.Orient.Left)
+      |> addAxis (Axis.create model.xScale Axis.Orient.Bottom)
       |> attributes events
       |> toSvg
 

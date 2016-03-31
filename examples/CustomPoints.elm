@@ -49,8 +49,8 @@ view : Signal.Address Action -> Model -> Svg
 view address model =
   createPlot 800 800
     |> addPoints model.points .x .y model.xScale model.yScale (symbol address)
-    |> addAxis (Axis.createAxis model.xScale Axis.Orient.Bottom)
-    |> addAxis (Axis.createAxis model.yScale Axis.Orient.Left)
+    |> addAxis (Axis.create model.xScale Axis.Orient.Bottom)
+    |> addAxis (Axis.create model.yScale Axis.Orient.Left)
     |> toSvg
 
 symbol : Signal.Address Action -> Float -> Float -> Float -> Float -> Svg

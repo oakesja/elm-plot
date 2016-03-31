@@ -1,11 +1,31 @@
 module BoundingBox where
 
-import Private.Models exposing (Dimensions, Margins, BoundingBox)
+import Margins exposing (Margins)
+import Dimensions exposing (Dimensions)
+
+type alias BoundingBox =
+  { xStart : Float
+  , xEnd : Float
+  , yStart : Float
+  , yEnd : Float
+  }
+
+init : BoundingBox
+init =
+  create 0 0 0 0
+
+create : Float -> Float -> Float -> Float -> BoundingBox
+create xStart xEnd yStart yEnd =
+  { xStart = xStart
+  , xEnd = xEnd
+  , yStart = yStart
+  , yEnd = yEnd
+  }
 
 from : Dimensions -> Margins -> BoundingBox
 from dim marg =
-  { xStart = marg.left
-  , xEnd = dim.width - marg.right
-  , yStart = marg.top
-  , yEnd = dim.height - marg.bottom
-  }
+  create
+    marg.left
+    (dim.width - marg.right)
+    marg.top
+    (dim.height - marg.bottom)

@@ -1,7 +1,8 @@
 module Polygon where
 
-import Private.Models exposing (BoundingBox, Point)
+import BoundingBox exposing (BoundingBox)
 
+-- TODO use other Point
 type alias Point = { x : Float , y : Float}
 type alias PosCheck = (Point -> Bool)
 

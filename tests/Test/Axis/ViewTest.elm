@@ -3,10 +3,11 @@ module Test.Axis.ViewTest where
 import Axis.View exposing (..)
 import Axis.Orient
 import Scale
-import Private.Models exposing (BoundingBox)
+import BoundingBox exposing (BoundingBox)
 import Scale.Scale exposing (Scale)
 import ElmTest exposing (..)
 import Svg.Attributes exposing (transform)
+import Extras.Set as Set exposing (Set)
 
 tests : Test
 tests =
@@ -64,14 +65,10 @@ pathStringTests =
       <| pathString boundingBox scale Axis.Orient.Top 8
     ]
 
-scale : Scale (Float, Float) Float
+scale : Scale Set Float
 scale =
   Scale.linear (10, 90) (10, 90) 1
 
 boundingBox : BoundingBox
 boundingBox  =
-    { xStart = 5
-    , xEnd = 95
-    , yStart = 2
-    , yEnd = 100
-    }
+  BoundingBox.create 5 95 2 100

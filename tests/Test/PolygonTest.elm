@@ -1,7 +1,7 @@
 module Test.PolygonTest where
 
 import Polygon exposing (..)
-import Private.Models exposing (BoundingBox)
+import BoundingBox exposing (BoundingBox)
 import ElmTest exposing (..)
 
 tests : Test
@@ -37,11 +37,7 @@ createPoint p =
 
 bBox : BoundingBox
 bBox =
-  { xStart = 1
-  , xEnd = 3
-  , yStart = 1
-  , yEnd = 3
-  }
+  BoundingBox.create 1 3 1 3
 
 assertList : List comparable -> List comparable -> Assertion
 assertList expected actual =

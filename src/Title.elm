@@ -2,8 +2,8 @@ module Title (..) where
 
 import Svg exposing (svg, Svg, text', text)
 import Svg.Attributes exposing (textAnchor)
-import SvgAttributesExtra exposing (x, y)
-import Private.Models exposing (BoundingBox)
+import Extras.SvgAttributes exposing (x, y)
+import BoundingBox exposing (BoundingBox)
 import List
 import String
 
@@ -26,8 +26,8 @@ isEmpty : Model -> Bool
 isEmpty title =
   String.isEmpty title.title
 
-view : Model -> BoundingBox -> Svg
-view model bBox =
+toSvg : Model -> BoundingBox -> Svg
+toSvg model bBox =
   let
     titleAttrs =
       if List.isEmpty model.attrs then

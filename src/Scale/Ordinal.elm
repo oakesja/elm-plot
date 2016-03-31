@@ -1,9 +1,10 @@
 module Scale.Ordinal where
 
 import Dict exposing (Dict)
-import ListExtra exposing (find)
-import StringExtra exposing (maybeStringToString)
-import Private.Models exposing (PointValue, Tick)
+import Extras.List exposing (find)
+import Extras.String exposing (maybeStringToString)
+import Private.Models exposing (PointValue)
+import Tick exposing (Tick)
 
 type alias OrdinalMapping =
   { lookup : Dict String (PointValue String)

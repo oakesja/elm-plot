@@ -1,4 +1,4 @@
-module StringExtra where
+module Extras.String where
 
 maybeStringToString : Maybe String -> String
 maybeStringToString s =

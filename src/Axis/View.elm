@@ -1,13 +1,13 @@
 module Axis.View where
 
-import Private.Models exposing (BoundingBox)
-import Axis.Axis exposing (Axis)
+import BoundingBox exposing (BoundingBox)
+import Axis exposing (Axis)
 import Scale.Scale exposing (Scale)
 import Axis.Orient exposing (Orient)
 import Svg exposing (Svg, g, path)
 import Svg.Attributes exposing (d)
-import Sets exposing (extentOf, calculateAxisExtent)
-import SvgAttributesExtra exposing (translate)
+import Extras.Set exposing (extentOf, calculateAxisExtent)
+import Extras.SvgAttributes exposing (translate)
 import Axis.Ticks
 import Axis.Title
 
@@ -41,16 +41,21 @@ axisTranslation bBox orient =
 
 axisSvg : Axis a b -> Svg
 axisSvg axis =
-  path
-     ((d <| pathString axis.boundingBox axis.scale axis.orient axis.outerTickSize) :: axis.axisAttributes)
-     []
+  let
+    ps = pathString axis.boundingBox axis.scale axis.orient axis.outerTickSize
+    attrs = (d ps) :: axis.axisAttributes
+  in
+    path
+       attrs
+       []
 
 pathString : BoundingBox -> Scale a b -> Orient -> Int -> String
 pathString bBox scale orient tickSize =
   let
     extent = extentOf scale.range
-    start = fst extent
-    end = snd extent
+    start = extent.start
+    end = extent.end
+    -- TODO try and create a single case statement
     path = case orient of
       Axis.Orient.Top ->
         verticalAxisString bBox -tickSize start end
@@ -66,15 +71,15 @@ pathString bBox scale orient tickSize =
 verticalAxisString : BoundingBox -> Int -> Float -> Float -> String
 verticalAxisString bBox tickLocation xStart xEnd =
   let
-    start = if xStart < bBox.xStart then bBox.xStart else xStart
-    end = if xEnd > bBox.xEnd then bBox.xEnd else xEnd
+    start = max xStart bBox.xStart
+    end = min xEnd bBox.xEnd
   in
     (toString start) ++ "," ++ (toString tickLocation) ++ "V0H" ++ (toString end) ++ "V" ++ (toString tickLocation)
 
 horizontalAxisString : BoundingBox -> Int -> Float -> Float -> String
 horizontalAxisString bBox tickLocation yStart yEnd =
   let
-    start = if yStart < bBox.yStart then bBox.yStart else yStart
-    end = if yEnd > bBox.yEnd then bBox.yEnd else yEnd
+    start = max yStart bBox.yStart
+    end = min yEnd bBox.yEnd
   in
     (toString tickLocation) ++ "," ++ (toString start) ++ "H0V" ++ (toString end) ++ "H" ++ (toString tickLocation)

@@ -26,6 +26,8 @@ ordinal scales
   - [ ] specified range
   - [ ] handle undefined points that are not in the domain
   - [ ] height and width option for scale rather than number
+  - [ ] pan
+  - [ ] zoom
 
 bars
   - [x] orient (horizonal or vertical)

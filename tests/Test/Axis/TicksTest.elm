@@ -19,7 +19,7 @@ createTickInfosTests =
   let
     scale = Scale.linear (0, 1) (0, 10) 1
   in
-    suite "createTicks"
+    suite "createTickInfos"
       [ test "for top orient"
           <| assertEqual [{label = "0", translation = (0, 0)}, {label = "1", translation = (10, 0)}]
           <| createTickInfos scale Axis.Orient.Top

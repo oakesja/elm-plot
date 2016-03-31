@@ -1,13 +1,18 @@
 module Axis.Ticks where
 
 import Axis.Orient exposing (Orient)
-import Private.Models exposing (Tick, TickInfo)
-import Axis.Axis exposing (Axis)
+import Tick exposing (Tick)
+import Axis exposing (Axis)
 import Scale.Scale exposing (Scale)
 import Svg exposing (Svg, path, text', g, line)
-import Svg.Attributes exposing (d, fill, stroke, shapeRendering, transform, dy, textAnchor)
-import SvgAttributesExtra exposing (translate, rotate, y2, x2, x, y)
+import Svg.Attributes exposing (dy, textAnchor)
+import Extras.SvgAttributes exposing (translate, rotate, y2, x2, x, y)
 import Scale
+
+type alias TickInfo =
+  { label : String
+  , translation : (Float, Float)
+  }
 
 createTicks : Axis a b -> List Svg
 createTicks axis =

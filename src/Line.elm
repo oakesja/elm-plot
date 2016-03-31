@@ -1,6 +1,7 @@
 module Line where
 
-import Private.Models exposing (BoundingBox, Path)
+import Private.Models exposing (Path)
+import BoundingBox exposing (BoundingBox)
 
 type alias Point = { x : Float, y : Float }
 type alias Line = { p0 : Point, p1 : Point }

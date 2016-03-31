@@ -4,11 +4,15 @@ import Svg exposing (Svg, g, line)
 import Svg.Attributes exposing (d, stroke, strokeWidth)
 import Line.Interpolation exposing (linear)
 import Private.Models exposing (Points)
-import SvgAttributesExtra exposing (rotate, cx, cy, r, x, y, width, height, x1, x2, y1, y2)
+import Extras.SvgAttributes exposing (rotate, cx, cy, r, x, y, width, height, x1, x2, y1, y2)
 
 circle : Int -> List Svg.Attribute -> Float -> Float -> a -> b -> Svg
-circle radius additionalAttrs x y origX origY =
-  createSvg Svg.circle  additionalAttrs [cx x, cy y, r radius]
+circle radius additionalAttrs xPos yPos origX origY =
+  createSvg Svg.circle additionalAttrs
+    [ cx xPos
+    , cy yPos
+    , r radius
+    ]
 
 square : Float -> List Svg.Attribute -> Float -> Float -> a -> b -> Svg
 square length additionalAttrs xPos yPos origX origY =
@@ -21,7 +25,10 @@ square length additionalAttrs xPos yPos origX origY =
 
 diamond : Float -> List Svg.Attribute -> Float -> Float -> a -> b -> Svg
 diamond length additionalAttrs xPos yPos origX origY =
-  square length ((rotate (xPos, yPos) 45) :: additionalAttrs) xPos yPos origX origY
+  let
+    attrs = (rotate (xPos, yPos) 45) :: additionalAttrs
+  in
+    square length attrs xPos yPos origX origY
 
 triangleUp : Float -> List Svg.Attribute -> Float -> Float -> a -> b -> Svg
 triangleUp length additionalAttrs xPos yPos origX origY =
@@ -44,31 +51,31 @@ cross length additionalAttrs xPos yPos origX origY =
   let
     attrs =
       if List.isEmpty additionalAttrs then
-        [ stroke "black"]
+        [ stroke "black" ]
       else
         additionalAttrs
   in
-  g
-    additionalAttrs
-    [ line
-        ( [ x1 (xPos - length / 2)
-          , y1 (yPos - length / 2)
-          , x2 (xPos + length / 2)
-          , y2 (yPos + length / 2)
-          ] ++ attrs )
-        []
-    , line
-        ( [ x1 (xPos - length / 2)
-          , y1 (yPos + length / 2)
-          , x2 (xPos + length / 2)
-          , y2 (yPos - length / 2)
-          ] ++ attrs )
-        []
-    ]
+    g
+      additionalAttrs
+      [ line
+          ( [ x1 (xPos - length / 2)
+            , y1 (yPos - length / 2)
+            , x2 (xPos + length / 2)
+            , y2 (yPos + length / 2)
+            ] ++ attrs )
+          []
+      , line
+          ( [ x1 (xPos - length / 2)
+            , y1 (yPos + length / 2)
+            , x2 (xPos + length / 2)
+            , y2 (yPos - length / 2)
+            ] ++ attrs )
+          []
+      ]
 
 pathSvg : List Svg.Attribute -> Points Float Float -> Svg
 pathSvg additionalAttrs points =
-  createSvg Svg.path additionalAttrs [ d <| "M" ++ linear points]
+  createSvg Svg.path additionalAttrs [ d ("M" ++ linear points) ]
 
 createSvg : (List Svg.Attribute -> List Svg -> Svg) -> List Svg.Attribute -> List Svg.Attribute -> Svg
 createSvg svgFunc additionalAttrs posAttrs =

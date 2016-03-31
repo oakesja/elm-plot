@@ -3,7 +3,9 @@ module Test.Scale.OrdinalBandsTest where
 import Scale.OrdinalBands exposing (..)
 import ElmTest exposing (..)
 import Dict exposing (Dict)
-import Private.Models exposing (PointValue, Tick)
+import Private.Models exposing (PointValue)
+import Tick exposing (Tick)
+import Extras.Set as Set
 
 tests : Test
 tests =
@@ -19,7 +21,7 @@ createMappingTests : Test
 createMappingTests =
   let
     domain = ["a", "b", "c"]
-    range = (0, 120)
+    range = Set.createFromTuple (0, 120)
     expected = expectedMapping domain
   in
     suite "createMapping"
@@ -34,7 +36,7 @@ createMappingTests =
           <| Dict.toList (createMapping 0.2 0.1 domain range).lookup
       , test "with a descending range"
           <| assertEqual (expected [82.5, 45, 7.5] 30)
-          <| Dict.toList (createMapping 0.2 0.2 domain (120, 0)).lookup
+          <| Dict.toList (createMapping 0.2 0.2 domain (Set.createFromTuple (120, 0))).lookup
       ]
 
 expectedMapping : List String -> List Float -> Float -> List (String, PointValue String)
@@ -45,7 +47,7 @@ interpolateTests : Test
 interpolateTests =
   let
     domain = ["a", "b", "c"]
-    range = (0, 120)
+    range = Set.createFromTuple (0, 120)
     expected = expectedInterpolation domain
   in
     suite "interpolate"
@@ -61,7 +63,7 @@ uninterpolateTests : Test
 uninterpolateTests =
   let
     domain = ["a", "b", "c"]
-    range = (0, 120)
+    range = Set.createFromTuple (0, 120)
     expected = expectedInterpolation domain
   in
     suite "interpolate"
@@ -84,7 +86,7 @@ ticksTests : Test
 ticksTests =
   let
     domain = ["a", "b", "c"]
-    range = (0, 120)
+    range = Set.createFromTuple (0, 120)
   in
     suite "ticks"
       [ test "it creates ticks for the given mapping in the middle of the bands"
