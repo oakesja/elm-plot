@@ -1,14 +1,6 @@
-append additional svg to plot
-give option of width and height for range of scale
-negative dimensions
-negative margins
 arcs for pie charts
-change sets (domain and range) to be model instead of a tuple to clean up code in scales
-don't draw points outside of bounding box but how to handle lines and areas that cross bounding box
-consider doing grid lines separate from axises to allow when to draw and how many ticks
 better default colors for marks
 different interpolation methods
-different scales
 axis placement should be based on ranges of both axises not by bounding box (change range to start at non-zeros)
 
 events
@@ -19,10 +11,12 @@ plot
   - [x] margins (most components will need to wait to be created until margins are known)
   - [ ] additional svg
   - [x] top level style
+  - [x] title
 
 linear scales
   - [x] number of ticks
   - [ ] tick values instead of number of ticks
+  - [ ] height and width option for scale rather than number
 
 ordinal scales
   - [x] points
@@ -31,6 +25,7 @@ ordinal scales
     - check y axis and that horizontal bars
   - [ ] specified range
   - [ ] handle undefined points that are not in the domain
+  - [ ] height and width option for scale rather than number
 
 bars
   - [x] orient (horizonal or vertical)
@@ -61,7 +56,7 @@ axis
   - [x] style for inner ticks - default [fill "none", stroke "#000", shapeRendering "crispEdges"]
   - [ ] style for labels - default depends on orientation
   - [ ] tick format
-  - [ ] grid lines - default none
+  - [ ] grid lines - default none (consider doing separate from axises to allow when to draw and how many ticks)
   - [ ] grid line style - default none
   - [x] title - default none
   - [x] title offset

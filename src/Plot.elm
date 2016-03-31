@@ -18,6 +18,7 @@ import Json.Decode exposing (object2, (:=), float, Decoder)
 import ListExtra exposing (toList)
 import Scale.Type
 import Rules
+import Title
 
 type alias MouseInfo = { clientX: Float, clientY: Float }
 type alias MouseEvent a b = { x: a, y: b }
@@ -28,6 +29,7 @@ type alias Plot =
   , svgs: List (BoundingBox -> List Svg)
   , eventHandlers: List (BoundingBox -> Svg.Attribute)
   , attrs: List Svg.Attribute
+  , title : Title.Model
   }
 
 createPlot : Float -> Float -> Plot
@@ -37,7 +39,12 @@ createPlot w h =
   , svgs = []
   , eventHandlers = []
   , attrs = [width w, height h]
+  , title = Title.init
   }
+
+addTitle : String -> List Svg.Attribute -> Plot -> Plot
+addTitle title attrs plot =
+  { plot | title = Title.create title attrs }
 
 attributes : List Svg.Attribute -> Plot -> Plot
 attributes attrs plot =
@@ -120,11 +127,11 @@ onClick : Scale a b -> Scale d c -> (MouseEvent b c -> Signal.Message) -> Plot -
 onClick xScale yScale createMessage plot =
   let
     handler = \bBox ->
-        on "click" clickDecoder
-          <| \event -> createMessage
-              { x = Scale.uninterpolate (rescaleX bBox xScale) event.clientX
-              , y = Scale.uninterpolate (rescaleY bBox yScale) event.clientY
-              }
+      on "click" clickDecoder
+        <| \event -> createMessage
+            { x = Scale.uninterpolate (rescaleX bBox xScale) event.clientX
+            , y = Scale.uninterpolate (rescaleY bBox yScale) event.clientY
+            }
   in
     { plot | eventHandlers =  handler :: plot.eventHandlers }
 
@@ -133,10 +140,15 @@ toSvg : Plot -> Svg
 toSvg plot =
   let
     bBox = BoundingBox.from plot.dimensions plot.margins
-    svgs = List.concat (List.map (\s -> s bBox) plot.svgs)
+    plotElements = List.concat (List.map (\s -> s bBox) plot.svgs)
     events = List.map (\s -> s bBox) plot.eventHandlers
+    svgs =
+      if Title.isEmpty plot.title then
+        plotElements
+      else
+        plotElements ++ [Title.view plot.title bBox]
   in
-    svg (plot.attrs ++ events) svgs
+    svg (plot.attrs ++ events) (svgs)
 
 addRule : List a -> Scale x a -> List Svg.Attribute -> Rules.Direction -> (BoundingBox -> Scale x a -> Scale x a) -> Plot -> Plot
 addRule vals scale attrs direction rescale plot =

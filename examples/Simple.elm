@@ -31,6 +31,7 @@ main =
       |> verticalRules [50, 80] xScale []
       |> horizontalRules [50, 10] yScale []
       |> addArea area .x .y1 .y2 xScale yScale linear []
+      |> addTitle "really cool title" []
       |> toSvg
 
 xScale =
