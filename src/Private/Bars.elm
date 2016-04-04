@@ -1,6 +1,6 @@
 module Private.Bars where
 
-import Private.Models exposing (InterpolatedPoint)
+import Private.Point exposing (InterpolatedPoint)
 import Private.BoundingBox exposing (BoundingBox)
 import Svg exposing (Svg, rect)
 import Private.Extras.SvgAttributes exposing (x, y, height, width)

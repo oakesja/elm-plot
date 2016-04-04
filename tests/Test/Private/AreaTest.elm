@@ -9,12 +9,11 @@ import Test.TestUtils.Point exposing (createPoints)
 
 tests : Test
 tests =
-  suite "Area"
+  suite "Private.Area"
     [ interpolateTests
     , pathStringTests
     ]
 
--- TODO add test for clipping
 interpolateTests : Test
 interpolateTests =
   let

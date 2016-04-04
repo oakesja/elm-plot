@@ -3,10 +3,10 @@ module Private.Axis.Title where
 import Svg exposing (Svg, text, text')
 import Svg.Attributes exposing (textAnchor)
 import Plot.Axis as Axis exposing (Orient)
-import Private.Extras.Set exposing (Extent)
+import Private.Extras.Set exposing (Set)
 import Private.Extras.SvgAttributes exposing (rotate, x, y)
 
-createTitle : Extent -> Orient -> Int -> Int -> List Svg.Attribute -> Maybe Int ->  Maybe String -> List Svg
+createTitle : Set -> Orient -> Int -> Int -> List Svg.Attribute -> Maybe Int ->  Maybe String -> List Svg
 createTitle extent orient innerTickSize tickPadding attrs offset title =
   case title of
     Just s ->
@@ -14,13 +14,13 @@ createTitle extent orient innerTickSize tickPadding attrs offset title =
     Nothing ->
       []
 
-titleSvg : Extent -> Orient -> Int -> Int -> List Svg.Attribute -> Maybe Int -> String -> Svg
+titleSvg : Set -> Orient -> Int -> Int -> List Svg.Attribute -> Maybe Int -> String -> Svg
 titleSvg extent orient innerTickSize tickPadding attrs offset title =
   text'
     (titleAttrs extent orient innerTickSize tickPadding attrs offset)
     [text title]
 
-titleAttrs : Extent -> Orient -> Int -> Int -> List Svg.Attribute -> Maybe Int -> List Svg.Attribute
+titleAttrs : Set -> Orient -> Int -> Int -> List Svg.Attribute -> Maybe Int -> List Svg.Attribute
 titleAttrs extent orient innerTickSize tickPadding attrs offset =
   let
     middle = ((extent.end - extent.start) / 2) + extent.start

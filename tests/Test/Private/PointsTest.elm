@@ -6,9 +6,8 @@ import Plot.Scale as Scale
 
 tests : Test
 tests =
-  suite "Points"
-        [ interpolateTests
-        ]
+  suite "Private.Points"
+        [ interpolateTests ]
 
 interpolateTests : Test
 interpolateTests =

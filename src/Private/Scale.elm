@@ -1,14 +1,14 @@
 module Private.Scale where
 
-import Private.Extras.Set as Set exposing (Range)
+import Private.Extras.Set as Set exposing (Set)
 import Private.Tick exposing (Tick)
-import Private.Models exposing (PointValue)
+import Private.PointValue exposing (PointValue)
 
 type alias Scale a b =
   { domain : a
-  , range : Range
-  , interpolate : (a -> Range -> b -> PointValue b)
-  , uninterpolate : (a -> Range -> Float -> b)
-  , createTicks : (a -> Range -> List Tick)
+  , range : Set
+  , interpolate : (a -> Set -> b -> PointValue b)
+  , uninterpolate : (a -> Set -> Float -> b)
+  , createTicks : (a -> Set -> List Tick)
   , inDomain : (a -> b -> Bool)
   }

@@ -3,7 +3,7 @@ module Plot.Symbols (circle, square, diamond, triangleUp, triangleDown, cross) w
 import Svg exposing (Svg, g, line)
 import Svg.Attributes exposing (d, stroke, strokeWidth)
 import Plot.Interpolation exposing (linear)
-import Private.Models exposing (Points)
+import Private.Points exposing (Points)
 import Private.Extras.SvgAttributes exposing (rotate, cx, cy, r, x, y, width, height, x1, x2, y1, y2)
 
 circle : Int -> List Svg.Attribute -> Float -> Float -> a -> b -> Svg

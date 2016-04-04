@@ -2,7 +2,7 @@ module Private.Axis.Ticks where
 
 import Plot.Axis as Axis exposing (Orient, Axis)
 import Private.Tick exposing (Tick)
-import Plot.Scale as Scale
+import Private.Scale.Utils as Scale
 import Private.Scale exposing (Scale)
 import Svg exposing (Svg, path, text', g, line)
 import Svg.Attributes exposing (dy, textAnchor)

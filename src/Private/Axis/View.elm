@@ -23,7 +23,6 @@ toSvg axis =
           , AxisTitle.createTitle extent axis.orient axis.innerTickSize axis.tickPadding axis.titleAttributes axis.titleOffset axis.title
           ]
 
--- TODO very similar to function in Plot.Scale
 calculateAxisExtent : BoundingBox -> Orient -> Set -> Set
 calculateAxisExtent bBox orient set =
   let
@@ -34,10 +33,7 @@ calculateAxisExtent bBox orient set =
       else
         Set.create (max extent.start bBox.yStart) (min extent.end bBox.yEnd)
   in
-    if Set.isDescending set then
-      Set.reverse calc
-    else
-      calc
+    Set.extentOf(calc)
 
 axisTranslation : BoundingBox -> Orient -> Svg.Attribute
 axisTranslation bBox orient =
@@ -70,7 +66,6 @@ pathString bBox scale orient tickSize =
     extent = Set.extentOf scale.range
     start = extent.start
     end = extent.end
-    -- TODO try and create a single case statement
     path = case orient of
       Axis.Top ->
         verticalAxisString bBox -tickSize start end

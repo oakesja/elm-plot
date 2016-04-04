@@ -1,8 +1,8 @@
 module Private.Rules where
 
-import Plot.Scale as Scale
+import Private.Scale.Utils as Scale
 import Private.Scale exposing (Scale)
-import Private.Models exposing (PointValue)
+import Private.PointValue exposing (PointValue)
 import Private.BoundingBox exposing (BoundingBox)
 import Svg exposing (Svg, line)
 import Svg.Attributes exposing (stroke)

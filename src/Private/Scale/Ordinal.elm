@@ -3,7 +3,7 @@ module Private.Scale.Ordinal where
 import Dict exposing (Dict)
 import Private.Extras.List exposing (find)
 import Private.Extras.String exposing (maybeStringToString)
-import Private.Models exposing (PointValue)
+import Private.PointValue exposing (PointValue)
 import Private.Tick exposing (Tick)
 
 type alias OrdinalMapping =

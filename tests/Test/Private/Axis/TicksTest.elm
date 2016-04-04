@@ -8,11 +8,11 @@ import Svg.Attributes exposing (x, y, y2, x2, dy, textAnchor, transform)
 
 tests : Test
 tests =
-  suite "Axis.Svg"
-        [ createTickInfosTests
-        , innerTickLineAttributesTests
-        , labelAttributesTests
-        ]
+  suite "Private.Axis.Ticks"
+    [ createTickInfosTests
+    , innerTickLineAttributesTests
+    , labelAttributesTests
+    ]
 
 createTickInfosTests : Test
 createTickInfosTests =

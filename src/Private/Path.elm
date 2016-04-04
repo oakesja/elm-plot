@@ -1,15 +1,15 @@
 module Private.Path where
 
-import Private.Models exposing (Points, Path, Point)
 import Plot.Interpolation exposing (Interpolation)
 import Private.BoundingBox exposing (BoundingBox)
 import Private.Scale exposing (Scale)
-import Private.Point as Point
+import Private.Point as Point exposing (Point)
 import Svg exposing (Svg, path, g)
 import Svg.Attributes exposing (d, stroke, strokeWidth, fill)
 import Private.Line exposing (clipPath)
 
--- TODO add test
+type alias Path a b = List (Point a b)
+
 interpolate : BoundingBox -> Scale x a -> Scale y b -> Path a b -> List (Path Float Float)
 interpolate bBox xScale yScale path =
   let
@@ -44,6 +44,6 @@ pathToSvg intMethod attrs p =
     ((d <| "M" ++ intMethod (linePositions p)) :: attributes)
     []
 
-linePositions : Path Float Float -> Points Float Float
+linePositions : Path Float Float -> Path Float Float
 linePositions path =
   List.map (\p -> {x = p.x, y = p.y}) path

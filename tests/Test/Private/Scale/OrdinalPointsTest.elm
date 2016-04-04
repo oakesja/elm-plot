@@ -2,27 +2,27 @@ module Test.Private.Scale.OrdinalPointsTest where
 
 import Private.Scale.OrdinalPoints exposing (..)
 import ElmTest exposing (..)
-import Private.Models exposing (PointValue)
-import Private.Tick exposing (Tick)
 import Dict exposing (Dict)
 import Private.Extras.Set as Set
+import Private.PointValue exposing (PointValue)
+import Test.TestUtils.Ordinal exposing (expectedInterpolation, expectedTicks, expectedMapping)
 
 tests : Test
 tests =
-  suite "Scale.OrdinalPoints"
-        [ createMappingTests
-        , interpolateTests
-        , uninterpolateTests
-        , ticksTests
-        , inDomainTests
-        ]
+  suite "Private.Scale.OrdinalPoints"
+    [ createMappingTests
+    , interpolateTests
+    , uninterpolateTests
+    , ticksTests
+    , inDomainTests
+    ]
 
 createMappingTests : Test
 createMappingTests =
   let
     domain = ["a", "b", "c"]
     range = Set.createFromTuple (0, 120)
-    expected = expectedMapping domain
+    expected = expectedMapping domain 0
   in
     suite "createMapping"
       [ test "without padding"
@@ -42,16 +42,12 @@ createMappingTests =
           <| Dict.toList (createMapping 2 domain (Set.createFromTuple (120, 0))).lookup
       ]
 
-expectedMapping : List String -> List Float -> List (String, PointValue String)
-expectedMapping domain values =
-    List.map2 (\d v -> (d, { value = v, width = 0, originalValue = d })) domain values
-
 interpolateTests : Test
 interpolateTests =
   let
     domain = ["a", "b", "c"]
     range = Set.createFromTuple (0, 120)
-    expected = expectedInterpolation domain
+    expected = expectedInterpolation domain 0
   in
     suite "interpolate"
       [ test "for inputs inside the domain"
@@ -61,11 +57,6 @@ interpolateTests =
           <| assertEqual {value = 0, width = 0, originalValue = "d"}
           <| interpolate (createMapping 0) domain range "d"
       ]
-
--- TODO abstract
-expectedInterpolation : List String -> List Float -> List (PointValue String)
-expectedInterpolation domain values =
-  List.map2 (\d v -> { value = v, width = 0, originalValue = d }) domain values
 
 uninterpolateTests : Test
 uninterpolateTests =
@@ -97,11 +88,6 @@ ticksTests =
           <| assertEqual (expectedTicks [0, 60, 120] domain)
           <| createTicks (createMapping 0) domain range
       ]
-
--- TODO abstract
-expectedTicks : List Float -> List String -> List Tick
-expectedTicks values domain =
-  List.map2 (\v d-> { position = v, label = d }) values domain
 
 inDomainTests : Test
 inDomainTests =

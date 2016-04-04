@@ -8,17 +8,16 @@ import Test.TestUtils.Sets exposing (assertSet)
 
 tests : Test
 tests =
-  suite "Scale.Linear"
-        [ interpolateTests
-        , uninterpolateTests
-        , createTicksTests
-        , zoomTests
-        , panTests
-        , panInPixelsTests
-        , inDomainTests
-        ]
+  suite "Private.Scale.Linear"
+    [ interpolateTests
+    , uninterpolateTests
+    , createTicksTests
+    , zoomTests
+    , panTests
+    , panInPixelsTests
+    , inDomainTests
+    ]
 
--- TODO assert point value
 interpolateTests : Test
 interpolateTests =
   let

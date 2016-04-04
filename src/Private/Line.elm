@@ -1,10 +1,13 @@
 module Private.Line where
 
-import Private.Models exposing (Path)
+import Private.Point exposing (Point)
 import Private.BoundingBox exposing (BoundingBox)
 
-type alias Point = { x : Float, y : Float }
-type alias Line = { p0 : Point, p1 : Point }
+type alias Path a b = List (Point a b)
+type alias Line =
+  { p0 : Point Float Float
+  , p1 : Point Float Float
+  }
 
 clipPath : BoundingBox -> Path Float Float -> List (Path Float Float)
 clipPath bBox path =
@@ -26,7 +29,6 @@ pathToLines path =
         Nothing ->
           []
 
--- TODO this is awful, find a better solution
 linesToPath : List (Maybe Line) -> Path Float Float -> List (Path Float Float) -> List (Path Float Float)
 linesToPath lines currentPath paths =
   case lines of
@@ -82,19 +84,19 @@ clip bBox line =
     else
       Just (Line clippedStart clippedEnd)
 
-leftCheck : Point -> Float -> BoundingBox -> (Float, Float) -> (Float, Float)
+leftCheck : Point Float Float -> Float -> BoundingBox -> (Float, Float) -> (Float, Float)
 leftCheck p0 xDelta bBox times =
   updateTimes -xDelta -(bBox.xStart - p0.x) times
 
-bottomCheck : Point -> Float -> BoundingBox -> (Float, Float) -> (Float, Float)
+bottomCheck : Point Float Float -> Float -> BoundingBox -> (Float, Float) -> (Float, Float)
 bottomCheck p0 yDelta bBox times =
   updateTimes -yDelta -(bBox.yStart - p0.y) times
 
-rightCheck : Point -> Float -> BoundingBox -> (Float, Float) -> (Float, Float)
+rightCheck : Point Float Float -> Float -> BoundingBox -> (Float, Float) -> (Float, Float)
 rightCheck p0 xDelta bBox times =
   updateTimes xDelta (bBox.xEnd - p0.x) times
 
-topCheck : Point -> Float -> BoundingBox -> (Float, Float) -> (Float, Float)
+topCheck : Point Float Float -> Float -> BoundingBox -> (Float, Float) -> (Float, Float)
 topCheck p0 yDelta bBox times =
   updateTimes yDelta (bBox.yEnd - p0.y) times
 

@@ -1,12 +1,12 @@
 module Private.Scale.Linear (interpolate, createTicks, uninterpolate, pan, zoom, panInPixels, inDomain) where
 
 import Private.Extras.Float exposing (ln, roundTo)
-import Private.Models exposing (PointValue)
+import Private.PointValue exposing (PointValue)
 import Private.Tick as Tick exposing (Tick)
-import Private.Extras.Set as Set exposing (Domain, Range, Set)
+import Private.Extras.Set as Set exposing (Set)
 import Plot.Zoom as Zoom
 
-interpolate : Domain -> Range -> Float -> PointValue Float
+interpolate : Set -> Set -> Float -> PointValue Float
 interpolate domain range x =
   let
     value =
@@ -17,14 +17,14 @@ interpolate domain range x =
   in
     { value = value, width = 0, originalValue = x }
 
-uninterpolate : Domain -> Range -> Float -> Float
+uninterpolate : Set -> Set -> Float -> Float
 uninterpolate domain range y =
   if range.start == range.end then
     domain.start
   else
     ((y - range.start) * (domain.end - domain.start) / (range.end - range.start)) + domain.start
 
-zoom : Domain -> Float -> Zoom.Direction -> Domain
+zoom : Set -> Float -> Zoom.Direction -> Set
 zoom domain percentZoom direction =
   let
     change = (domain.end - domain.start) * percentZoom
@@ -35,11 +35,11 @@ zoom domain percentZoom direction =
       Zoom.In ->
         Set.create (domain.start + change) (domain.end - change)
 
-pan : Domain -> Float -> Domain
+pan : Set -> Float -> Set
 pan domain change =
   Set.create (domain.start + change) (domain.end + change)
 
-panInPixels : Domain -> Range -> Float -> Domain
+panInPixels : Set -> Set -> Float -> Set
 panInPixels domain range pxChange =
   let
     dExtent = Set.extentOf domain
@@ -51,7 +51,7 @@ panInPixels domain range pxChange =
     else
       pan domain change
 
-inDomain : Domain -> Float -> Bool
+inDomain : Set -> Float -> Bool
 inDomain domain x =
   let
     extent = Set.extentOf (domain)
@@ -59,7 +59,7 @@ inDomain domain x =
     (x >= extent.start) && (x <= extent.end)
 
 -- https://github.com/mbostock/d3/blob/78ce531f79e82275fe50f975e784ee2be097226b/src/scale/linear.js#L96
-createTicks : Int -> Domain -> Range -> List Tick
+createTicks : Int -> Set -> Set -> List Tick
 createTicks numTicks domain range =
   let
     extent = Set.extentOf domain
@@ -70,7 +70,7 @@ createTicks numTicks domain range =
     makeTicks min max step
       |> List.map (createTick (significantDigits step) domain range)
 
-createTick : Int -> Domain -> Range -> Float -> Tick
+createTick : Int -> Set -> Set -> Float -> Tick
 createTick sigDigits domain range position =
   Tick.create
     (roundTo (interpolate domain range position).value sigDigits)

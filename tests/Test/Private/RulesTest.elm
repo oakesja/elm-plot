@@ -8,9 +8,8 @@ import Svg.Attributes exposing (stroke)
 
 tests : Test
 tests =
-  suite "Rules"
-    [ lineAttrsTests
-    ]
+  suite "Private.Rules"
+    [ lineAttrsTests ]
 
 lineAttrsTests : Test
 lineAttrsTests =

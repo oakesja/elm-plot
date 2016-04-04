@@ -8,10 +8,10 @@ import ElmTest exposing (..)
 
 tests : Test
 tests =
-  suite "Axis.Axis"
-        [ createTitleTests
-        , titleAttrsTests
-        ]
+  suite "Private.Axis.Title"
+    [ createTitleTests
+    , titleAttrsTests
+    ]
 
 createTitleTests : Test
 createTitleTests =

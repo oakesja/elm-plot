@@ -1,21 +1,21 @@
-module Private.Polygon where
+module Private.Polygon (clip) where
 
 import Private.BoundingBox exposing (BoundingBox)
+import Private.Point as Point exposing (Point)
 
--- TODO use other Point
-type alias Point = { x : Float , y : Float}
-type alias PosCheck = (Point -> Bool)
+type alias FPoint = Point Float Float
+type alias PosCheck = (FPoint -> Bool)
 
 -- Uses Sutherland-Hodgman Polygon Clipping algorithm
 -- https://www.cs.helsinki.fi/group/goa/viewing/leikkaus/intro2.html
-clip : BoundingBox -> List Point -> List Point
+clip : BoundingBox -> List FPoint -> List FPoint
 clip bBox points =
   clipLeft bBox points
     |> clipRight bBox
     |> clipTop bBox
     |> clipBottom bBox
 
-clipLeft : BoundingBox -> List Point -> List Point
+clipLeft : BoundingBox -> List FPoint -> List FPoint
 clipLeft bBox points =
   let
     intersection = \p1 p2 ->
@@ -23,11 +23,11 @@ clipLeft bBox points =
         slope = (p2.y - p1.y) / (p2.x - p1.x)
         y = slope * (bBox.xStart - p1.x) + p1.y
       in
-        Point bBox.xStart y
+        Point.create bBox.xStart y
   in
     clipSide (\p -> p.x >= bBox.xStart) intersection (appendHead points)
 
-clipRight : BoundingBox -> List Point -> List Point
+clipRight : BoundingBox -> List FPoint -> List FPoint
 clipRight bBox points =
   let
     intersection = \p1 p2 ->
@@ -35,11 +35,11 @@ clipRight bBox points =
         slope = (p2.y - p1.y) / (p2.x - p1.x)
         y = slope * (bBox.xEnd - p1.x) + p1.y
       in
-        Point bBox.xEnd y
+        Point.create bBox.xEnd y
   in
     clipSide (\p -> p.x <= bBox.xEnd) intersection (appendHead points)
 
-clipBottom : BoundingBox -> List Point -> List Point
+clipBottom : BoundingBox -> List FPoint -> List FPoint
 clipBottom bBox points =
   let
     intersection = \p1 p2 ->
@@ -47,11 +47,11 @@ clipBottom bBox points =
         slope = (p2.y - p1.y) / (p2.x - p1.x)
         x = p1.x + (bBox.yStart - p1.y) / slope
       in
-        Point x bBox.yStart
+        Point.create x bBox.yStart
   in
     clipSide (\p -> p.y >= bBox.yStart) intersection (appendHead points)
 
-clipTop : BoundingBox -> List Point -> List Point
+clipTop : BoundingBox -> List FPoint -> List FPoint
 clipTop bBox points =
   let
     intersection = \p1 p2 ->
@@ -59,11 +59,11 @@ clipTop bBox points =
         slope = (p2.y - p1.y) / (p2.x - p1.x)
         x = p1.x + (bBox.yEnd - p1.y) / slope
       in
-        Point x bBox.yEnd
+        Point.create x bBox.yEnd
   in
     clipSide (\p -> p.y <= bBox.yEnd) intersection (appendHead points)
 
-clipSide : (Point -> Bool) -> (Point -> Point -> Point) -> List Point -> List Point
+clipSide : (FPoint -> Bool) -> (FPoint -> FPoint -> FPoint) -> List FPoint -> List FPoint
 clipSide insideClipRegion intersection points =
   case points of
     [] ->

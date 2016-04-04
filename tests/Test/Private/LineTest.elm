@@ -3,13 +3,15 @@ module Test.Private.LineTest where
 import Private.Line exposing (..)
 import Private.BoundingBox as BoundingBox exposing (BoundingBox)
 import ElmTest exposing (..)
+import Test.TestUtils.Point exposing (createPoint)
+import Private.Point exposing (Point)
 
 tests : Test
 tests =
-  suite "Line"
-        [ clipPathTests
-        , clipTests
-        ]
+  suite "Private.Line"
+    [ clipPathTests
+    , clipTests
+    ]
 
 clipPathTests : Test
 clipPathTests =
@@ -17,27 +19,23 @@ clipPathTests =
     clipPath' = \pts -> clipPath bBox (List.map createPoint pts)
   in
     suite "clipPath"
-        [ test "when all lines in the path do not need to be clipped"
-            <| assertPoints [[(1, 1), (1.5, 1.5), (2, 2)]]
-            <| clipPath' [(1, 1), (1.5, 1.5), (2, 2)]
-        , test "when some of the lines are outside of the bounding box"
-            <| assertPoints [[(1.5, 1), (2, 1.5)]]
-            <| clipPath' [(1.5, 1), (2.5, 2), (3, 3)]
-        , test "when a path is split in two because parts of two lines are outside the bounding box"
-            <| assertPoints [[(1.5, 1), (2, 1.25)], [(2, 1.75), (1.5, 2)]]
-            <| clipPath' [(1.5, 1), (2.5, 1.5), (1.5, 2)]
-        , test "when a path is split in two because a line is outside the bounding box"
-            <| assertPoints [[(1.5, 1), (2, 1.5)], [(2, 1.5), (1.5, 2)]]
-            <| clipPath' [(1.5, 1), (2.5, 2), (2.5, 1), (1.5, 2) ]
-        ]
+      [ test "when all lines in the path do not need to be clipped"
+          <| assertPoints [[(1, 1), (1.5, 1.5), (2, 2)]]
+          <| clipPath' [(1, 1), (1.5, 1.5), (2, 2)]
+      , test "when some of the lines are outside of the bounding box"
+          <| assertPoints [[(1.5, 1), (2, 1.5)]]
+          <| clipPath' [(1.5, 1), (2.5, 2), (3, 3)]
+      , test "when a path is split in two because parts of two lines are outside the bounding box"
+          <| assertPoints [[(1.5, 1), (2, 1.25)], [(2, 1.75), (1.5, 2)]]
+          <| clipPath' [(1.5, 1), (2.5, 1.5), (1.5, 2)]
+      , test "when a path is split in two because a line is outside the bounding box"
+          <| assertPoints [[(1.5, 1), (2, 1.5)], [(2, 1.5), (1.5, 2)]]
+          <| clipPath' [(1.5, 1), (2.5, 2), (2.5, 1), (1.5, 2) ]
+      ]
 
-assertPoints : List (List (Float, Float)) -> List (List Point) -> Assertion
+assertPoints : List (List (Float, Float)) -> List (List (Point Float Float)) -> Assertion
 assertPoints points actual =
   assertEqual (List.map (List.map createPoint) points) actual
-
-createPoint : (Float, Float) -> Point
-createPoint p =
-  Point (fst p) (snd p)
 
 clipTests : Test
 clipTests =

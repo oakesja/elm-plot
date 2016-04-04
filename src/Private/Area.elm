@@ -1,19 +1,22 @@
 module Private.Area where
 
-import Private.Models exposing (Point)
+import Private.Point exposing (Point)
 import Plot.Interpolation exposing (Interpolation)
 import Private.BoundingBox exposing (BoundingBox)
-import Plot.Scale as Scale
+import Private.Scale.Utils as Scale
 import Private.Scale as Scale exposing (Scale)
 import Svg exposing (Svg, path, g)
 import Svg.Attributes exposing (d, stroke, strokeWidth)
 import Private.Polygon as Polygon
 
-type alias AreaPoint a b = { x : a, y : b, y2 : b }
+type alias AreaPoint a b =
+  { x : a
+  , y : b
+  , y2 : b
+  }
 type alias Area a b = List (AreaPoint a b)
 type alias InterpolatedArea = List (Point Float Float)
 
--- TODO use point constructor
 interpolate : BoundingBox -> Scale x a -> Scale y b -> Area a b -> InterpolatedArea
 interpolate bBox xScale yScale area =
   let

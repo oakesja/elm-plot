@@ -24,8 +24,16 @@ create xStart xEnd yStart yEnd =
 
 from : Dimensions -> Margins -> BoundingBox
 from dim marg =
-  create
-    marg.left
-    (dim.width - marg.right)
-    marg.top
-    (dim.height - marg.bottom)
+  let
+    bBox = create
+              marg.left
+              (dim.width - marg.right)
+              marg.top
+              (dim.height - marg.bottom)
+  in
+    if bBox.xStart > bBox.xEnd then
+      init
+    else if bBox.yStart > bBox.yEnd then
+      init
+    else
+      bBox

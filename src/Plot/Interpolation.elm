@@ -1,6 +1,6 @@
 module Plot.Interpolation (Interpolation, linear) where
 
-import Private.Models exposing (Points)
+import Private.Points exposing (Points)
 
 type alias Interpolation = Points Float Float -> String
 

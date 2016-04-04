@@ -1,10 +1,12 @@
-module Private.Points (interpolate, toSvg) where
+module Private.Points (Points, InterpolatedPoints, interpolate, toSvg) where
 
-import Private.Models exposing (Points, InterpolatedPoints, PointValue, Point)
-import Plot.Scale as Scale
+import Private.Scale.Utils as Scale
 import Private.Scale exposing (Scale)
-import Private.Point as Point
+import Private.Point as Point exposing (InterpolatedPoint, Point)
 import Svg exposing (Svg, rect)
+
+type alias Points a b = List (Point a b)
+type alias InterpolatedPoints a b = List (InterpolatedPoint a b)
 
 interpolate : Scale x a -> Scale y b -> Points a b -> InterpolatedPoints a b
 interpolate xScale yScale points =

@@ -2,7 +2,7 @@ module Plot.Events (MouseEvent, onClick) where
 
 import Json.Decode exposing (object2, (:=), float, Decoder)
 import Html.Events exposing (on)
-import Plot.Scale as Scale
+import Private.Scale.Utils as Scale
 import Private.Scale exposing (Scale)
 import Svg exposing (Svg)
 import Private.BoundingBox exposing (BoundingBox)

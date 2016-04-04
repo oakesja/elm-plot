@@ -1,14 +1,13 @@
 module Test.Plot.InterpolationTest where
 
 import Plot.Interpolation exposing (..)
-import Private.Models exposing (Points)
 import ElmTest exposing (..)
+import Test.TestUtils.Point exposing (createPoints)
 
 tests : Test
 tests =
-  suite "Line.InterpolationTest"
-        [ linearTests
-        ]
+  suite "Plot.Interpolation"
+    [ linearTests ]
 
 linearTests : Test
 linearTests =
@@ -23,7 +22,3 @@ linearTests =
       <| assertEqual "1,2L3,4"
       <| linear (createPoints [(1, 2), (3, 4)])
     ]
-
-createPoints : List (Float, Float) -> Points Float Float
-createPoints values =
-  List.map (\p -> {x = fst p, y = snd p}) values

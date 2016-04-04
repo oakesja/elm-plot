@@ -6,7 +6,7 @@ import Test.Private.Axis.TicksTest
 import Test.Private.Axis.TitleTest
 import Test.Plot.InterpolationTest
 import Test.Private.Scale.LinearTest
-import Test.Private.SetsTest
+import Test.Private.Extras.SetTest
 import Test.Private.Extras.FloatTest
 import Test.Private.Scale.OrdinalPointsTest
 import Test.Private.Scale.OrdinalBandsTest
@@ -17,8 +17,9 @@ import Test.Private.PolygonTest
 import Test.Private.BoundingBoxTest
 import Test.Private.AreaTest
 import Test.Private.RulesTest
+import Test.Private.Scale.UtilsTest
 
--- TODO autogenerate this
+-- TODO autogenerate this file
 tests : Test
 tests =
   suite "All Tests"
@@ -37,7 +38,8 @@ tests =
     , Test.Private.PointsTest.tests
     , Test.Private.PolygonTest.tests
     , Test.Private.RulesTest.tests
-    , Test.Private.SetsTest.tests
+    , Test.Private.Extras.SetTest.tests
+    , Test.Private.Scale.UtilsTest.tests
     ]
 
 port runner : Signal (Task.Task x ())

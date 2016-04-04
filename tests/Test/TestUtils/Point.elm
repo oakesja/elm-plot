@@ -1,6 +1,6 @@
 module Test.TestUtils.Point where
 
-import Private.Models exposing (Point)
+import Private.Point as Point exposing (Point)
 
 createPoints : List (Float, Float) -> List (Point Float Float)
 createPoints points =
@@ -8,4 +8,4 @@ createPoints points =
 
 createPoint : (Float, Float) -> Point Float Float
 createPoint point =
-  Point (fst point) (snd point)
+  Point.create (fst point) (snd point)

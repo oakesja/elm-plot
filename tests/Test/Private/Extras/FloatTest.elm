@@ -5,7 +5,7 @@ import ElmTest exposing (..)
 
 tests : Test
 tests =
-  suite "FloatExtra"
+  suite "Private.Extras.Float"
     [ lnTests
     , roundTests
     ]

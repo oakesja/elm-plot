@@ -7,9 +7,8 @@ import Private.BoundingBox as BoundingBox
 
 tests : Test
 tests =
-  suite "BoundingBox"
-    [ barAttrsTests
-    ]
+  suite "Private.Bars"
+    [ barAttrsTests ]
 
 barAttrsTests : Test
 barAttrsTests =

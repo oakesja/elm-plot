@@ -6,7 +6,7 @@ import Private.Dimensions exposing (Dimensions)
 import Private.Margins as Margins exposing (Margins)
 import Plot.Interpolation exposing (Interpolation)
 import Private.BoundingBox as BoundingBox exposing (BoundingBox)
-import Plot.Scale as Scale
+import Private.Scale.Utils as Scale
 import Private.Scale exposing (Scale)
 import Plot.Axis as Axis exposing (Axis)
 import Private.Bars as Bars exposing (Orient)
@@ -50,61 +50,45 @@ margins : Margins -> Plot -> Plot
 margins m plot =
   { plot | margins = m }
 
--- TODO remove duplication of (Scale.rescaleX bBox xScale) (Scale.rescaleY bBox yScale)
 addPoints : List a -> (a -> b) -> (a -> c) -> Scale x b -> Scale y c -> (Float -> Float -> b -> c -> Svg) -> Plot -> Plot
 addPoints points getX getY xScale yScale pointToSvg plot =
   let
-    svg = \bBox ->
+    toSvg = \bBox xScale yScale ->
       List.map (\p -> { x = getX p, y = getY p }) points
-        |> Points.interpolate (Scale.rescaleX bBox xScale) (Scale.rescaleY bBox yScale)
+        |> Points.interpolate xScale yScale
         |> Points.toSvg pointToSvg
   in
-    addSvg svg plot
+    addSvgWithTwoScales toSvg xScale yScale plot
 
--- TODO Element.interpolate and interpolation method is confusioning
 addLines : List a ->  (a -> b) -> (a -> c) -> Scale x b -> Scale y c -> Interpolation -> List Svg.Attribute -> Plot -> Plot
 addLines points getX getY xScale yScale intMethod attrs plot =
   let
-    svg = \bBox ->
+    toSvg = \bBox xScale yScale ->
       List.map (\p -> { x = getX p, y = getY p }) points
-        |> Path.interpolate bBox (Scale.rescaleX bBox xScale) (Scale.rescaleY bBox yScale)
+        |> Path.interpolate bBox xScale yScale
         |> Path.toSvg intMethod attrs
         |> toList
   in
-    addSvg svg plot
+    addSvgWithTwoScales toSvg xScale yScale plot
 
 addArea : List a ->  (a -> b) -> (a -> c) -> (a -> c) -> Scale x b -> Scale y c -> Interpolation -> List Svg.Attribute -> Plot -> Plot
 addArea points getX getY getY2 xScale yScale intMethod attrs plot =
   let
-    svg = \bBox ->
+    toSvg = \bBox xScale yScale ->
       List.map (\p -> { x = getX p, y = getY p, y2 = getY2 p }) points
-        |> Area.interpolate bBox (Scale.rescaleX bBox xScale) (Scale.rescaleY bBox yScale)
+        |> Area.interpolate bBox xScale yScale
         |> Area.toSvg intMethod attrs
         |> toList
   in
-    addSvg svg plot
+    addSvgWithTwoScales toSvg xScale yScale plot
 
--- TODO cleanup add bars
 addVerticalBars : List a -> (a -> b) -> (a -> c) -> Scale x b -> Scale y c -> List Svg.Attribute -> Plot -> Plot
 addVerticalBars points getX getY xScale yScale attrs plot =
-  let
-    svg = \bBox ->
-      List.map (\p -> { x = getX p, y = getY p }) points
-        |> Points.interpolate (Scale.rescaleX bBox xScale) (Scale.rescaleY bBox yScale)
-        |> Bars.toSvg bBox Bars.Vertical attrs
-  in
-    addSvg svg plot
+  addBars points getX getY xScale yScale attrs Bars.Vertical plot
 
--- TODO consider doing add vertical and add horizontal bars
 addHorizontalBars : List a -> (a -> b) -> (a -> c) -> Scale x b -> Scale y c -> List Svg.Attribute -> Plot -> Plot
 addHorizontalBars points getX getY xScale yScale attrs plot =
-  let
-    svg = \bBox ->
-      List.map (\p -> { x = getX p, y = getY p }) points
-        |> Points.interpolate (Scale.rescaleX bBox xScale) (Scale.rescaleY bBox yScale)
-        |> Bars.toSvg bBox Bars.Horizontal attrs
-  in
-    addSvg svg plot
+  addBars points getX getY xScale yScale attrs Bars.Horizontal plot
 
 addAxis : Axis a b -> Plot -> Plot
 addAxis axis plot =
@@ -121,7 +105,7 @@ addAxis axis plot =
               , boundingBox = bBox
             }
       in
-        [AxisView.toSvg a]
+        [ AxisView.toSvg a ]
   in
     addSvg svg plot
 
@@ -133,7 +117,6 @@ addHorizontalRules : List a -> Scale x a -> List Svg.Attribute -> Plot -> Plot
 addHorizontalRules vals scale attrs plot =
   addRule vals scale attrs Rules.Horizontal Scale.rescaleY plot
 
--- TODO look into an abstract addEvent function
 onClick : Scale a b -> Scale d c -> (MouseEvent b c -> Signal.Message) -> Plot -> Plot
 onClick xScale yScale createMessage plot =
   let
@@ -163,6 +146,24 @@ addRule vals scale attrs direction rescale plot =
         |> Rules.toSvg bBox attrs direction
   in
     addSvg svg plot
+
+addBars : List a -> (a -> b) -> (a -> c) -> Scale x b -> Scale y c -> List Svg.Attribute -> Bars.Orient -> Plot -> Plot
+addBars points getX getY xScale yScale attrs orient plot =
+  let
+    toSvg = \bBox xScale yScale ->
+      List.map (\p -> { x = getX p, y = getY p }) points
+        |> Points.interpolate xScale yScale
+        |> Bars.toSvg bBox orient attrs
+  in
+    addSvgWithTwoScales toSvg xScale yScale plot
+
+addSvgWithTwoScales : (BoundingBox -> Scale a b -> Scale c d -> List Svg) -> Scale a b -> Scale c d -> Plot -> Plot
+addSvgWithTwoScales toSvg xScale yScale plot =
+  let
+    toSvgWithScales = \bBox ->
+      toSvg bBox (Scale.rescaleX bBox xScale) (Scale.rescaleY bBox yScale)
+  in
+    addSvg toSvgWithScales plot
 
 addSvg : (BoundingBox -> List Svg) -> Plot -> Plot
 addSvg svg plot =

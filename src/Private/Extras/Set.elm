@@ -1,10 +1,6 @@
 module Private.Extras.Set where
 
 type alias Set = { start : Float, end : Float }
--- TODO These may not be useful now
-type alias Domain = Set
-type alias Range = Set
-type alias Extent = Set
 
 create : Float -> Float -> Set
 create start end =
