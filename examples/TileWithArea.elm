@@ -2,9 +2,8 @@ module TileWithArea where
 
 import Html exposing (Html)
 import Plot exposing (..)
-import Plot exposing (..)
-import Line.Interpolation exposing (linear)
-import Scale
+import Plot.Scale as Scale
+import Plot.Interpolation exposing (linear)
 import Svg.Attributes exposing (stroke)
 
 main : Html

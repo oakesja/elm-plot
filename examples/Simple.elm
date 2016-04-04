@@ -2,23 +2,22 @@ module Simple where
 
 import Html exposing (Html, div)
 import Plot exposing (..)
-import Line.Interpolation exposing (linear)
-import Scale
+import Plot.Interpolation exposing (linear)
+import Plot.Scale as Scale
+import Plot.Axis as Axis
 import Svg.Attributes exposing (cx, cy, r, fill, stroke)
-import Axis
-import Axis.Orient
-import Symbols exposing (circle, square, diamond, triangleUp, triangleDown)
+import Plot.Symbols exposing (circle, square, diamond, triangleUp, triangleDown)
 
 main : Html
 main =
   let
     yAxis =
-      Axis.create yScale Axis.Orient.Left
+      Axis.create yScale Axis.Left
         |> Axis.innerTickAttributes [stroke "red"]
         |> Axis.title "y axis"
 
     xAxis =
-      Axis.create xScale Axis.Orient.Bottom
+      Axis.create xScale Axis.Bottom
         |> Axis.labelRotation -45
         |> Axis.title "x axis"
   in

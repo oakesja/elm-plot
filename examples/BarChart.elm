@@ -2,10 +2,8 @@ module OrdinalBands where
 
 import Svg exposing (Svg)
 import Plot exposing (..)
-import Scale
-import Axis
-import Axis.Orient
-import Bars.Orient
+import Plot.Scale as Scale
+import Plot.Axis as Axis
 
 main : Svg
 main =
@@ -14,9 +12,9 @@ main =
     yScale = Scale.linear (0, 400) (800, 0) 10
   in
     createPlot 800 800
-      |> addBars points .x .y xScale yScale Bars.Orient.Vertical []
-      |> addAxis (Axis.create xScale Axis.Orient.Bottom)
-      |> addAxis (Axis.create yScale Axis.Orient.Left)
+      |> addVerticalBars points .x .y xScale yScale []
+      |> addAxis (Axis.create xScale Axis.Bottom)
+      |> addAxis (Axis.create yScale Axis.Left)
       |> toSvg
 
 points : List { x : String, y : Float }

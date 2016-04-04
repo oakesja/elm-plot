@@ -1,11 +1,9 @@
 module CustomSymbol where
 
 import Plot exposing (..)
-import Scale
-import Axis
-import Axis.Orient
+import Plot.Scale as Scale exposing (LinearScale)
+import Plot.Axis as Axis
 import StartApp.Simple as StartApp
-import Scale.Scale exposing (Scale)
 import Svg exposing (Svg, ellipse)
 import Svg.Attributes exposing (cx, cy, rx, ry, stroke, fill, strokeWidth)
 import Svg.Events
@@ -19,8 +17,8 @@ type Action = Click Float Float
 type alias Point = { x: Float, y : Float }
 type alias Model =
   { points : List Point
-  , xScale : Scale (Float, Float) Float
-  , yScale : Scale (Float, Float) Float
+  , xScale : LinearScale
+  , yScale : LinearScale
 }
 
 model : Model
@@ -49,8 +47,8 @@ view : Signal.Address Action -> Model -> Svg
 view address model =
   createPlot 800 800
     |> addPoints model.points .x .y model.xScale model.yScale (symbol address)
-    |> addAxis (Axis.create model.xScale Axis.Orient.Bottom)
-    |> addAxis (Axis.create model.yScale Axis.Orient.Left)
+    |> addAxis (Axis.create model.xScale Axis.Bottom)
+    |> addAxis (Axis.create model.yScale Axis.Left)
     |> toSvg
 
 symbol : Signal.Address Action -> Float -> Float -> Float -> Float -> Svg

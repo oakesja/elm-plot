@@ -1,12 +1,10 @@
 module PlotClickEvent where
 
 import Plot exposing (..)
-import Scale
-import Axis
-import Axis.Orient
-import Symbols exposing (circle)
+import Plot.Scale as Scale exposing (LinearScale)
+import Plot.Axis as Axis
+import Plot.Symbols exposing (circle)
 import StartApp.Simple as StartApp
-import Scale.Scale exposing (Scale)
 import Svg exposing (Svg)
 
 main : Signal Svg
@@ -17,8 +15,8 @@ type Action = Click Float Float
 
 type alias Model =
   { points : List { x: Float, y : Float }
-  , xScale : Scale (Float, Float) Float
-  , yScale : Scale (Float, Float) Float
+  , xScale : LinearScale
+  , yScale : LinearScale
 }
 
 model : Model
@@ -47,7 +45,7 @@ view : Signal.Address Action -> Model -> Svg
 view address model =
   createPlot 800 800
     |> addPoints model.points .x .y model.xScale model.yScale (circle 5 [])
-    |> addAxis (Axis.create model.xScale Axis.Orient.Bottom)
-    |> addAxis (Axis.create model.yScale Axis.Orient.Left)
+    |> addAxis (Axis.create model.xScale Axis.Bottom)
+    |> addAxis (Axis.create model.yScale Axis.Left)
     |> onClick model.xScale model.yScale (\e -> Signal.message address (Click e.x e.y))
     |> toSvg

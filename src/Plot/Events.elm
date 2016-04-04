@@ -2,10 +2,10 @@ module Plot.Events (MouseEvent, onClick) where
 
 import Json.Decode exposing (object2, (:=), float, Decoder)
 import Html.Events exposing (on)
-import Scale.Scale exposing (Scale)
+import Plot.Scale as Scale
+import Private.Scale exposing (Scale)
 import Svg exposing (Svg)
-import BoundingBox exposing (BoundingBox)
-import Scale
+import Private.BoundingBox exposing (BoundingBox)
 
 type alias MouseInfo = { clientX: Float, clientY: Float }
 type alias MouseEvent a b = { x: a, y: b }

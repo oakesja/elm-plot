@@ -1,43 +1,43 @@
 import Task
 import Console
 import ElmTest exposing (..)
-import Test.Axis.ViewTest
-import Test.Axis.TicksTest
-import Test.Axis.TitleTest
-import Test.Line.InterpolationTest
-import Test.Scale.LinearTest
-import Test.SetsTest
-import Test.Extras.FloatTest
-import Test.Scale.OrdinalPointsTest
-import Test.Scale.OrdinalBandsTest
-import Test.BarsTest
-import Test.PointsTest
-import Test.LineTest
-import Test.PolygonTest
-import Test.BoundingBoxTest
-import Test.AreaTest
-import Test.RulesTest
+import Test.Private.Axis.ViewTest
+import Test.Private.Axis.TicksTest
+import Test.Private.Axis.TitleTest
+import Test.Plot.InterpolationTest
+import Test.Private.Scale.LinearTest
+import Test.Private.SetsTest
+import Test.Private.Extras.FloatTest
+import Test.Private.Scale.OrdinalPointsTest
+import Test.Private.Scale.OrdinalBandsTest
+import Test.Private.BarsTest
+import Test.Private.PointsTest
+import Test.Private.LineTest
+import Test.Private.PolygonTest
+import Test.Private.BoundingBoxTest
+import Test.Private.AreaTest
+import Test.Private.RulesTest
 
 -- TODO autogenerate this
 tests : Test
 tests =
   suite "All Tests"
-    [ Test.Axis.TicksTest.tests
-    , Test.Axis.TitleTest.tests
-    , Test.Axis.ViewTest.tests
-    , Test.Extras.FloatTest.tests
-    , Test.Line.InterpolationTest.tests
-    , Test.Scale.LinearTest.tests
-    , Test.Scale.OrdinalBandsTest.tests
-    , Test.Scale.OrdinalPointsTest.tests
-    , Test.AreaTest.tests
-    , Test.BarsTest.tests
-    , Test.BoundingBoxTest.tests
-    , Test.LineTest.tests
-    , Test.PointsTest.tests
-    , Test.PolygonTest.tests
-    , Test.RulesTest.tests
-    , Test.SetsTest.tests
+    [ Test.Private.Axis.TicksTest.tests
+    , Test.Private.Axis.TitleTest.tests
+    , Test.Private.Axis.ViewTest.tests
+    , Test.Private.Extras.FloatTest.tests
+    , Test.Plot.InterpolationTest.tests
+    , Test.Private.Scale.LinearTest.tests
+    , Test.Private.Scale.OrdinalBandsTest.tests
+    , Test.Private.Scale.OrdinalPointsTest.tests
+    , Test.Private.AreaTest.tests
+    , Test.Private.BarsTest.tests
+    , Test.Private.BoundingBoxTest.tests
+    , Test.Private.LineTest.tests
+    , Test.Private.PointsTest.tests
+    , Test.Private.PolygonTest.tests
+    , Test.Private.RulesTest.tests
+    , Test.Private.SetsTest.tests
     ]
 
 port runner : Signal (Task.Task x ())

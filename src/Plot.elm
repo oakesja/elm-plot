@@ -1,26 +1,23 @@
 module Plot where
 
 import Svg exposing (svg, Svg)
-import Extras.SvgAttributes exposing (width, height)
-import Dimensions exposing (Dimensions)
-import Margins exposing (Margins)
-import Line.Interpolation exposing (Interpolation)
-import BoundingBox exposing (BoundingBox)
-import Scale.Scale exposing (Scale)
-import Axis exposing (Axis)
-import Bars
-import Scale
-import Points
-import Area
-import Path
-import Axis.View
-import Axis.Orient
-import BoundingBox
-import Extras.List exposing (toList)
-import Rules
-import Title
+import Private.Extras.SvgAttributes exposing (width, height)
+import Private.Dimensions exposing (Dimensions)
+import Private.Margins as Margins exposing (Margins)
+import Plot.Interpolation exposing (Interpolation)
+import Private.BoundingBox as BoundingBox exposing (BoundingBox)
+import Plot.Scale as Scale
+import Private.Scale exposing (Scale)
+import Plot.Axis as Axis exposing (Axis)
+import Private.Bars as Bars exposing (Orient)
+import Private.Points as Points
+import Private.Area as Area
+import Private.Path as Path
+import Private.Axis.View as AxisView
+import Private.Extras.List exposing (toList)
+import Private.Rules as Rules
+import Private.Title as Title
 import Plot.Events exposing (MouseEvent)
-import Bars.Orient
 
 type alias Plot =
   { dimensions: Dimensions
@@ -87,13 +84,25 @@ addArea points getX getY getY2 xScale yScale intMethod attrs plot =
   in
     addSvg svg plot
 
-addBars : List a -> (a -> b) -> (a -> c) -> Scale x b -> Scale y c -> Bars.Orient.Orient -> List Svg.Attribute -> Plot -> Plot
-addBars points getX getY xScale yScale orient attrs plot =
+-- TODO cleanup add bars
+addVerticalBars : List a -> (a -> b) -> (a -> c) -> Scale x b -> Scale y c -> List Svg.Attribute -> Plot -> Plot
+addVerticalBars points getX getY xScale yScale attrs plot =
   let
     svg = \bBox ->
       List.map (\p -> { x = getX p, y = getY p }) points
         |> Points.interpolate (Scale.rescaleX bBox xScale) (Scale.rescaleY bBox yScale)
-        |> Bars.toSvg bBox orient attrs
+        |> Bars.toSvg bBox Bars.Vertical attrs
+  in
+    addSvg svg plot
+
+-- TODO consider doing add vertical and add horizontal bars
+addHorizontalBars : List a -> (a -> b) -> (a -> c) -> Scale x b -> Scale y c -> List Svg.Attribute -> Plot -> Plot
+addHorizontalBars points getX getY xScale yScale attrs plot =
+  let
+    svg = \bBox ->
+      List.map (\p -> { x = getX p, y = getY p }) points
+        |> Points.interpolate (Scale.rescaleX bBox xScale) (Scale.rescaleY bBox yScale)
+        |> Bars.toSvg bBox Bars.Horizontal attrs
   in
     addSvg svg plot
 
@@ -103,7 +112,7 @@ addAxis axis plot =
     svg = \bBox ->
       let
         scale =
-          if axis.orient == Axis.Orient.Top || axis.orient == Axis.Orient.Bottom then
+          if axis.orient == Axis.Top || axis.orient == Axis.Bottom then
             Scale.rescaleX bBox axis.scale
           else
             Scale.rescaleY bBox axis.scale
@@ -112,7 +121,7 @@ addAxis axis plot =
               , boundingBox = bBox
             }
       in
-        [Axis.View.toSvg a]
+        [AxisView.toSvg a]
   in
     addSvg svg plot
 
